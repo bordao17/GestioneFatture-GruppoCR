@@ -1,97 +1,49 @@
 import os
 import json
-import ollama
-from PIL import Image
+import shutil
+from src.pdf_processor import converti_pdf_in_immagini
+from src.llm_engine import estrai_dati_da_immagine
+from src.document_builder import elabora_pagine_in_documenti
+from src.memory_manager import aggiorna_fornitore
 
-# 1. Percorso dell'immagine originale
-percorso_immagine = 'documento.jpg'
+# Inserisci un PDF multi-pagina o un singolo JPG
+FILE_INPUT = 'documento.pdf' 
 
-def ottimizza_immagine(image_path):
-    """
-    Ridimensiona l'immagine mantenendo una risoluzione alta (1800px) 
-    per preservare la nitidezza delle etichette e dei testi piccoli.
-    """
-    percorso_temp = 'documento_ottimizzato.jpg'
-    with Image.open(image_path) as img:
-        img.thumbnail((1800, 1800), Image.Resampling.LANCZOS)
-        img.save(percorso_temp, format="JPEG", quality=95)
-    return percorso_temp
+def main():
+    print(f"🚀 Avvio elaborazione su: {FILE_INPUT}")
+    
+    # 1. GENERAZIONE IMMAGINI
+    immagini = []
+    if FILE_INPUT.lower().endswith('.pdf'):
+        immagini = converti_pdf_in_immagini(FILE_INPUT)
+    else:
+        immagini = [FILE_INPUT]
+    
+    print(f"📸 Trovate {len(immagini)} pagine da analizzare.")
 
-def estrai_dati_ddt(image_path):
-    if not os.path.exists(image_path):
-        print(f"Errore: Il file non è stato trovato: {image_path}")
-        return
+    # 2. ESTRAZIONE DATI
+    dati_pagine_grezze = []
+    for i, img_path in enumerate(immagini):
+        print(f"🤖 Scansione AI pagina {i+1} in corso...")
+        dati = estrai_dati_da_immagine(img_path)
+        if dati:
+            dati_pagine_grezze.append(dati)
+    
+    # 3. MACCHINA A STATI (Raggruppamento)
+    print("⚙️ Analisi semantica: Raggruppamento dei documenti...")
+    documenti_finali = elabora_pagine_in_documenti(dati_pagine_grezze)
 
-    print("Ottimizzazione dell'immagine in corso...")
-    immagine_leggera = ottimizza_immagine(image_path)
+    # 4. SALVATAGGIO IN MEMORIA
+    for doc in documenti_finali:
+        aggiorna_fornitore(doc.get("fornitore"))
 
-    print("Scansione con l'Intelligenza Artificiale...")
-    prompt = (
-        """
-        Sei un sistema esperto nell'estrazione di dati da Documenti di Trasporto (D.D.T.) italiani.
-        Ti viene fornita l'immagine di un documento.
-         
-        REGOLE RIGIDE DI ESTRAZIONE:
-        1. NON duplicare i dati tra i campi.
-        2. Distingui con precisione i caratteri simili (es. 3 e 9, O e 0).
-        
-        GUIDA CRITICA PER IL CAMPO "consegna":
-        - IGNORA ASSOLUTAMENTE la sede legale se riporta l'indirizzo: "VIA G. ANDREASSI 30 00123 ROMA (RM)" (o variazioni simili della sede amministrativa/Spett.le). Quella non è la destinazione della merce!
-        - Cerca esplicitamente etichette come **"Destinazione"**, **"Luogo di consegna"**, **"Spedizione a"**, **"Consegnare a"** o il box del punto vendita effettivo.
-        - Estrai solo il vero indirizzo in cui viene recapitata la merce.
-        
-        Altri campi:
-        - fornitore: L'azienda emittente (in alto, es. srl, spa, snc).
-        - numero_ddt: Il numero identificativo o progressivo del documento.
-        - data_ddt: La data di emissione.
-         
-        Se un campo non è presente o non è leggibile con certezza, restituisci una stringa vuota "".
-         
-        Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza aggiungere testo prima o dopo, senza markdown.
-        Usa esattamente questa struttura:
-        {
-            "fornitore": "",
-            "numero_ddt": "",
-            "data_ddt": "",
-            "consegna": ""
-        }
-        """
-    )
+    # 5. OUTPUT FINALE (Lista Array JSON)
+    print("\n✅ RISULTATO FINALE:")
+    print(json.dumps(documenti_finali, indent=4, ensure_ascii=False))
 
-    try:
-        response = ollama.chat(
-            model='qwen2.5vl:7b',
-            messages=[{
-                'role': 'user',
-                'content': prompt,
-                'images': [immagine_leggera]
-            }],
-            options={
-                'num_ctx': 4096,
-                'temperature': 0.0
-            }
-        )
-
-        risultato_testo = response['message']['content'].strip()
-        
-        if risultato_testo.startswith("```json"):
-            risultato_testo = risultato_testo[7:-3].strip()
-        elif risultato_testo.startswith("```"):
-            risultato_testo = risultato_testo[3:-3].strip()
-
-        dati_json = json.loads(risultato_testo)
-        
-        print("\n✅ Dati estratti con successo:")
-        print(json.dumps(dati_json, indent=4, ensure_ascii=False))
-
-    except json.JSONDecodeError:
-        print("\n❌ Errore: Il modello non ha restituito un JSON valido. Risposta grezza:")
-        print(risultato_testo)
-    except Exception as e:
-        print(f"\n❌ Si è verificato un errore con Ollama: {e}")
-    finally:
-        if os.path.exists(immagine_leggera):
-            os.remove(immagine_leggera)
+    # 6. PULIZIA CARTELLE TEMPORANEE
+    if FILE_INPUT.lower().endswith('.pdf') and os.path.exists("temp_images"):
+        shutil.rmtree("temp_images")
 
 if __name__ == "__main__":
-    estrai_dati_ddt(percorso_immagine)
+    main()
