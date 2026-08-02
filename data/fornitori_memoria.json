@@ -1,0 +1,30 @@
+{
+    "Francia Latticini S.p.A.": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "Manzi Giovanni Srl": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "UNIVERSO PANE S.R.L.": {
+        "confermato": "yes",
+        "note_specifiche": "IGNORA ASSOLUTAMENTE l'indirizzo 'VIA DEL RAME 06077 PONTE FELCINO PG'. Quello NON è la destinazione. Il vero indirizzo di consegna (che cambia in base al punto vendita) si trova in alto a destra, esattamente sotto l'etichetta 'Luogo di consegna'. Estrai solo l'indirizzo scritto lì sotto."
+    },
+    "PERFETTI van Melle S.p.A.": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "PASTIFICIO RANA S.P.A.": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "PERFETTI VAN MELLE S.p.A.": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "TRASPORTO IO SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    }
+}

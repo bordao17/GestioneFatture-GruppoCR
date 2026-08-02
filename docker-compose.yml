@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  api-gestione-fatture:
+    build: .
+    container_name: api_fatture_gruppocr
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n_automations
+    user: "root"
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Europe/Rome
+      - N8N_USER_FOLDER=/home/node/.n8n
+      - N8N_RESTRICT_FILE_ACCESS_TO=/fatture
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./fatture_da_leggere:/fatture
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  n8n_data:

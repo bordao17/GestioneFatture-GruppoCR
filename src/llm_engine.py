@@ -3,14 +3,13 @@ import ollama
 from src.memory_manager import ottieni_regole_formattate
 
 def estrai_dati_da_immagine(image_path):
-    # 1. Recupera le regole dalla memoria storica
     regole_memoria = ottieni_regole_formattate()
     sezione_memoria = ""
     
     if regole_memoria:
         sezione_memoria = f"\n\nMEMORIA STORICA DEI FORNITORI (Applica queste regole se riconosci il fornitore):\n{regole_memoria}"
 
-    # 2. Costruisce il prompt (il tuo prompt originale + le regole dinamiche)
+    # Il tuo prompt ottimizzato e snello
     prompt = f"""
     Sei un sistema esperto nell'estrazione di dati da Documenti di Trasporto (D.D.T.) italiani.
     Ti viene fornita l'immagine di un documento.
@@ -21,13 +20,13 @@ def estrai_dati_da_immagine(image_path):
     
     GUIDA CRITICA PER IL CAMPO "consegna":
     - IGNORA ASSOLUTAMENTE la sede legale se riporta l'indirizzo: "VIA G. ANDREASSI 30 00123 ROMA (RM)" (o variazioni simili della sede amministrativa/Spett.le). Quella non è la destinazione della merce!
-    - Cerca esplicitamente etichette come **"Destinazione"**, **"Luogo di consegna"**, **"Spedizione a"**, **"Consegnare a"** o il box del punto vendita effettivo.
+    - Cerca esplicitamente etichette come **"Destinazione"**, **"Luogo di consegna"**, **"Spedizione a"**, **"Consegnare a"**, **Luogo di destinazione** o il box del punto vendita effettivo.
     - Estrai solo il vero indirizzo in cui viene recapitata la merce.
     
     Altri campi:
     - fornitore: L'azienda emittente (in alto, es. srl, spa, snc).
-    - numero_ddt: Il numero identificativo o progressivo del documento. Se il numero inizia con uno o più zeri (es. "00127"), rimuovili e restituisci solo le cifre (es. "127").
-    - data_ddt: La data di emissione del documento, escludi l'orario e formatta la data come segue "GG-MM-AAAA".{sezione_memoria}
+    - numero_ddt: Il numero identificativo o progressivo del documento (cerca D.D.T. N. o Doc. N., ignora ID Transazione). Se inizia con zeri (es. "00127"), rimuovili e restituisci "127".
+    - data_ddt: La data di emissione del documento, escludi l'orario e formatta come "GG-MM-AAAA".{sezione_memoria}
      
     Se un campo non è presente o non è leggibile con certezza, restituisci una stringa "dato mancante".
      
@@ -49,10 +48,7 @@ def estrai_dati_da_immagine(image_path):
                 'content': prompt,
                 'images': [image_path]
             }],
-            options={
-                'num_ctx': 4096,
-                'temperature': 0.0
-            }
+            options={'num_ctx': 4096, 'temperature': 0.0}
         )
 
         risultato_testo = response['message']['content'].strip()
@@ -64,19 +60,13 @@ def estrai_dati_da_immagine(image_path):
 
         dati = json.loads(risultato_testo)
         
-        # 3. RETE DI SICUREZZA PYTHON: Rimuove forzatamente gli zeri iniziali
         numero = dati.get("numero_ddt", "")
         if numero and numero != "dato mancante":
             dati["numero_ddt"] = numero.lstrip('0')
-            # Se era tutto composto da zeri (es "000"), rimarrà vuoto. In quel caso rimettiamo "0".
             if dati["numero_ddt"] == "":
                 dati["numero_ddt"] = "0"
         
         return dati
-
-    except json.JSONDecodeError:
-        print(f"❌ Il modello non ha restituito JSON valido per {image_path}. Risposta: {risultato_testo}")
-        return None
     except Exception as e:
-        print(f"❌ Errore LLM sull'immagine {image_path}: {e}")
+        print(f"❌ Errore sull'immagine {image_path}: {e}")
         return None
