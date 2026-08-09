@@ -1,0 +1,217 @@
+[
+  {
+    "id": "0c85bb4f-6767-4cc5-8378-d4915662ba94",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:02:51.510555",
+    "dati": {
+      "fornitore": "GRANDEIMPERO",
+      "numero_ddt": "50139/005",
+      "data_ddt": "11-6-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DEL RAME PONTE FELCINO 06134 PERUGIA PG 00163040546 CONAD (CR RIETI) VIA EMILIO GRECO SNC 02100 RIETI",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "cd12b61d-4766-4dc1-9b7e-09a823d37013",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 2,
+    "timestamp": "2026-08-09T17:03:21.513851",
+    "dati": {
+      "fornitore": "Centrale del latte di Roma S.p.A",
+      "numero_ddt": "*CLR1*81197691*20260604*3200987001*",
+      "data_ddt": "04/06/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA MARIO VISINTINI 51, 00012 GUIDONIA MONTECELIO (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "f30005e7-a767-43e1-be7c-64238fb38763",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 2,
+    "timestamp": "2026-08-09T17:04:20.770942",
+    "dati": {
+      "fornitore": "Andriani Spa",
+      "numero_ddt": "2426",
+      "data_ddt": "02-04-26",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "PAC 2000A SOCIETA' COOPERATIVA VIA MARIO VISINTINI,51 00019 GUIDONIA ROMA",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "6f834233-6f33-46ab-b748-135a0d3c36b4",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 2,
+    "timestamp": "2026-08-09T17:05:19.175497",
+    "dati": {
+      "fornitore": "Gabbiano S.p.A.",
+      "numero_ddt": "SGE/070580",
+      "data_ddt": "15/05/26",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA VISINTINI 51, 00012 GUIDONIA MONTECELIO (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "e1dae773-89ad-4a82-bd8b-83af8b433e72",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 3,
+    "timestamp": "2026-08-09T17:06:17.647782",
+    "dati": {
+      "fornitore": "OSCAR'78 SRL",
+      "numero_ddt": "4969",
+      "data_ddt": "19/05/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "V. CASSIA, PRATO DELLA FONTANA 01030 MONTEROSI VT ITALIA",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "f5b112ea-ddc4-49a1-8137-27c9ed6e5c41",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 7,
+    "timestamp": "2026-08-09T17:07:45.605564",
+    "dati": {
+      "fornitore": "Nutrition & Santè Italia S.p.A",
+      "numero_ddt": "26009625",
+      "data_ddt": "24/03/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA CASSIA, PRATO DELLA FONTANA 01030 MONTEROSI VT",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "a5c99194-954d-4134-81a8-14d2f1d8cd65",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:11:10.179234",
+    "dati": {
+      "fornitore": "PETRUCCI",
+      "numero_ddt": "9501",
+      "data_ddt": "03-07-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA MACCHIA GRANDE 61, 04100 BORGO SABOTINO P.Iva/Albo: IT6205975H",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "18424afb-0456-4643-a26f-facd87759bcd",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:11:39.327068",
+    "dati": {
+      "fornitore": "Granarolo S.p.A.",
+      "numero_ddt": "6813003799",
+      "data_ddt": "01.07.2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA CASSIA PRATO DELLA FONTANA 01030 MONTEROSI VT",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "cd3cc906-10c5-4542-9c0c-c74d7693e8f6",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 3,
+    "timestamp": "2026-08-09T17:12:08.341755",
+    "dati": {
+      "fornitore": "ABC ITALIA S.R.L.",
+      "numero_ddt": "122949",
+      "data_ddt": "13.04.2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DEL RAME 06077 PONTE FELCINO PG",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "aa53433b-a8c8-4f4b-a617-659cbae995a2",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:13:35.602492",
+    "dati": {
+      "fornitore": "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.",
+      "numero_ddt": "5100",
+      "data_ddt": "03/07/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA EMILIO GRECO 02100 Rieti (RI)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "95276cdc-3474-4b96-8675-78a10c13384a",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:14:04.924209",
+    "dati": {
+      "fornitore": "Panificio Marianantoni Silvio srls",
+      "numero_ddt": "3098/A/2026",
+      "data_ddt": "03/07/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "f0c7c724-b3a0-4f1e-8d1c-0239c304e1b4",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:14:33.993063",
+    "dati": {
+      "fornitore": "Cerealdolci S.r.l.",
+      "numero_ddt": "11439/DT",
+      "data_ddt": "08/07/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DEL RAME 2, 06134 PERUGIA (PG)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "9e5699e4-78b7-4bea-bfd2-355f7a494a36",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:15:03.192586",
+    "dati": {
+      "fornitore": "COKY S.R.L. Società Agricola",
+      "numero_ddt": "DOC.DI TRASPORTO 27071",
+      "data_ddt": "20/07/2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "V. Quarto Peperino 168, 00188 ROMA RM",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "680e2653-c73e-42b9-9af7-396f94b63aa0",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 4,
+    "timestamp": "2026-08-09T17:15:32.141663",
+    "dati": {
+      "fornitore": "Vitakraft Italia S.p.A.",
+      "numero_ddt": "858336",
+      "data_ddt": "02.07.2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "Via di Quarto Peperino 168, I-00189 ROMA RM",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "38244252-b9ff-4084-adcb-1c08231567ba",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:17:27.503391",
+    "dati": {
+      "fornitore": "EUROFRESH S.r.l.",
+      "numero_ddt": "11921",
+      "data_ddt": "24-06-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DI QUARTO PEPERINO, 168 00188 ROMA RM",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "8c5e0fb2-1262-4206-8a72-294bcb97a8c3",
+    "file_origine": "test2.pdf",
+    "timestamp": "2026-08-09T17:17:56.983604",
+    "dati": {
+      "fornitore": "PERFETTI VAN MELLE S.p.A.",
+      "numero_ddt": "2668111283",
+      "data_ddt": "17.07.2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA QUARTO PEPERINO 168/170, 00188 ROMA (RM)",
+      "leggibilita_bassa": false
+    }
+  }
+]

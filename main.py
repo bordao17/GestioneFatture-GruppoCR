@@ -1,28 +1,18 @@
 import os
 import shutil
 import tempfile
+import uuid
+import time
+from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from pydantic import BaseModel
-from typing import List
 import uvicorn
 
 from src.pdf_processor import converti_pdf_in_immagini
 from src.llm_engine import estrai_dati_da_immagine
-from src.document_builder import elabora_pagine_in_documenti
-from src.memory_manager import aggiorna_fornitore
-
-# --- MODELLI PYDANTIC (Il Contratto dei Dati) ---
-class DocumentoDDT(BaseModel):
-    fornitore: str
-    numero_ddt: str
-    data_ddt: str
-    consegna: str
-
-class RispostaEstrazione(BaseModel):
-    status: str
-    filename: str
-    documenti_estratti: List[DocumentoDDT]
-# ------------------------------------------------
+from src.classificatore import determina_stato, CAMPI_OBBLIGATORI
+from src.registro import aggiorna_registro
+from src.pdf_writer import salva_pdf_multipagina
+from src.accorpatore import accorpa_documenti
 
 app = FastAPI(
     title="GestioneFatture - GruppoCR API",
@@ -30,68 +20,107 @@ app = FastAPI(
     version="1.0.0"
 )
 
-@app.post("/estrai-ddt", summary="Analizza un documento (PDF o Immagine) ed estrae i dati dei DDT")
+
+@app.post("/accorpa-documenti")
+async def accorpa_documenti_endpoint():
+    """
+    Da chiamare UNA SOLA VOLTA, dopo che tutte le pagine di un batch sono
+    state analizzate con /estrai-ddt. Legge OK.json e CHECK.json, unisce
+    le pagine che appartengono allo stesso DDT multi-pagina (PDF + JSON),
+    e riscrive i registri con una voce sola per documento reale.
+    """
+    try:
+        report = accorpa_documenti()
+        print(f"🔗 Accorpamento completato: {report}")
+        return {"status": "success", **report}
+    except Exception as e:
+        print(f"❌ Errore durante l'accorpamento: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/estrai-ddt")
 async def analizza_documento(file: UploadFile = File(...)):
-    print(f"🚀 [GestioneFatture-GruppoCR] Ricevuto file da elaborare: {file.filename}")
-    
-    # 1. SALVATAGGIO TEMPORANEO DEL FILE IN INGRESSO
+    t_totale_inizio = time.time()
+    print(f"🚀 Apertura file: {file.filename}")
+
     temp_dir = tempfile.mkdtemp()
     file_path = os.path.join(temp_dir, file.filename)
-    
+
     try:
+        t0 = time.time()
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
+        print(f"⏱️ [1/4] Salvataggio file caricato: {time.time() - t0:.2f} secondi")
 
-        # 2. GENERAZIONE IMMAGINI
+        # 1. SPLIT: Divido il PDF in immagini, una per pagina
+        t0 = time.time()
         immagini = []
         if file.filename.lower().endswith('.pdf'):
             immagini = converti_pdf_in_immagini(file_path, cartella_output=os.path.join(temp_dir, "pages"))
         elif file.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
             immagini = [file_path]
         else:
-            raise HTTPException(status_code=400, detail="Formato file non supportato. Invia PDF, JPG o PNG.")
-        
-        print(f"📸 Trovate {len(immagini)} pagine da analizzare.")
+            raise HTTPException(status_code=400, detail="Formato non supportato.")
+        print(f"⏱️ [2/4] Conversione PDF → {len(immagini)} immagini: {time.time() - t0:.2f} secondi")
 
-        # 3. ESTRAZIONE DATI
-        dati_pagine_grezze = []
+        risultati_pagine = []
+
+        # 2. ELABORAZIONE SINGOLO DDT (una pagina = un documento, NESSUN raggruppamento)
         for i, img_path in enumerate(immagini):
-            print(f"🤖 Scansione AI pagina {i+1} in corso...")
-            dati = estrai_dati_da_immagine(img_path)
-            if dati:
-                dati_pagine_grezze.append(dati)
-        
-        # 4. MACCHINA A STATI (Raggruppamento)
-        print("⚙️ Analisi semantica: Raggruppamento dei documenti...")
-        documenti_finali = elabora_pagine_in_documenti(dati_pagine_grezze)
+            id_generico = str(uuid.uuid4())
+            print(f"🤖 Analisi pagina {i + 1}/{len(immagini)} (id={id_generico}) in corso...")
 
-        # 5. SALVATAGGIO IN MEMORIA (e pulizia JSON finale)
-        for doc in documenti_finali:
-            note_proposte = doc.get("note_layout", "")
-            aggiorna_fornitore(doc.get("fornitore"), note_proposte)
-            
-            if "note_layout" in doc:
-                del doc["note_layout"]
+            t0 = time.time()
+            dati_estratti = estrai_dati_da_immagine(img_path)
+            t_modello = time.time() - t0
+            print(f"⏱️ [3/4] Pagina {i + 1}: chiamata al modello Ollama: {t_modello:.2f} secondi")
 
-        print(f"✅ Elaborazione completata per {file.filename}")
-        
-        # 6. OUTPUT VERSO n8n
+            if not dati_estratti:
+                dati_estratti = {}
+
+            stato, campi_trovati = determina_stato(dati_estratti, CAMPI_OBBLIGATORI)
+
+            if dati_estratti.get("leggibilita_bassa"):
+                print(f"⚠️  Pagina {i + 1} segnalata come poco leggibile dal modello.")
+
+            cartella_dest = f"/fatture_lette/{stato}"
+            os.makedirs(cartella_dest, exist_ok=True)
+
+            t0 = time.time()
+            path_pdf_dest = os.path.join(cartella_dest, f"{id_generico}.pdf")
+            salva_pdf_multipagina(path_pdf_dest, [img_path])
+            print(f"⏱️ [4/4] Pagina {i + 1}: salvataggio PDF su disco: {time.time() - t0:.2f} secondi")
+
+            if stato in ["OK", "CHECK"]:
+                anagrafica = {
+                    "id": id_generico,
+                    "file_origine": file.filename,
+                    "timestamp": datetime.now().isoformat(),
+                    "dati": dati_estratti
+                }
+                aggiorna_registro(stato, anagrafica)
+
+            risultati_pagine.append({
+                "id": id_generico,
+                "stato": stato,
+                "campi_trovati": campi_trovati
+            })
+
+        print(f"✅ Elaborazione completata per {file.filename} in {time.time() - t_totale_inizio:.2f} secondi totali")
         return {
             "status": "success",
             "filename": file.filename,
-            "documenti_estratti": documenti_finali
+            "pagine_elaborate": risultati_pagine
         }
 
     except Exception as e:
-        print(f"❌ Errore critico durante l'elaborazione: {e}")
+        print(f"❌ Errore critico: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    
+
     finally:
-        # 7. PULIZIA GARANTITA DELL'HARD DISK
         if os.path.exists(temp_dir):
-            shutil.rmtree(temp_dir)
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 if __name__ == "__main__":
-    # Avvia il server locale sulla porta 8000
-    print("Avvio del server GestioneFatture - GruppoCR...")
+    print("Avvio del server GestioneFatture - GruppoCR (Author: Lo Staff di Pa.Rea S.n.C.)...")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

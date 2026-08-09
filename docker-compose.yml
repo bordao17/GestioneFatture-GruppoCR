@@ -11,6 +11,8 @@ services:
       - OLLAMA_HOST=http://host.docker.internal:11434
     volumes:
       - ./data:/app/data
+      - ./fatture_da_leggere:/fatture
+      - ./fatture_lette:/fatture_lette
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -29,12 +31,13 @@ services:
       - WEBHOOK_URL=http://localhost:5678/
       - GENERIC_TIMEZONE=Europe/Rome
       - N8N_USER_FOLDER=/home/node/.n8n
-      - N8N_RESTRICT_FILE_ACCESS_TO=/fatture
+      - N8N_RESTRICT_FILE_ACCESS_TO=/fatture;/fatture_lette
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_HIDE_USAGE_PAGE=true
+      - N8N_COMMUNITY_PACKAGES_ENABLED=false
     volumes:
-      - n8n_data:/home/node/.n8n
+      - ./n8n_config:/home/node/.n8n
       - ./fatture_da_leggere:/fatture
+      - ./fatture_lette:/fatture_lette
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-volumes:
-  n8n_data:
