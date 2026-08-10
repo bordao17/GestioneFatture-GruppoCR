@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     environment:
       - OLLAMA_HOST=http://host.docker.internal:11434
+      - GENERIC_TIMEZONE=Europe/Rome
     volumes:
       - ./data:/app/data
       - ./fatture_da_leggere:/fatture

@@ -3,8 +3,9 @@ import shutil
 import tempfile
 import uuid
 import time
-from datetime import datetime
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from datetime import datetime, timezone
+import zoneinfo
+from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 import uvicorn
 
 from src.pdf_processor import converti_pdf_in_immagini
@@ -13,6 +14,7 @@ from src.classificatore import determina_stato, CAMPI_OBBLIGATORI
 from src.registro import aggiorna_registro
 from src.pdf_writer import salva_pdf_multipagina
 from src.accorpatore import accorpa_documenti
+from src.notificatore import calcola_riepilogo
 
 app = FastAPI(
     title="GestioneFatture - GruppoCR API",
@@ -20,21 +22,27 @@ app = FastAPI(
     version="1.0.0"
 )
 
+TZ = zoneinfo.ZoneInfo(os.getenv("GENERIC_TIMEZONE", "Europe/Rome"))
 
-@app.post("/accorpa-documenti")
-async def accorpa_documenti_endpoint():
-    """
-    Da chiamare UNA SOLA VOLTA, dopo che tutte le pagine di un batch sono
-    state analizzate con /estrai-ddt. Legge OK.json e CHECK.json, unisce
-    le pagine che appartengono allo stesso DDT multi-pagina (PDF + JSON),
-    e riscrive i registri con una voce sola per documento reale.
-    """
+def timestamp_locale():
+    return datetime.now(TZ).isoformat()
+
+@app.get("/riepilogo")
+async def riepilogo_endpoint(
+    da: str = Query(..., description="Timestamp ISO 8601 es. 2026-08-09T10:30:00+02:00")
+):
+    # PATCH URL ENCODING: Ripristina il '+' che viene convertito in spazio dall'URL
+    da_corretto = da.replace(" ", "+")
+    
     try:
-        report = accorpa_documenti()
-        print(f"🔗 Accorpamento completato: {report}")
-        return {"status": "success", **report}
+        da_timestamp = datetime.fromisoformat(da_corretto)
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Timestamp non valido: '{da_corretto}'")
+
+    try:
+        riepilogo = calcola_riepilogo(da_timestamp)
+        return riepilogo
     except Exception as e:
-        print(f"❌ Errore durante l'accorpamento: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -95,10 +103,17 @@ async def analizza_documento(file: UploadFile = File(...)):
                 anagrafica = {
                     "id": id_generico,
                     "file_origine": file.filename,
-                    "timestamp": datetime.now().isoformat(),
+                    "timestamp": timestamp_locale(),
                     "dati": dati_estratti
                 }
                 aggiorna_registro(stato, anagrafica)
+            else:  # KO: nessun dato utile estratto, salviamo solo un riferimento minimo
+                anagrafica_ko = {
+                    "id": id_generico,
+                    "file_origine": file.filename,
+                    "timestamp": timestamp_locale()
+                }
+                aggiorna_registro(stato, anagrafica_ko)
 
             risultati_pagine.append({
                 "id": id_generico,
@@ -106,11 +121,19 @@ async def analizza_documento(file: UploadFile = File(...)):
                 "campi_trovati": campi_trovati
             })
 
+        # 3. ACCORPAMENTO A POSTERIORI: unisce le pagine di questo PDF che
+        #    risultano appartenere allo stesso DDT multi-pagina (stesso
+        #    numero_ddt + fornitore), fondendo PDF e voci JSON già scritte.
+        t0 = time.time()
+        report_accorpamento = accorpa_documenti()
+        print(f"🔗 Accorpamento completato in {time.time() - t0:.2f} secondi: {report_accorpamento}")
+
         print(f"✅ Elaborazione completata per {file.filename} in {time.time() - t_totale_inizio:.2f} secondi totali")
         return {
             "status": "success",
             "filename": file.filename,
-            "pagine_elaborate": risultati_pagine
+            "pagine_elaborate": risultati_pagine,
+            "accorpamento": report_accorpamento
         }
 
     except Exception as e:

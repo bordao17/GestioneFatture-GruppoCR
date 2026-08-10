@@ -1,0 +1,14 @@
+# Dati elaborati - non vanno versionati (contengono documenti/dati dei clienti)
+
+# n8n
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# File temporanei e di sistema
+.DS_Store
+*.log

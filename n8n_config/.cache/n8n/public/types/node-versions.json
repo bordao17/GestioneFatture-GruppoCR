@@ -1115,6 +1115,8 @@
 "@n8n/mcp-registry.sendPulse@1.1",
 "@n8n/mcp-registry.snitcher@1",
 "@n8n/mcp-registry.snitcher@1.1",
+"@n8n/mcp-registry.miro@1",
+"@n8n/mcp-registry.miro@1.1",
 "n8n-nodes-base.actionNetworkTool@1",
 "n8n-nodes-base.activeCampaignTool@1",
 "n8n-nodes-base.adaloTool@1",
