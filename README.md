@@ -249,10 +249,10 @@ Controlla che:
 ## 👥 Autori
 
 **GestioneFatture - GruppoCR**  
-Developed by *Lo Staff di Pa.Rea S.n.C.*
+Developed by *Bordao Studio*
 
 ---
 
 ## 📄 Licenza
 
-Questo progetto è proprietà di GruppoCR. Tutti i diritti riservati.
+Questo progetto è proprietà di Bordao Studio. Tutti i diritti riservati.
