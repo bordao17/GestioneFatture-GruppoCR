@@ -27,7 +27,7 @@ Il sistema utilizza un modello di linguaggio locale (Ollama) per analizzare i do
 ├── main.py                 # Server API FastAPI principale
 ├── requirements.txt        # Dipendenze Python
 ├── Dockerfile             # Configurazione Docker per l'API
-├── docker-compose.yml     # Orchestrazione container (API + n8n)
+├── docker-compose.yml     # Orchestrazione container (API + Frontend + n8n)
 ├── src/                   # Moduli del sistema
 │   ├── pdf_processor.py   # Conversione PDF in immagini
 │   ├── llm_engine.py      # Integrazione con Ollama per estrazione dati
@@ -36,6 +36,14 @@ Il sistema utilizza un modello di linguaggio locale (Ollama) per analizzare i do
 │   ├── pdf_writer.py      # Salvataggio PDF multipagina
 │   ├── accorpatore.py     # Unione documenti correlati
 │   └── notificatore.py    # Calcolo riepiloghi e notifiche
+├── frontend/              # Applicazione React per la dashboard web
+│   ├── src/               # Codice sorgente React
+│   │   ├── App.js         # Componente principale della dashboard
+│   │   └── index.js       # Punto di ingresso React
+│   ├── public/            # File statici pubblici
+│   ├── package.json       # Dipendenze Node.js
+│   ├── Dockerfile         # Containerizzazione frontend
+│   └── nginx.conf         # Configurazione server web
 ├── fatture_da_leggere/    # Cartella input per nuovi documenti
 ├── fatture_lette/         # Cartella output documenti elaborati
 │   ├── OK/                # Documenti completi
@@ -70,7 +78,23 @@ docker-compose up --build -d
 
 I servizi saranno disponibili alle seguenti porte:
 - **API Gestione Fatture**: http://localhost:8000
+- **Dashboard Web (Frontend)**: http://localhost:3000
 - **Interfaccia n8n**: http://localhost:5678
+
+### Dashboard Web
+
+Il progetto include una **dashboard web** sviluppata con React e Bootstrap che permette di:
+- Visualizzare tutti i documenti elaborati in ordine cronologico
+- Cercare e filtrare documenti per stato (OK, CHECK, KO)
+- Visualizzare l'anteprima dei PDF direttamente nel browser
+- Modificare i dati estratti dai documenti
+- Eliminare documenti non più necessari
+- Esportare report (funzionalità futura)
+
+Per accedere alla dashboard:
+1. Avvia i servizi con `docker-compose up -d`
+2. Apri il browser su http://localhost:3000
+3. La dashboard si connetterà automaticamente all'API backend
 
 ### Avvio Manuale (Senza Docker)
 
@@ -238,11 +262,13 @@ Controlla che:
 
 ## 📝 Note Tecniche
 
-- **Framework API**: FastAPI con Uvicorn
+- **Backend API**: FastAPI con Uvicorn (Python 3.12+)
+- **Frontend Dashboard**: React 18 con Bootstrap 5
 - **Motore AI**: Ollama (modelli LLM locali)
 - **Elaborazione PDF**: PyMuPDF (fitz)
 - **Automazione**: n8n
-- **Linguaggio**: Python 3.12+
+- **Server Web Frontend**: Nginx (in produzione)
+- **Containerizzazione**: Docker e Docker Compose
 
 ---
 

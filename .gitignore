@@ -1,1 +1,38 @@
-Nothing should be ignored in this case, as the only added file is README.md, which is a source/config file and not a build artifact, dependency, or temporary file. Therefore, the output is empty.
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dependencies
+node_modules/
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+```
