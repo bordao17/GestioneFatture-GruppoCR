@@ -1,14 +1,1 @@
-# Dati elaborati - non vanno versionati (contengono documenti/dati dei clienti)
-
-# n8n
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-
-# File temporanei e di sistema
-.DS_Store
-*.log
+Nothing should be ignored in this case, as the only added file is README.md, which is a source/config file and not a build artifact, dependency, or temporary file. Therefore, the output is empty.
