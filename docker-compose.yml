@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   api-gestione-fatture:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: api_fatture_gruppocr
     restart: always
     ports:
@@ -11,7 +13,7 @@ services:
       - OLLAMA_HOST=http://host.docker.internal:11434
       - GENERIC_TIMEZONE=Europe/Rome
     volumes:
-      - ./data:/app/data
+      - ./backend/data:/app/data
       - ./fatture_da_leggere:/fatture
       - ./fatture_lette:/fatture_lette
     extra_hosts:
@@ -24,7 +26,7 @@ services:
     container_name: frontend_fatture_gruppocr
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       - REACT_APP_API_URL=http://localhost:8000
     depends_on:
