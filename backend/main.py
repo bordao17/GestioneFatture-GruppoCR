@@ -239,5 +239,5 @@ async def analizza_documento(file: UploadFile = File(...)):
             shutil.rmtree(temp_dir, ignore_errors=True)
 
 if __name__ == "__main__":
-    print("Avvio del server GestioneFatture - GruppoCR (Author: Lo Staff di Pa.Rea S.n.C.)...")
+    print("Avvio del server GestioneFatture - GruppoCR (Author: Lorenzo Bordi)...")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
