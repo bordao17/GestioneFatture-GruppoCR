@@ -17,6 +17,19 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  frontend-gestione-fatture:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_fatture_gruppocr
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - api-gestione-fatture
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n_automations

@@ -5,13 +5,16 @@ import uuid
 import time
 from datetime import datetime, timezone
 import zoneinfo
+import json
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 import uvicorn
 
 from src.pdf_processor import converti_pdf_in_immagini
 from src.llm_engine import estrai_dati_da_immagine
 from src.classificatore import determina_stato, CAMPI_OBBLIGATORI
-from src.registro import aggiorna_registro
+from src.registro import aggiorna_registro, leggi_registro, rimuovi_dal_registro, aggiorna_documento_registro
 from src.pdf_writer import salva_pdf_multipagina
 from src.accorpatore import accorpa_documenti
 from src.notificatore import calcola_riepilogo
@@ -22,10 +25,101 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Abilita CORS per il frontend React
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In produzione, specifica gli origin consentiti
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 TZ = zoneinfo.ZoneInfo(os.getenv("GENERIC_TIMEZONE", "Europe/Rome"))
+CARTELLA_FATTURE = "/fatture_lette"
 
 def timestamp_locale():
     return datetime.now(TZ).isoformat()
+
+@app.get("/api/documents")
+async def get_all_documents():
+    """Restituisce tutti i documenti dai registri OK, CHECK e KO"""
+    tutti_documenti = []
+    
+    for stato in ["OK", "CHECK", "KO"]:
+        registro = leggi_registro(stato)
+        if registro:
+            for doc in registro:
+                doc['status'] = stato
+                tutti_documenti.append(doc)
+    
+    return tutti_documenti
+
+@app.get("/api/documents/{doc_id}")
+async def get_document(doc_id: str):
+    """Restituisce un documento specifico per ID"""
+    for stato in ["OK", "CHECK", "KO"]:
+        registro = leggi_registro(stato)
+        if registro:
+            for doc in registro:
+                if doc.get('id') == doc_id:
+                    doc['status'] = stato
+                    return doc
+    
+    raise HTTPException(status_code=404, detail="Documento non trovato")
+
+@app.put("/api/documents/{doc_id}")
+async def update_document(doc_id: str, updated_data: dict):
+    """Aggiorna i dati estratti di un documento"""
+    for stato in ["OK", "CHECK", "KO"]:
+        registro = leggi_registro(stato)
+        if registro:
+            for i, doc in enumerate(registro):
+                if doc.get('id') == doc_id:
+                    # Aggiorna solo i dati estratti, mantieni metadata
+                    doc['extracted_data'] = updated_data.get('extracted_data', doc.get('dati', {}))
+                    if 'dati' in doc:
+                        doc['dati'] = updated_data.get('extracted_data', doc['dati'])
+                    
+                    # Salva nel registro
+                    aggiorna_documento_registro(stato, i, doc)
+                    return {"message": "Documento aggiornato con successo", "document": doc}
+    
+    raise HTTPException(status_code=404, detail="Documento non trovato")
+
+@app.delete("/api/documents/{doc_id}")
+async def delete_document(doc_id: str):
+    """Elimina un documento dal registro e il file PDF associato"""
+    for stato in ["OK", "CHECK", "KO"]:
+        registro = leggi_registro(stato)
+        if registro:
+            for i, doc in enumerate(registro):
+                if doc.get('id') == doc_id:
+                    # Rimuovi dal registro
+                    rimuovi_dal_registro(stato, i)
+                    
+                    # Elimina il file PDF associato se esiste
+                    pdf_path = os.path.join(CARTELLA_FATTURE, stato, f"{doc_id}.pdf")
+                    if os.path.exists(pdf_path):
+                        os.remove(pdf_path)
+                    
+                    return {"message": "Documento eliminato con successo"}
+    
+    raise HTTPException(status_code=404, detail="Documento non trovato")
+
+@app.get("/api/pdf/{filename}")
+async def get_pdf(filename: str):
+    """Restituisce il file PDF richiesto"""
+    # Cerca il file in tutte le cartelle di stato
+    for stato in ["OK", "CHECK", "KO"]:
+        pdf_path = os.path.join(CARTELLA_FATTURE, stato, filename)
+        if os.path.exists(pdf_path):
+            return FileResponse(
+                pdf_path,
+                media_type="application/pdf",
+                filename=filename
+            )
+    
+    raise HTTPException(status_code=404, detail="PDF non trovato")
 
 @app.get("/riepilogo")
 async def riepilogo_endpoint(
