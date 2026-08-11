@@ -274,7 +274,7 @@ Controlla che:
 
 ## 👥 Autori
 
-**GestioneFatture - GruppoCR**  
+**Lorenzo Bordi: GestioneFatture - GruppoCR**  
 Developed by *Bordao Studio*
 
 ---
