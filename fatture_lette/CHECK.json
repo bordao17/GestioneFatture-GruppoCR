@@ -20,7 +20,15 @@
       "fornitore": "V Srl",
       "numero_ddt": "25876121-0825 876424 - Fax 0825 09826",
       "data_ddt": "",
-      "ragione_sociale_consegna": "",
+      "ragione_sociale_consegna": "aaa",
+      "indirizzo_consegna": "",
+      "leggibilita_bassa": true
+    },
+    "extracted_data": {
+      "fornitore": "V Srl",
+      "numero_ddt": "25876121-0825 876424 - Fax 0825 09826",
+      "data_ddt": "",
+      "ragione_sociale_consegna": "aaa",
       "indirizzo_consegna": "",
       "leggibilita_bassa": true
     }

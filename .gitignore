@@ -1,1 +1,52 @@
-(empty)
+# =========================
+# File di Sistema (OS)
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Variabili d'Ambiente e Segreti
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Frontend (React / Vite)
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# =========================
+# Backend (Python / FastAPI)
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+backend/venv/
+backend/.venv/
+backend/env/
+.pytest_cache/
+
+# =========================
+# Volumi Docker e Dati Sensibili
+# =========================
+# Ignoriamo i file dentro le cartelle delle fatture per non intasare la repo, 
+# ma manteniamo le cartelle stesse usando un (eventuale) file .gitkeep
+#fatture_da_leggere/*
+ #!fatture_da_leggere/.gitkeep
+
+#fatture_lette/*
+#!fatture_lette/.gitkeep
+
+
+# Ignoriamo il database locale del backend (se usi SQLite)
+!backend/data/.gitkeep
+*.sqlite3
+*.db

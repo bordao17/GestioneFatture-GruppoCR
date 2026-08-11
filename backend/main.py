@@ -106,20 +106,51 @@ async def delete_document(doc_id: str):
     
     raise HTTPException(status_code=404, detail="Documento non trovato")
 
-@app.get("/api/pdf/{filename}")
-async def get_pdf(filename: str):
-    """Restituisce il file PDF richiesto"""
-    # Cerca il file in tutte le cartelle di stato
-    for stato in ["OK", "CHECK", "KO"]:
-        pdf_path = os.path.join(CARTELLA_FATTURE, stato, filename)
-        if os.path.exists(pdf_path):
-            return FileResponse(
-                pdf_path,
-                media_type="application/pdf",
-                filename=filename
-            )
+@app.get("/api/pdf/{doc_id}.pdf")
+async def get_pdf(doc_id: str):
+    print(f"🔍 Cerco PDF per ID: {doc_id}")
     
-    raise HTTPException(status_code=404, detail="PDF non trovato")
+    # Lista dei possibili percorsi dove potrebbe trovarsi il file
+    possible_paths = [
+        f"fatture_da_leggere/{doc_id}.pdf",
+        f"fatture_lette/OK/{doc_id}.pdf",
+        f"fatture_lette/CHECK/{doc_id}.pdf",
+        f"fatture_lette/KO/{doc_id}.pdf",
+        f"fatture_lette/{doc_id}.pdf"
+    ]
+    
+    file_path = None
+    for path in possible_paths:
+        print(f"  Controllo: {path}")
+        if os.path.exists(path):
+            file_path = path
+            print(f"✅ Trovato: {path}")
+            break
+    
+    if not file_path:
+        print(f"💥 PDF non trovato per ID: {doc_id}")
+        raise HTTPException(status_code=404, detail=f"PDF non trovato per ID: {doc_id}")
+    
+    # Leggi il file in memoria
+    with open(file_path, "rb") as f:
+        pdf_content = f.read()
+    
+    # Restituisci il PDF con gli header corretti per la visualizzazione inline
+    from fastapi.responses import Response
+    
+    return Response(
+        content=pdf_content,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": "inline; filename=documento.pdf",
+            "Content-Type": "application/pdf",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+            "X-Content-Type-Options": "nosniff"
+        }
+    )
+
 
 @app.get("/riepilogo")
 async def riepilogo_endpoint(
