@@ -1,17 +1,37 @@
 import React, { useState } from 'react';
+import { Download } from 'lucide-react';
 
 export default function ComparisonModal({ selectedDoc, editData, setEditData, onClose, onSave, isSaving, apiUrl }) {
-  const [loadError, setLoadError] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!selectedDoc) return null;
 
   const pdfUrl = `${apiUrl}/api/pdf/${selectedDoc.id}.pdf`;
+  const pdfUrlWithCache = `${pdfUrl}?t=${Date.now()}#toolbar=0&navpanes=0`;
 
-  // Aggiungiamo un parametro anti-cache per evitare problemi
-  const pdfUrlWithCache = `${pdfUrl}?t=${Date.now()}`;
-
-  const handleRetry = () => {
-    setLoadError(false);
+  // Funzione che scarica il file bypassando le restrizioni di visualizzazione del browser
+  const handleDownloadPDF = async () => {
+    try {
+      setIsDownloading(true);
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      // Mantiene il nome originale del file se esiste, altrimenti usa l'ID
+      link.download = `Fattura_${selectedDoc.id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Errore durante il download del PDF:", error);
+      alert("Impossibile scaricare il file in questo momento.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -33,56 +53,30 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
             <div className="row g-0 h-100">
               
               {/* Sinistra: Anteprima PDF */}
-              <div className="col-lg-7 h-100 bg-dark border-end border-secondary d-flex flex-column">
-                <div className="p-2 border-bottom border-secondary text-center small fw-bold text-secondary text-uppercase">
-                  Documento Scansionato
+              <div className="col-lg-7 h-100 bg-black border-end border-secondary d-flex flex-column">
+                
+                {/* Header del PDF con il nuovo bottone di download */}
+                <div className="p-2 border-bottom border-secondary d-flex justify-content-between align-items-center bg-dark">
+                  <span className="small fw-bold text-secondary text-uppercase ps-2">
+                    Documento Scansionato
+                  </span>
+                  <button 
+                    className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2" 
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloading}
+                    title="Scarica il file PDF originale"
+                  >
+                    <Download size={16} /> 
+                    {isDownloading ? 'Scaricamento...' : 'Scarica PDF'}
+                  </button>
                 </div>
                 
-                <div className="flex-grow-1 bg-light" style={{ minHeight: 0 }}>
-                  {loadError ? (
-                    <div className="d-flex flex-column align-items-center justify-content-center h-100 text-center p-4">
-                      <div style={{ fontSize: '64px' }} className="mb-3">📄</div>
-                      <h5 className="text-dark mb-2">PDF non disponibile</h5>
-                      <p className="text-muted mb-3">Il browser non riesce a visualizzare questo PDF</p>
-                      <div className="d-flex gap-2">
-                        <button 
-                          className="btn btn-primary"
-                          onClick={handleRetry}
-                        >
-                          Riprova
-                        </button>
-                        <a 
-                          href={pdfUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-outline-primary"
-                        >
-                          Apri in nuova scheda
-                        </a>
-                      </div>
-                    </div>
-                  ) : (
-                    <object
-                      data={pdfUrlWithCache}
-                      type="application/pdf"
-                      style={{ width: '100%', height: '100%' }}
-                      onError={() => setLoadError(true)}
-                    >
-                      <div className="d-flex flex-column align-items-center justify-content-center h-100 text-center p-4">
-                        <div style={{ fontSize: '64px' }} className="mb-3">📄</div>
-                        <h5 className="text-dark mb-2">Visualizzazione non supportata</h5>
-                        <p className="text-muted mb-3">Il tuo browser non supporta la visualizzazione PDF integrata</p>
-                        <a 
-                          href={pdfUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-primary"
-                        >
-                          Apri PDF
-                        </a>
-                      </div>
-                    </object>
-                  )}
+                <div className="flex-grow-1" style={{ minHeight: 0 }}>
+                  <iframe 
+                    src={pdfUrlWithCache} 
+                    className="w-100 h-100 border-0"
+                    title="Anteprima PDF"
+                  />
                 </div>
               </div>
 

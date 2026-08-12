@@ -110,44 +110,35 @@ async def delete_document(doc_id: str):
 async def get_pdf(doc_id: str):
     print(f"🔍 Cerco PDF per ID: {doc_id}")
     
-    # Lista dei possibili percorsi dove potrebbe trovarsi il file
-    possible_paths = [
-        f"fatture_da_leggere/{doc_id}.pdf",
-        f"fatture_lette/OK/{doc_id}.pdf",
-        f"fatture_lette/CHECK/{doc_id}.pdf",
-        f"fatture_lette/KO/{doc_id}.pdf",
-        f"fatture_lette/{doc_id}.pdf"
-    ]
-    
     file_path = None
-    for path in possible_paths:
+    
+    # Usa os.path.join con la costante CARTELLA_FATTURE e gli stati
+    for stato in ["OK", "CHECK", "KO"]:
+        path = os.path.join(CARTELLA_FATTURE, stato, f"{doc_id}.pdf")
         print(f"  Controllo: {path}")
+        
         if os.path.exists(path):
             file_path = path
             print(f"✅ Trovato: {path}")
             break
+            
+    # Se per qualche motivo il file dovesse trovarsi nella root di CARTELLA_FATTURE (vecchi documenti?)
+    if not file_path:
+        root_path = os.path.join(CARTELLA_FATTURE, f"{doc_id}.pdf")
+        if os.path.exists(root_path):
+             file_path = root_path
+             print(f"✅ Trovato (root): {root_path}")
     
     if not file_path:
         print(f"💥 PDF non trovato per ID: {doc_id}")
         raise HTTPException(status_code=404, detail=f"PDF non trovato per ID: {doc_id}")
     
-    # Leggi il file in memoria
-    with open(file_path, "rb") as f:
-        pdf_content = f.read()
-    
-    # Restituisci il PDF con gli header corretti per la visualizzazione inline
-    from fastapi.responses import Response
-    
-    return Response(
-        content=pdf_content,
-        media_type="application/pdf",
+    return FileResponse(
+        path=file_path, 
+        media_type="application/pdf", 
         headers={
-            "Content-Disposition": "inline; filename=documento.pdf",
-            "Content-Type": "application/pdf",
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
-            "X-Content-Type-Options": "nosniff"
+            "Content-Disposition": "inline",
+            "Cache-Control": "no-cache, no-store, must-revalidate"
         }
     )
 
