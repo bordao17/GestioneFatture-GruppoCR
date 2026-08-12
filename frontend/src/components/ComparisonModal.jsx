@@ -9,7 +9,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
   const pdfUrl = `${apiUrl}/api/pdf/${selectedDoc.id}.pdf`;
   const pdfUrlWithCache = `${pdfUrl}?t=${Date.now()}#toolbar=0&navpanes=0`;
 
-  // Funzione che scarica il file bypassando le restrizioni di visualizzazione del browser
+  // Funzione che scarica il file bypassando le restrizioni
   const handleDownloadPDF = async () => {
     try {
       setIsDownloading(true);
@@ -17,10 +17,20 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       
+      // 1. Recuperiamo Fornitore e Data (usiamo "Ignoto" se il campo è vuoto)
+      let nomeFornitore = editData.fornitore || 'FornitoreIgnoto';
+      let dataDocumento = editData.data_ddt || 'DataIgnota';
+
+      // 2. Puliamo le stringhe da caratteri illegali per i file di Windows/Mac e sostituiamo gli spazi con underscore
+      nomeFornitore = nomeFornitore.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_');
+      dataDocumento = dataDocumento.replace(/[\/\\:*?"<>|]/g, '-').replace(/\s+/g, '_');
+
+      // 3. Creiamo il nome finale
+      const nomeFileFinale = `Fattura_${nomeFornitore}_${dataDocumento}.pdf`;
+      
       const link = document.createElement('a');
       link.href = url;
-      // Mantiene il nome originale del file se esiste, altrimenti usa l'ID
-      link.download = `Fattura_${selectedDoc.id}.pdf`;
+      link.download = nomeFileFinale;
       document.body.appendChild(link);
       link.click();
       
@@ -55,7 +65,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
               {/* Sinistra: Anteprima PDF */}
               <div className="col-lg-7 h-100 bg-black border-end border-secondary d-flex flex-column">
                 
-                {/* Header del PDF con il nuovo bottone di download */}
+                {/* Header del PDF con il bottone di download */}
                 <div className="p-2 border-bottom border-secondary d-flex justify-content-between align-items-center bg-dark">
                   <span className="small fw-bold text-secondary text-uppercase ps-2">
                     Documento Scansionato
@@ -64,7 +74,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                     className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2" 
                     onClick={handleDownloadPDF}
                     disabled={isDownloading}
-                    title="Scarica il file PDF originale"
+                    title="Scarica il file PDF rinominato"
                   >
                     <Download size={16} /> 
                     {isDownloading ? 'Scaricamento...' : 'Scarica PDF'}

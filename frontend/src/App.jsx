@@ -3,7 +3,8 @@ import axios from 'axios';
 import Header from './components/Header';
 import Stats from './components/Stats';
 import Dashboard from './components/Dashboard';
-import ComparisonModal from './components/ComparisonModal'; // Importiamo il Modale
+import ComparisonModal from './components/ComparisonModal';
+import SuppliersManager from './components/SuppliersManager';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -16,6 +17,7 @@ function App() {
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [editData, setEditData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
+  const [currentView, setCurrentView] = useState('DASHBOARD'); // 'DASHBOARD' o 'SUPPLIERS'
 
   useEffect(() => { fetchDocuments(); }, []);
 
@@ -63,28 +65,45 @@ function App() {
   };
 
   return (
-    <div className="bg-dark min-vh-100 text-light pb-5">
-      {/* 1. Dashboard sempre visibile */}
-      <Header onRefresh={fetchDocuments} isLoading={loading} />
-      
-      <div className="container-fluid px-4">
-        {error && <div className="alert alert-danger shadow-sm">{error}</div>}
-        
-        <Stats stats={stats} />
-        
-        <Dashboard 
-          documents={documents}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          onEdit={(doc) => {
-            setSelectedDoc(doc);
-            setEditData({ ...doc.dati });
-          }}
-          onDelete={handleDelete}
-        />
-      </div>
+ <div className="bg-dark min-vh-100 text-light pb-5">
 
-      {/* 2. Modale sovrapposto in trasparenza quando richiesto */}
+   {/* 1. Header Globale */}
+   <Header 
+     onRefresh={fetchDocuments} 
+     isLoading={loading} 
+     onViewSuppliers={() => setCurrentView('SUPPLIERS')} 
+   />
+
+   {/* 2. Routing molto semplice */}
+   {currentView === 'SUPPLIERS' ? (
+
+     <SuppliersManager 
+       apiUrl={API_URL} 
+       onBack={() => setCurrentView('DASHBOARD')} 
+     />
+
+   ) : (
+
+     <div className="container-fluid px-4">
+       {error && <div className="alert alert-danger shadow-sm">{error}</div>}
+
+       <Stats stats={stats} />
+
+       <Dashboard 
+         documents={documents}
+         activeTab={activeTab}
+         setActiveTab={setActiveTab}
+         onEdit={(doc) => {
+           setSelectedDoc(doc);
+           setEditData({ ...doc.dati });
+         }}
+         onDelete={handleDelete}
+       />
+     </div>
+
+   )}
+
+      {/* 3. Modale sovrapposto in trasparenza quando richiesto */}
       <ComparisonModal 
         selectedDoc={selectedDoc} 
         editData={editData} 

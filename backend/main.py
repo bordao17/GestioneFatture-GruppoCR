@@ -37,6 +37,28 @@ app.add_middleware(
 TZ = zoneinfo.ZoneInfo(os.getenv("GENERIC_TIMEZONE", "Europe/Rome"))
 CARTELLA_FATTURE = "/fatture_lette"
 
+# ==========================================
+# GESTIONE MEMORIA AI (FORNITORI)
+# ==========================================
+FILE_FORNITORI = "data/fornitori_memoria.json"
+
+@app.get("/api/fornitori")
+async def get_fornitori():
+    """Legge la memoria attuale dell'AI sui fornitori"""
+    if os.path.exists(FILE_FORNITORI):
+        with open(FILE_FORNITORI, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+@app.put("/api/fornitori")
+async def update_fornitori(data: dict):
+    """Sovrascrive il file JSON con le nuove istruzioni dell'utente"""
+    os.makedirs(os.path.dirname(FILE_FORNITORI), exist_ok=True)
+    with open(FILE_FORNITORI, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+    return {"message": "Memoria AI aggiornata con successo"}
+
+
 def timestamp_locale():
     return datetime.now(TZ).isoformat()
 
