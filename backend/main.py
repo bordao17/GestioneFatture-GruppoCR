@@ -1,3 +1,6 @@
+# ==========================================
+# 1. IMPORTS & SETUP APP
+# ==========================================
 import os
 import shutil
 import tempfile
@@ -18,6 +21,7 @@ from src.registro import aggiorna_registro, leggi_registro, rimuovi_dal_registro
 from src.pdf_writer import salva_pdf_multipagina
 from src.accorpatore import accorpa_documenti
 from src.notificatore import calcola_riepilogo
+from src.memoria import carica_memoria, salva_memoria, aggiorna_fornitore
 
 app = FastAPI(
     title="GestioneFatture - GruppoCR API",
@@ -28,40 +32,46 @@ app = FastAPI(
 # Abilita CORS per il frontend React
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In produzione, specifica gli origin consentiti
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# ==========================================
+# 2. CONFIGURAZIONI & COSTANTI
+# ==========================================
 TZ = zoneinfo.ZoneInfo(os.getenv("GENERIC_TIMEZONE", "Europe/Rome"))
 CARTELLA_FATTURE = "/fatture_lette"
-
-# ==========================================
-# GESTIONE MEMORIA AI (FORNITORI)
-# ==========================================
-FILE_FORNITORI = "data/fornitori_memoria.json"
-
-@app.get("/api/fornitori")
-async def get_fornitori():
-    """Legge la memoria attuale dell'AI sui fornitori"""
-    if os.path.exists(FILE_FORNITORI):
-        with open(FILE_FORNITORI, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
-
-@app.put("/api/fornitori")
-async def update_fornitori(data: dict):
-    """Sovrascrive il file JSON con le nuove istruzioni dell'utente"""
-    os.makedirs(os.path.dirname(FILE_FORNITORI), exist_ok=True)
-    with open(FILE_FORNITORI, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-    return {"message": "Memoria AI aggiornata con successo"}
-
 
 def timestamp_locale():
     return datetime.now(TZ).isoformat()
 
+# ==========================================
+# 3. ROUTING: MEMORIA AI (FORNITORI)
+# ==========================================
+@app.get("/api/fornitori")
+async def get_fornitori():
+    """Legge la memoria attuale dell'AI sui fornitori"""
+    try:
+        return carica_memoria()
+    except Exception as e:
+        print(f"Errore lettura fornitori: {e}")
+        return {}
+
+@app.put("/api/fornitori")
+async def update_fornitori(data: dict):
+    """Sovrascrive il file JSON con le nuove istruzioni dell'utente"""
+    try:
+        salva_memoria(data)
+        return {"message": "Memoria AI aggiornata con successo"}
+    except Exception as e:
+        print(f"Errore salvataggio fornitori: {e}")
+        raise HTTPException(status_code=500, detail="Impossibile salvare la memoria fornitori.")
+
+# ==========================================
+# 4. ROUTING: GESTIONE DOCUMENTI (CRUD)
+# ==========================================
 @app.get("/api/documents")
 async def get_all_documents():
     """Restituisce tutti i documenti dai registri OK, CHECK e KO"""
@@ -128,10 +138,13 @@ async def delete_document(doc_id: str):
     
     raise HTTPException(status_code=404, detail="Documento non trovato")
 
+# ==========================================
+# 5. ROUTING: VISUALIZZAZIONE PDF
+# ==========================================
 @app.get("/api/pdf/{doc_id}.pdf")
 async def get_pdf(doc_id: str):
+    """Restituisce fisicamente il file PDF forzandone la visualizzazione a schermo"""
     print(f"🔍 Cerco PDF per ID: {doc_id}")
-    
     file_path = None
     
     # Usa os.path.join con la costante CARTELLA_FATTURE e gli stati
@@ -144,7 +157,7 @@ async def get_pdf(doc_id: str):
             print(f"✅ Trovato: {path}")
             break
             
-    # Se per qualche motivo il file dovesse trovarsi nella root di CARTELLA_FATTURE (vecchi documenti?)
+    # Ricerca di fallback nella root di CARTELLA_FATTURE (vecchi documenti)
     if not file_path:
         root_path = os.path.join(CARTELLA_FATTURE, f"{doc_id}.pdf")
         if os.path.exists(root_path):
@@ -164,7 +177,9 @@ async def get_pdf(doc_id: str):
         }
     )
 
-
+# ==========================================
+# 6. ROUTING: RIEPILOGO STATISTICHE
+# ==========================================
 @app.get("/riepilogo")
 async def riepilogo_endpoint(
     da: str = Query(..., description="Timestamp ISO 8601 es. 2026-08-09T10:30:00+02:00")
@@ -183,7 +198,9 @@ async def riepilogo_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+# ==========================================
+# 7. ROUTING CORE: ESTRAZIONE AI OLLAMA
+# ==========================================
 @app.post("/estrai-ddt")
 async def analizza_documento(file: UploadFile = File(...)):
     t_totale_inizio = time.time()
@@ -211,7 +228,7 @@ async def analizza_documento(file: UploadFile = File(...)):
 
         risultati_pagine = []
 
-        # 2. ELABORAZIONE SINGOLO DDT (una pagina = un documento, NESSUN raggruppamento)
+        # 2. ELABORAZIONE SINGOLO DDT (una pagina = un documento)
         for i, img_path in enumerate(immagini):
             id_generico = str(uuid.uuid4())
             print(f"🤖 Analisi pagina {i + 1}/{len(immagini)} (id={id_generico}) in corso...")
@@ -224,12 +241,24 @@ async def analizza_documento(file: UploadFile = File(...)):
             if not dati_estratti:
                 dati_estratti = {}
 
+            # =======================================================
+            # SALVATAGGIO AUTOMATICO NUOVO FORNITORE IN MEMORIA
+            # =======================================================
+            fornitore_estratto = dati_estratti.get("fornitore")
+            if fornitore_estratto and str(fornitore_estratto).strip().lower() not in ["", "dato mancante", "nessuno"]:
+                try:
+                    # Inserisce il fornitore se non esiste già
+                    aggiorna_fornitore(str(fornitore_estratto).strip(), "")
+                except Exception as e:
+                    print(f"⚠️ Errore durante l'aggiornamento della memoria fornitori: {e}")
+            # =======================================================
+
             stato, campi_trovati = determina_stato(dati_estratti, CAMPI_OBBLIGATORI)
 
             if dati_estratti.get("leggibilita_bassa"):
                 print(f"⚠️  Pagina {i + 1} segnalata come poco leggibile dal modello.")
 
-            cartella_dest = f"/fatture_lette/{stato}"
+            cartella_dest = os.path.join(CARTELLA_FATTURE, stato)
             os.makedirs(cartella_dest, exist_ok=True)
 
             t0 = time.time()
@@ -282,6 +311,7 @@ async def analizza_documento(file: UploadFile = File(...)):
         if os.path.exists(temp_dir):
             shutil.rmtree(temp_dir, ignore_errors=True)
 
+
 if __name__ == "__main__":
-    print("Avvio del server GestioneFatture - GruppoCR (Author: Lorenzo Bordi)...")
+    print("Avvio del server GestioneFatture - GruppoCR (Author: Lo Staff di Pa.Rea S.n.C.)...")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
