@@ -14,6 +14,7 @@ services:
       - ./backend/data:/app/data
       - ./fatture_da_leggere:/fatture
       - ./fatture_lette:/fatture_lette
+      - ./huggingface_cache:/root/.cache/huggingface
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

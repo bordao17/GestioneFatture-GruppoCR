@@ -50,3 +50,6 @@ backend/env/
 !backend/data/.gitkeep
 *.sqlite3
 *.db
+
+huggingface_cache/
+fatture_lette/

@@ -1,13 +1,19 @@
 # Comunicazione con il motore AI locale
 ollama>=0.2.0
+requests
 
 # PyMuPDF: Estrazione nativa ad altissima qualità dei PDF (importato come 'fitz')
 PyMuPDF>=1.24.0
+
+# Motore OCR ad alta precisione (Hybrid Pipeline)
+surya-ocr==0.4.14
 
 # Server API e Web Framework
 fastapi>=0.100.0
 uvicorn>=0.23.0
 python-multipart>=0.0.6
 pydantic>=2.0.0
+
+# Utility
 Pillow
 tzdata
