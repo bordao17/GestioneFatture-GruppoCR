@@ -8,8 +8,8 @@ desktop.ini
 # =========================
 # Variabili d'Ambiente e Segreti
 # =========================
-.env
-.env.*
+#.env
+#.env.*
 !.env.example
 
 # =========================
