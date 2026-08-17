@@ -1,78 +1,58 @@
+import os
 import json
+from pathlib import Path
+from typing import Any, Dict, Optional
+import requests
 import ollama
-from PIL import Image
 from src.memory_manager import ottieni_regole_formattate
 
-# Variabili globali "vuote" che riempiremo solo quando serve
-det_processor = None
-det_model = None
-rec_model = None
-rec_processor = None
-surya_loaded = False
+# Configurazioni lette da variabili d'ambiente con fallback sul server AI
+OLLAMA_HOST = os.getenv("OLLAMA_BASE_URL", "http://10.1.20.25:11434")
+SURYA_OCR_URL = os.getenv("SURYA_OCR_URL", "http://10.1.20.25:8000/v1/ocr")
+MODEL_NAME = os.getenv("LLM_MODEL", "llama3.1")
 
-MODEL_NAME = 'llama3.2'
+# Inizializzazione del client Ollama puntando all'host specificato
+ollama_client = ollama.Client(host=OLLAMA_HOST)
 
-def carica_surya():
-    """Carica i modelli in RAM solo alla primissima fattura inviata, non all'avvio del server"""
-    global det_processor, det_model, rec_model, rec_processor, surya_loaded
-    
-    if surya_loaded:
-        return # Se sono già stati caricati, non fa nulla
-        
-    print("\n⏳ Inizializzazione modelli Surya OCR per la prima volta (richiederà RAM e tempo)...")
-    try:
-        # ---> CORREZIONE QUI: usiamo 'segformer' invece di 'model' per la detection
-        from surya.model.detection.segformer import load_model as load_det_model, load_processor as load_det_processor
-        from surya.model.recognition.model import load_model as load_rec_model
-        from surya.model.recognition.processor import load_processor as load_rec_processor
 
-        print("   - Caricamento modello di Rilevamento Testo...")
-        det_processor, det_model = load_det_processor(), load_det_model()
-        
-        print("   - Caricamento modello di Riconoscimento Caratteri...")
-        rec_model, rec_processor = load_rec_model(), load_rec_processor()
-        
-        surya_loaded = True
-        print("✅ Modelli Surya OCR caricati con successo in memoria!\n")
-    except Exception as e:
-        print(f"\n❌ ERRORE CRITICO DURANTE IL CARICAMENTO DI SURYA: {e}")
-        raise e
-
-    
-def estrai_testo_surya(image_path: str) -> str:
-    """Usa Surya OCR per estrarre il testo grezzo dalla pagina"""
-    # Si assicura che Surya sia in memoria
-    carica_surya()
-    
-    # Importa la funzione di run solo quando serve
-    from surya.ocr import run_ocr
-    
-    try:
-        image = Image.open(image_path)
-        langs = ["it", "en"] 
-        
-        predictions = run_ocr([image], [langs], det_model, det_processor, rec_model, rec_processor)
-        
-        testo_estratto = []
-        for pred in predictions:
-            for riga in pred.text_lines:
-                testo_estratto.append(riga.text)
-                
-        return "\n".join(testo_estratto)
-    except Exception as e:
-        print(f"❌ Errore Surya OCR: {e}")
+def estrai_testo_surya_remoto(image_path: str) -> str:
+    """Invia il documento al microservizio FastAPI Surya OCR remoto per estrarre il testo."""
+    file_path = Path(image_path)
+    if not file_path.exists():
+        print(f"❌ File non trovato: {image_path}")
         return ""
 
-def estrai_dati_da_immagine(image_path):
-    print(f"  -> Avvio lettura ottica (OCR) con Surya per {image_path}...")
-    testo_grezzo = estrai_testo_surya(image_path)
-    
-    if not testo_grezzo.strip():
+    mime_type = "application/pdf" if file_path.suffix.lower() == ".pdf" else "image/png"
+
+    try:
+        with open(file_path, "rb") as f:
+            files = {"file": (file_path.name, f, mime_type)}
+            response = requests.post(SURYA_OCR_URL, files=files, timeout=120)
+
+        if response.status_code == 200:
+            data = response.json()
+            # Concatena il testo di tutte le pagine restituite dal microservizio
+            testo_pagine = [page.get("full_text", "") for page in data.get("results", [])]
+            return "\n".join(testo_pagine).strip()
+        else:
+            print(f"❌ Errore Surya OCR API ({response.status_code}): {response.text}")
+            return ""
+    except Exception as e:
+        print(f"❌ Errore di connessione a Surya OCR remoto ({SURYA_OCR_URL}): {e}")
+        return ""
+
+
+def estrai_dati_da_immagine(image_path: str) -> Optional[Dict[str, Any]]:
+    print(f"  -> Avvio lettura ottica (OCR) remota per {image_path}...")
+    testo_grezzo = estrai_testo_surya_remoto(image_path)
+
+    if not testo_grezzo or not testo_grezzo.strip():
+        print("⚠️ Testo estratto vuoto o illeggibile.")
         return {"leggibilita_bassa": True}
 
     regole_memoria = ottieni_regole_formattate()
     sezione_memoria = ""
-    
+
     if regole_memoria:
         sezione_memoria = f"\n\nMEMORIA STORICA DEI FORNITORI:\nApplica queste regole al testo estratto se riconosci il fornitore:\n{regole_memoria}"
 
@@ -112,29 +92,31 @@ def estrai_dati_da_immagine(image_path):
     }}
     """
 
-    print(f"  -> Interrogazione LLM ({MODEL_NAME}) in corso...")
+    print(f"  -> Interrogazione Ollama remota ({MODEL_NAME} su {OLLAMA_HOST})...")
     try:
-        response = ollama.chat(
+        response = ollama_client.chat(
             model=MODEL_NAME,
             messages=[{'role': 'user', 'content': prompt}],
+            format='json',
             options={'num_ctx': 8192, 'temperature': 0.0},
             keep_alive='30m'
         )
 
         risultato_testo = response['message']['content'].strip()
-        
+
+        # Pulizia blocchi markdown se presenti nonostante format='json'
         if risultato_testo.startswith("```json"):
             risultato_testo = risultato_testo[7:-3].strip()
         elif risultato_testo.startswith("```"):
             risultato_testo = risultato_testo[3:-3].strip()
 
         dati = json.loads(risultato_testo)
-        
+
         numero = dati.get("numero_ddt", "")
-        if numero and numero != "dato mancante" and numero.isdigit():
-            dati["numero_ddt"] = numero.lstrip('0') or "0"
-        
+        if numero and str(numero) != "dato mancante" and str(numero).isdigit():
+            dati["numero_ddt"] = str(numero).lstrip('0') or "0"
+
         return dati
     except Exception as e:
-        print(f"❌ Errore durante l'analisi testuale: {e}")
+        print(f"❌ Errore durante l'analisi testuale con Ollama: {e}")
         return None
