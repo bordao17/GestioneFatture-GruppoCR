@@ -1,6 +1,7 @@
 FROM python:3.12-slim
 
 WORKDIR /app
+
 # 1. Installa librerie di sistema per manipolazione immagini
 RUN apt-get update && apt-get install -y \
     libxcb1 \
@@ -11,8 +12,13 @@ RUN apt-get update && apt-get install -y \
     libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Installiamo prima i requirements per sfruttare la cache di Docker
+# Copiamo i requirements
 COPY requirements.txt .
+
+# 2. INSTALLIAMO PYTORCH PER GPU (CUDA 12.1) PRIMA DI SURYA
+RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# 3. Installiamo il resto delle dipendenze (Surya capirà che PyTorch è già installato)
 RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 # Copiamo il resto del codice

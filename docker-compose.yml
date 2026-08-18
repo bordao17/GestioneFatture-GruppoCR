@@ -17,6 +17,14 @@ services:
       - ./huggingface_cache:/root/.cache/huggingface
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    # ---> AGGIUNTA PER SBLOCCARE LA RTX 3080 <---
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
   frontend-gestione-fatture:
     build:
