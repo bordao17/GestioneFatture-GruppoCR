@@ -5,6 +5,7 @@ import Stats from './components/Stats';
 import Dashboard from './components/Dashboard';
 import ComparisonModal from './components/ComparisonModal';
 import SuppliersManager from './components/SuppliersManager';
+import ManualEntryModal from './components/ManualEntryModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -18,6 +19,7 @@ function App() {
   const [editData, setEditData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [currentView, setCurrentView] = useState('DASHBOARD'); // 'DASHBOARD' o 'SUPPLIERS'
+  const [showManualEntry, setShowManualEntry] = useState(false);
 
   useEffect(() => { fetchDocuments(); }, []);
 
@@ -68,10 +70,14 @@ function App() {
  <div className="bg-dark min-vh-100 text-light pb-5">
 
    {/* 1. Header Globale */}
-   <Header 
-     onRefresh={fetchDocuments} 
-     isLoading={loading} 
-     onViewSuppliers={() => setCurrentView('SUPPLIERS')} 
+   <Header
+     onRefresh={fetchDocuments}
+     isLoading={loading}
+     onViewSuppliers={() => setCurrentView('SUPPLIERS')}
+     onManualAdd={() => {
+       setCurrentView('DASHBOARD');
+       setShowManualEntry(true);
+     }}
    />
 
    {/* 2. Routing molto semplice */}
@@ -103,8 +109,16 @@ function App() {
 
    )}
 
-      {/* 3. Modale sovrapposto in trasparenza quando richiesto */}
-      <ComparisonModal 
+      {/* 3. Inserimento manuale: allega il file e scrivi i dati, senza AI */}
+      <ManualEntryModal
+        show={showManualEntry}
+        onClose={() => setShowManualEntry(false)}
+        onSaved={fetchDocuments}
+        apiUrl={API_URL}
+      />
+
+      {/* 4. Modale sovrapposto in trasparenza quando richiesto */}
+      <ComparisonModal
         selectedDoc={selectedDoc} 
         editData={editData} 
         setEditData={setEditData}

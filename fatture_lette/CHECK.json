@@ -1,36 +1,42 @@
 [
   {
-    "id": "c2b5e0d1-ace3-4226-8b2e-60628cf32fcd",
+    "id": "9055d201-7d39-47db-803c-283b17744dd9",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-10T17:07:15.179421+02:00",
+    "timestamp": "2026-08-30T11:07:47.347030+02:00",
     "dati": {
-      "fornitore": "M Srl",
-      "numero_ddt": "D1/082145",
-      "data_ddt": "17-03-92",
+      "fornitore": "M SRL",
+      "numero_ddt": "D1/087145",
+      "data_ddt": "17-05-2026",
       "ragione_sociale_consegna": "",
       "indirizzo_consegna": "",
       "leggibilita_bassa": false
     }
   },
   {
-    "id": "613bde38-6dd9-4f6d-ae01-d9cd7015ee3a",
+    "id": "17fa8c88-e440-470a-bfc3-145beb3641c3",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-10T17:07:39.388357+02:00",
+    "timestamp": "2026-08-30T11:08:10.823146+02:00",
     "dati": {
-      "fornitore": "V Srl",
-      "numero_ddt": "25876121-0825 876424 - Fax 0825 09826",
+      "fornitore": "MOLINO VIGEVANO GIUSTO",
+      "numero_ddt": "",
       "data_ddt": "",
-      "ragione_sociale_consegna": "aaa",
+      "ragione_sociale_consegna": "",
       "indirizzo_consegna": "",
-      "leggibilita_bassa": true
-    },
-    "extracted_data": {
-      "fornitore": "V Srl",
-      "numero_ddt": "25876121-0825 876424 - Fax 0825 09826",
-      "data_ddt": "",
-      "ragione_sociale_consegna": "aaa",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "38fdc932-6d9b-4515-978a-c26b0895c4fa",
+    "file_origine": "test2.pdf",
+    "numero_pagine": 2,
+    "timestamp": "2026-08-30T11:19:42.531815+02:00",
+    "dati": {
+      "fornitore": "VITAKRAFT ITALIA SPA",
+      "numero_ddt": "374764",
+      "data_ddt": "08-07-2026",
+      "ragione_sociale_consegna": "",
       "indirizzo_consegna": "",
-      "leggibilita_bassa": true
+      "leggibilita_bassa": false
     }
   }
 ]

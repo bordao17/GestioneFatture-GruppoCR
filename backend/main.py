@@ -9,7 +9,7 @@ import time
 from datetime import datetime, timezone
 import zoneinfo
 import json
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 import uvicorn
@@ -21,7 +21,7 @@ from src.registro import aggiorna_registro, leggi_registro, rimuovi_dal_registro
 from src.pdf_writer import salva_pdf_multipagina
 from src.accorpatore import accorpa_documenti
 from src.notificatore import calcola_riepilogo
-from src.memoria import carica_memoria, salva_memoria, aggiorna_fornitore
+from src.memory_manager import carica_memoria, salva_memoria, aggiorna_fornitore
 
 app = FastAPI(
     title="GestioneFatture - GruppoCR API",
@@ -99,6 +99,90 @@ async def get_document(doc_id: str):
     
     raise HTTPException(status_code=404, detail="Documento non trovato")
 
+@app.post("/api/documents/manuale")
+async def crea_documento_manuale(
+    file: UploadFile = File(...),
+    fornitore: str = Form(""),
+    numero_ddt: str = Form(""),
+    data_ddt: str = Form(""),
+    ragione_sociale_consegna: str = Form(""),
+    indirizzo_consegna: str = Form(""),
+):
+    """Inserisce un D.D.T. compilato a mano, senza passare dal modello AI.
+
+    Serve per i documenti che l'utente ha già davanti e preferisce trascrivere:
+    il file viene archiviato come tutti gli altri, ma i dati sono quelli digitati
+    e NON vengono normalizzati — vale la stessa regola delle correzioni fatte da
+    dashboard, quello che l'utente scrive a mano resta com'è.
+    """
+    estensione = os.path.splitext(file.filename or "")[1].lower()
+    if estensione not in [".pdf", ".jpg", ".jpeg", ".png"]:
+        raise HTTPException(status_code=400, detail="Formato non supportato: carica un PDF o un'immagine.")
+
+    dati = {
+        "fornitore": fornitore.strip(),
+        "numero_ddt": numero_ddt.strip(),
+        "data_ddt": data_ddt.strip(),
+        "ragione_sociale_consegna": ragione_sociale_consegna.strip(),
+        "indirizzo_consegna": indirizzo_consegna.strip(),
+        "leggibilita_bassa": False,
+    }
+
+    if not any(dati[campo] for campo in CAMPI_OBBLIGATORI):
+        raise HTTPException(status_code=400, detail="Compila almeno un campo del documento.")
+
+    # Stessa regola degli altri documenti: se manca qualcosa finisce in CHECK,
+    # così un inserimento incompleto resta visibile tra quelli da verificare.
+    stato, campi_trovati = determina_stato(dati, CAMPI_OBBLIGATORI)
+    id_documento = str(uuid.uuid4())
+
+    cartella_dest = os.path.join(CARTELLA_FATTURE, stato)
+    os.makedirs(cartella_dest, exist_ok=True)
+    path_pdf_dest = os.path.join(cartella_dest, f"{id_documento}.pdf")
+
+    temp_dir = tempfile.mkdtemp()
+    try:
+        path_origine = os.path.join(temp_dir, f"upload{estensione}")
+        with open(path_origine, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        if estensione == ".pdf":
+            # Già un PDF: archiviato com'è. Passare da immagine come fa
+            # l'estrazione AI ne peggiorerebbe soltanto la qualità.
+            shutil.copyfile(path_origine, path_pdf_dest)
+        else:
+            salva_pdf_multipagina(path_pdf_dest, [path_origine])
+    except Exception as e:
+        print(f"❌ Errore salvataggio documento manuale: {e}")
+        raise HTTPException(status_code=500, detail=f"Impossibile salvare il file: {e}")
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+
+    anagrafica = {
+        "id": id_documento,
+        "file_origine": file.filename,
+        "timestamp": timestamp_locale(),
+        "inserimento": "manuale",
+        "dati": dati,
+    }
+    aggiorna_registro(stato, anagrafica)
+
+    # Anche i fornitori scritti a mano entrano nella memoria AI: sono anzi i più
+    # affidabili, perché non passano da una lettura del modello.
+    if dati["fornitore"]:
+        try:
+            aggiorna_fornitore(dati["fornitore"], "")
+        except Exception as e:
+            print(f"⚠️ Errore durante l'aggiornamento della memoria fornitori: {e}")
+
+    print(f"✍️ Documento manuale registrato: id={id_documento}, stato={stato}")
+    return {
+        "message": "Documento inserito manualmente",
+        "id": id_documento,
+        "stato": stato,
+        "campi_trovati": campi_trovati,
+    }
+
 @app.put("/api/documents/{doc_id}")
 async def update_document(doc_id: str, updated_data: dict):
     """Aggiorna i dati estratti di un documento"""
@@ -107,11 +191,12 @@ async def update_document(doc_id: str, updated_data: dict):
         if registro:
             for i, doc in enumerate(registro):
                 if doc.get('id') == doc_id:
-                    # Aggiorna solo i dati estratti, mantieni metadata
-                    doc['extracted_data'] = updated_data.get('extracted_data', doc.get('dati', {}))
-                    if 'dati' in doc:
-                        doc['dati'] = updated_data.get('extracted_data', doc['dati'])
-                    
+                    # Aggiorna solo i dati estratti, mantieni metadata.
+                    # Il registro usa la chiave 'dati' (come il frontend in lettura):
+                    # scrivere anche 'extracted_data' duplicava il campo nel JSON.
+                    doc['dati'] = updated_data.get('extracted_data', doc.get('dati', {}))
+
+
                     # Salva nel registro
                     aggiorna_documento_registro(stato, i, doc)
                     return {"message": "Documento aggiornato con successo", "document": doc}

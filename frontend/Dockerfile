@@ -4,6 +4,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+# Vite inietta le variabili VITE_* nel bundle in fase di build, non a runtime:
+# vanno quindi passate come build arg (vedi docker-compose.yml), non come "environment:".
+ARG VITE_API_URL=http://localhost:8000
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Stage 2: Nginx

@@ -1,29 +1,93 @@
 {
-    "Francia Latticini S.p.A.": {
+    "FRANCIA LATTICINI SPA": {
         "confermato": "no",
         "note_specifiche": ""
     },
-    "Manzi Giovanni Srl": {
+    "MANZI GIOVANNI SRL": {
         "confermato": "no",
         "note_specifiche": ""
     },
-    "UNIVERSO PANE S.R.L.": {
+    "UNIVERSO PANE SRL": {
         "confermato": "yes",
         "note_specifiche": "IGNORA ASSOLUTAMENTE l'indirizzo 'VIA DEL RAME 06077 PONTE FELCINO PG'. Quello NON è la destinazione. Il vero indirizzo di consegna (che cambia in base al punto vendita) si trova in alto a destra, esattamente sotto l'etichetta 'Luogo di consegna'. Estrai solo l'indirizzo scritto lì sotto."
     },
-    "PERFETTI van Melle S.p.A.": {
+    "PERFETTI VAN MELLE SPA": {
         "confermato": "no",
         "note_specifiche": ""
     },
-    "PASTIFICIO RANA S.P.A.": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "PERFETTI VAN MELLE S.p.A.": {
+    "PASTIFICIO RANA SPA": {
         "confermato": "no",
         "note_specifiche": ""
     },
     "TRASPORTO IO SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "M SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "MOLINO VIGEVANO GIUSTO": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "GRANDEIMPERO": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "CENTRALE DEL LATTE DI ROMA SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "ANDRIANI SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "GABBIANO SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "OSCAR'78 SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "NUTRITION & SANTÈ ITALIA SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "PETRUCCI": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "GRANAROLO SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "ABC ITALIA SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "PANIFICIO MARIANANTONI SILVIO SRLS": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "CEREALDOLCI SRL": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "COKY SRL SOCIETÀ AGRICOLA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "VITAKRAFT ITALIA SPA": {
+        "confermato": "no",
+        "note_specifiche": ""
+    },
+    "EUROFRESH SRL": {
         "confermato": "no",
         "note_specifiche": ""
     }

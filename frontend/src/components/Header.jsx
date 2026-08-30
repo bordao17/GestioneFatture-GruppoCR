@@ -1,7 +1,7 @@
 import React from 'react';
-import { FileText, RefreshCw, BrainCircuit } from 'lucide-react';
+import { FileText, RefreshCw, BrainCircuit, FilePlus } from 'lucide-react';
 
-export default function Header({ onRefresh, isLoading, onViewSuppliers }) {
+export default function Header({ onRefresh, isLoading, onViewSuppliers, onManualAdd }) {
   return (
     <nav className="navbar navbar-expand-lg bg-dark border-bottom border-secondary mb-4">
       <div className="container-fluid px-4 py-2 d-flex justify-content-between align-items-center">
@@ -29,14 +29,23 @@ export default function Header({ onRefresh, isLoading, onViewSuppliers }) {
           </button>
         </div>
 
-        {/* 3. DESTRA: Autore e Pulsante Sincronizza */}
-        <div className="d-flex align-items-center justify-content-end gap-4" style={{ minWidth: '250px' }}>
-          <div className="text-end d-none d-lg-block">
+        {/* 3. DESTRA: Autore, Aggiunta Manuale e Pulsante Sincronizza */}
+        <div className="d-flex align-items-center justify-content-end gap-3" style={{ minWidth: '250px' }}>
+          <div className="text-end d-none d-xl-block me-2">
             <small className="text-secondary d-block">Powered by Bordao Studio</small>
             <small className="text-muted" style={{ fontSize: '0.7rem' }}>Author: Lorenzo Bordi</small>
           </div>
-          
-          <button 
+
+          <button
+            className="btn btn-success d-flex align-items-center gap-2 shadow-sm"
+            onClick={onManualAdd}
+            title="Aggiungi a mano un D.D.T. già verificato, senza passare dall'AI"
+          >
+            <FilePlus size={18} />
+            <span className="d-none d-md-inline">Aggiungi Manuale</span>
+          </button>
+
+          <button
             className="btn btn-primary d-flex align-items-center gap-2 shadow-sm" 
             onClick={onRefresh}
             disabled={isLoading}
