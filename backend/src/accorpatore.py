@@ -28,6 +28,9 @@ from src.classificatore import determina_stato, CAMPI_OBBLIGATORI
 
 CARTELLA_BASE = "/fatture_lette"
 STATI_DA_ACCORPARE = ["OK", "CHECK"]
+# L'unione manuale può pescare da qualsiasi tab della dashboard, KO compreso
+# (una pagina illeggibile appartiene comunque a un documento reale).
+STATI_TUTTI = ["OK", "CHECK", "KO"]
 
 
 def _percorso_registro(stato):
@@ -151,4 +154,108 @@ def accorpa_documenti():
         "documenti_totali": len(voci),
         "gruppi_creati": len(gruppi),
         "pagine_accorpate": pagine_accorpate
+    }
+
+def _trova_pdf(stato, id_documento):
+    """Percorso del PDF di un documento, con lo stesso fallback sulla root usato
+    da GET /api/pdf/{id} per i documenti archiviati prima delle sottocartelle."""
+    percorso = _percorso_pdf(stato, id_documento)
+    if os.path.exists(percorso):
+        return percorso
+
+    percorso_root = os.path.join(CARTELLA_BASE, f"{id_documento}.pdf")
+    if os.path.exists(percorso_root):
+        return percorso_root
+
+    return None
+
+
+def unisci_documenti_manuale(ids):
+    """
+    Unisce a mano i documenti indicati in un unico documento multi-pagina,
+    anche se stanno in stati diversi (OK/CHECK/KO).
+
+    Serve quando l'accorpamento automatico non è scattato: `stesso_documento()`
+    pretende un numero_ddt identico, quindi basta una cifra letta male su una
+    pagina perché le pagine dello stesso DDT restino separate.
+
+    L'ordine di `ids` conta: il primo è il documento PRINCIPALE — i suoi dati
+    vincono, gli altri riempiono solo i campi ancora vuoti (stessa regola di
+    `unisci_dati_pagina` usata dall'accorpamento automatico), e le pagine dei
+    PDF vengono concatenate nell'ordine ricevuto.
+    """
+    # Dedup mantenendo l'ordine: il frontend manda l'ordine di selezione.
+    ids_unici = list(dict.fromkeys(ids or []))
+    if len(ids_unici) < 2:
+        raise ValueError("Servono almeno due documenti diversi da unire.")
+
+    # 1. Localizza ogni voce nel registro del suo stato, nell'ordine richiesto
+    registri = {stato: _carica_registro(stato) for stato in STATI_TUTTI}
+    voci_ordinate = []
+    for doc_id in ids_unici:
+        trovata = None
+        for stato in STATI_TUTTI:
+            for voce in registri[stato]:
+                if voce.get("id") == doc_id:
+                    trovata = (stato, voce)
+                    break
+            if trovata:
+                break
+        if not trovata:
+            raise ValueError(f"Documento non trovato: {doc_id}")
+        voci_ordinate.append(trovata)
+
+    # 2. Unisci i dati: il primo documento fa da base, gli altri completano i buchi
+    voce_master = voci_ordinate[0][1]
+    dati_uniti = dict(voce_master.get("dati") or {})
+    for _, voce in voci_ordinate[1:]:
+        dati_uniti = unisci_dati_pagina(dati_uniti, voce.get("dati") or {})
+
+    # Lo stato finale si ricalcola sui dati uniti, come nell'accorpamento automatico:
+    # due pagine CHECK che insieme coprono tutti i campi diventano OK.
+    stato_finale, _ = determina_stato(dati_uniti, CAMPI_OBBLIGATORI)
+
+    # 3. Concatena i PDF nell'ordine di selezione
+    id_finale = voce_master["id"]
+    percorsi_origine = [_trova_pdf(stato, voce["id"]) for stato, voce in voci_ordinate]
+    percorsi_esistenti = [p for p in percorsi_origine if p]
+    percorso_finale = _percorso_pdf(stato_finale, id_finale)
+
+    if percorsi_esistenti:
+        os.makedirs(os.path.dirname(percorso_finale), exist_ok=True)
+        _unisci_pdf(percorsi_esistenti, percorso_finale)
+        for percorso in percorsi_esistenti:
+            if percorso != percorso_finale and os.path.exists(percorso):
+                os.remove(percorso)
+
+    # 4. Riscrivi i registri: via le voci di partenza, dentro quella unita.
+    #    Partiamo dalla voce master per non perdere eventuali metadati suoi
+    #    (es. "inserimento": "manuale").
+    file_origini = []
+    for _, voce in voci_ordinate:
+        origine = voce.get("file_origine")
+        if origine and origine not in file_origini:
+            file_origini.append(origine)
+
+    voce_finale = _pulisci_voce(voce_master)
+    voce_finale["dati"] = dati_uniti
+    voce_finale["numero_pagine"] = sum(v.get("numero_pagine", 1) for _, v in voci_ordinate)
+    voce_finale["file_origine"] = " + ".join(file_origini)
+    voce_finale["unione"] = "manuale"
+
+    ids_da_rimuovere = set(ids_unici)
+    for stato in STATI_TUTTI:
+        registri[stato] = [v for v in registri[stato] if v.get("id") not in ids_da_rimuovere]
+    registri[stato_finale].append(voce_finale)
+
+    for stato in STATI_TUTTI:
+        _salva_registro(stato, registri[stato])
+
+    return {
+        "id": id_finale,
+        "stato": stato_finale,
+        "numero_pagine": voce_finale["numero_pagine"],
+        "documenti_uniti": len(voci_ordinate),
+        "stati_origine": [stato for stato, _ in voci_ordinate],
+        "pdf_mancanti": len(percorsi_origine) - len(percorsi_esistenti),
     }

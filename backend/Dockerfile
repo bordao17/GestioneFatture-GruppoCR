@@ -1,5 +1,9 @@
 FROM python:3.12-slim
 
+# Log non bufferizzati: senza questo i print delle singole pagine restano nel
+# buffer di stdout e compaiono tutti insieme a fine elaborazione.
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
 # Installiamo prima i requirements per sfruttare la cache di Docker

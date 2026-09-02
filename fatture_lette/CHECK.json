@@ -1,11 +1,11 @@
 [
   {
-    "id": "9055d201-7d39-47db-803c-283b17744dd9",
+    "id": "c6d5f369-8bf1-425f-b8c2-03604bb9f611",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:07:47.347030+02:00",
+    "timestamp": "2026-09-02T11:11:12.439988+02:00",
     "dati": {
       "fornitore": "M SRL",
-      "numero_ddt": "D1/087145",
+      "numero_ddt": "D1/082145",
       "data_ddt": "17-05-2026",
       "ragione_sociale_consegna": "",
       "indirizzo_consegna": "",
@@ -13,30 +13,16 @@
     }
   },
   {
-    "id": "17fa8c88-e440-470a-bfc3-145beb3641c3",
+    "id": "143fdaa1-7413-4091-a570-cc5eb1c6d442",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:08:10.823146+02:00",
+    "timestamp": "2026-09-02T11:11:16.906093+02:00",
     "dati": {
-      "fornitore": "MOLINO VIGEVANO GIUSTO",
+      "fornitore": "M SRL",
       "numero_ddt": "",
       "data_ddt": "",
       "ragione_sociale_consegna": "",
       "indirizzo_consegna": "",
-      "leggibilita_bassa": false
-    }
-  },
-  {
-    "id": "38fdc932-6d9b-4515-978a-c26b0895c4fa",
-    "file_origine": "test2.pdf",
-    "numero_pagine": 2,
-    "timestamp": "2026-08-30T11:19:42.531815+02:00",
-    "dati": {
-      "fornitore": "VITAKRAFT ITALIA SPA",
-      "numero_ddt": "374764",
-      "data_ddt": "08-07-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "",
-      "leggibilita_bassa": false
+      "leggibilita_bassa": true
     }
   }
 ]

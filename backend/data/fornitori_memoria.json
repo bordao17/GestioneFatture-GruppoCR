@@ -84,8 +84,8 @@
         "note_specifiche": ""
     },
     "VITAKRAFT ITALIA SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
+        "confermato": "yes",
+        "note_specifiche": "Il numero DDT sta sempre sotto la voce \"Bolla Nr.\" e NON usare la voce Nr. ordine d'acquisto"
     },
     "EUROFRESH SRL": {
         "confermato": "no",

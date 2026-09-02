@@ -1,0 +1,16 @@
+(function(){try{var e=typeof window<`u`?window:typeof global<`u`?global:typeof globalThis<`u`?globalThis:typeof self<`u`?self:{};e.SENTRY_RELEASE={id:`n8n@2.36.9`}}catch{}})();try{(function(){var e=typeof window<`u`?window:typeof global<`u`?global:typeof globalThis<`u`?globalThis:typeof self<`u`?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]=`7e96dd09-2db4-4ac3-a7c6-92c1594ea5e8`,e._sentryDebugIdIdentifier=`sentry-dbid-7e96dd09-2db4-4ac3-a7c6-92c1594ea5e8`)})()}catch{}import{S as e}from"./vue.runtime.esm-bundler-D7CM8Dqi.js";import{s as t}from"./src-C4bOk18C.js";import{s as n}from"./vue-router-4boDdV_P.js";import{c as r}from"./htmlUtils-KIkn572W.js";import{t as i}from"./useTelemetry-ByXayI0d.js";import{t as a}from"./views-BysAVZfz.js";import{t as o}from"./z-indexes-zzps1L8H.js";import{n as s}from"./useExternalHooks-BigDROum.js";var c;function l(e){c=e}var u={close(){}},d=()=>u;function f(){return c||d}var p=[];function m(){let c=i(),l=n(),d=e(()=>{if(l?.name===a.DEMO||l?.name===a.DEMO_DIFF)return`demo`;let e=l?.params?.workflowId;return(Array.isArray(e)?e[0]:e)??``}),m=s(),h=t();function g(e){return!e||typeof e!=`string`?!1:e.includes(`Credentials for`)&&e.includes(`are not set`)}function _(e,t=!0){let n=f(),i={dangerouslyUseHTMLString:!0,position:`bottom-right`,zIndex:o.TOASTS,appendTo:`#n8n-app`,customClass:`content-toast`},{message:a,title:s}=e,l={...i,...e};typeof a==`string`&&(l.message=r(a)),typeof s==`string`&&(l.title=r(s));let m=n(l);if(!m)return u;if(l.duration===0&&p.push(m),l.type===`error`&&t){let e;if(typeof l.message==`string`)e=l.message;else if(l.message&&typeof l.message==`object`&&`props`in l.message&&l.message.props){let t=l.message.props,n=typeof t==`object`&&!!t&&`errorMessage`in t,r=typeof t==`object`&&!!t&&`message`in t;e=n?String(t.errorMessage):r?String(t.message):`Unknown error`}else e=`Unknown error`;c.track(`Instance FE emitted error`,{error_title:l.title,error_message:e,caused_by_credential:g(e),workflow_id:d.value})}return m}function v(e){let t;if(e.closeOnClick){let n=e.onClick;e.onClick=()=>{t&&t.close(),n&&n()}}return t=_({title:e.title,message:e.message,onClick:e.onClick,onClose:e.onClose,duration:e.duration,customClass:e.customClass,type:e.type}),t}function y(e){let t=e.length>500?`${e.slice(0,500)}...`:e;return`
+				<br>
+				<br>
+				<details>
+					<summary
+						style="color: #ff6d5a; font-weight: bold; cursor: pointer;"
+					>
+						${h.baseText(`showMessage.showDetails`)}
+					</summary>
+					<p>${t}</p>
+				</details>
+			`}function b(e,t,n){let r=e,i=n?.message,a=n?.description??r.description;_({title:t,message:`
+					${i?`${i}<br/>`:``}
+					<i>${r.message}</i>
+					${a?y(a):``}`,type:`error`,duration:0},!1),m.run(`showMessage.showError`,{title:t,message:i,errorMessage:r.message}),c.track(`Instance FE emitted error`,{error_title:t,error_description:i,error_message:r.message,caused_by_credential:g(r.message),workflow_id:d.value})}function x(){p.forEach(e=>{e&&e.close()}),p.length=0}return{showMessage:_,showToast:v,showError:b,clearAllStickyNotifications:x}}export{m as n,l as t};
+//# sourceMappingURL=useToast-CsiynV6U.js.map

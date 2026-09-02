@@ -19,7 +19,7 @@ from src.llm_engine import estrai_dati_da_immagine
 from src.classificatore import determina_stato, CAMPI_OBBLIGATORI
 from src.registro import aggiorna_registro, leggi_registro, rimuovi_dal_registro, aggiorna_documento_registro
 from src.pdf_writer import salva_pdf_multipagina
-from src.accorpatore import accorpa_documenti
+from src.accorpatore import accorpa_documenti, unisci_documenti_manuale
 from src.notificatore import calcola_riepilogo
 from src.memory_manager import carica_memoria, salva_memoria, aggiorna_fornitore
 
@@ -222,6 +222,32 @@ async def delete_document(doc_id: str):
                     return {"message": "Documento eliminato con successo"}
     
     raise HTTPException(status_code=404, detail="Documento non trovato")
+
+@app.post("/api/documents/unisci")
+async def unisci_documenti(payload: dict):
+    """Unisce manualmente più documenti in un unico DDT multi-pagina.
+
+    Serve quando l'accorpamento automatico non è scattato (tipicamente perché il
+    modello ha letto un numero_ddt diverso su una pagina) e le pagine dello stesso
+    documento sono finite separate, anche in tab diversi della dashboard.
+
+    Body: {"ids": [...]} — l'ordine conta, il primo id è il documento principale.
+    """
+    ids = payload.get("ids") or []
+    if not isinstance(ids, list):
+        raise HTTPException(status_code=400, detail="Il campo 'ids' deve essere una lista.")
+
+    try:
+        risultato = unisci_documenti_manuale(ids)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"❌ Errore durante l'unione manuale: {e}")
+        raise HTTPException(status_code=500, detail="Impossibile unire i documenti.")
+
+    print(f"🧩 Unione manuale di {risultato['documenti_uniti']} documenti "
+          f"({', '.join(risultato['stati_origine'])}) → {risultato['stato']} id={risultato['id']}")
+    return {"message": "Documenti uniti con successo", **risultato}
 
 # ==========================================
 # 5. ROUTING: VISUALIZZAZIONE PDF

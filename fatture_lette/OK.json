@@ -1,9 +1,8 @@
-
 [
   {
-    "id": "67a10ff8-5f26-4bc3-ba31-cc2e3b674191",
+    "id": "18be3099-953d-4db8-a4ba-ca76c98513cb",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:08:35.386609+02:00",
+    "timestamp": "2026-09-02T11:11:21.770290+02:00",
     "dati": {
       "fornitore": "GRANDEIMPERO",
       "numero_ddt": "50139/005",
@@ -14,10 +13,10 @@
     }
   },
   {
-    "id": "944c39ea-cf67-46e0-8706-57f17f1939d2",
+    "id": "3afff0e3-3679-4e5c-a55c-9df6edf10887",
     "file_origine": "test2.pdf",
     "numero_pagine": 2,
-    "timestamp": "2026-08-30T11:09:00.208036+02:00",
+    "timestamp": "2026-09-02T11:11:26.737523+02:00",
     "dati": {
       "fornitore": "CENTRALE DEL LATTE DI ROMA SPA",
       "numero_ddt": "81197691",
@@ -28,10 +27,10 @@
     }
   },
   {
-    "id": "c8a85eb1-85c8-4dfb-ac21-4ec84515b090",
+    "id": "110b943d-78d6-4bb8-9054-03691f0c9abb",
     "file_origine": "test2.pdf",
     "numero_pagine": 2,
-    "timestamp": "2026-08-30T11:09:49.970254+02:00",
+    "timestamp": "2026-09-02T11:11:36.885777+02:00",
     "dati": {
       "fornitore": "ANDRIANI SPA",
       "numero_ddt": "2426",
@@ -42,10 +41,10 @@
     }
   },
   {
-    "id": "6a55799a-ccda-4e62-a44d-860825705279",
+    "id": "545f2535-91c2-45eb-8fc3-1fd1a2dbbd5f",
     "file_origine": "test2.pdf",
     "numero_pagine": 2,
-    "timestamp": "2026-08-30T11:10:39.330069+02:00",
+    "timestamp": "2026-09-02T11:11:47.048120+02:00",
     "dati": {
       "fornitore": "GABBIANO SPA",
       "numero_ddt": "SGE/070580",
@@ -56,10 +55,10 @@
     }
   },
   {
-    "id": "7d3af459-a5b3-4d3b-b1dc-723616a0b5f1",
+    "id": "6c617396-649f-4da3-b808-7ff94955c676",
     "file_origine": "test2.pdf",
     "numero_pagine": 3,
-    "timestamp": "2026-08-30T11:11:28.849382+02:00",
+    "timestamp": "2026-09-02T11:11:57.223798+02:00",
     "dati": {
       "fornitore": "OSCAR'78 SRL",
       "numero_ddt": "4969",
@@ -70,10 +69,10 @@
     }
   },
   {
-    "id": "1ac0909e-362d-43c3-a75a-fd65fd11c3f7",
+    "id": "c4a9aa06-327d-443d-aa94-5c4a8ec6b726",
     "file_origine": "test2.pdf",
     "numero_pagine": 7,
-    "timestamp": "2026-08-30T11:12:43.246327+02:00",
+    "timestamp": "2026-09-02T11:12:12.703392+02:00",
     "dati": {
       "fornitore": "NUTRITION & SANTÈ ITALIA SPA",
       "numero_ddt": "26009625",
@@ -84,9 +83,9 @@
     }
   },
   {
-    "id": "2a40690c-86a6-4f1c-871a-a51145ad9bd3",
+    "id": "4c36c581-7d9d-4e75-a5dc-a0eda19d20b7",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:15:36.142108+02:00",
+    "timestamp": "2026-09-02T11:12:47.993500+02:00",
     "dati": {
       "fornitore": "PETRUCCI",
       "numero_ddt": "9501",
@@ -97,9 +96,9 @@
     }
   },
   {
-    "id": "34a3e2f3-9827-4aea-9596-1cccab463deb",
+    "id": "3e497e5a-828c-402a-9dc2-d2cf594f57e6",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:16:00.835278+02:00",
+    "timestamp": "2026-09-02T11:12:53.035172+02:00",
     "dati": {
       "fornitore": "GRANAROLO SPA",
       "numero_ddt": "6813003799",
@@ -110,10 +109,10 @@
     }
   },
   {
-    "id": "ee8bbe7c-d881-4967-976a-4fc3b3e8c10d",
+    "id": "bf760796-946b-4a45-b0e2-7599c12ffdf0",
     "file_origine": "test2.pdf",
     "numero_pagine": 3,
-    "timestamp": "2026-08-30T11:16:25.726504+02:00",
+    "timestamp": "2026-09-02T11:12:58.094852+02:00",
     "dati": {
       "fornitore": "ABC ITALIA SRL",
       "numero_ddt": "122949",
@@ -124,9 +123,9 @@
     }
   },
   {
-    "id": "ceef0f6f-acde-42f3-be70-a7133375be06",
+    "id": "6a587455-01a8-446e-8f87-c87ee5768c87",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:17:39.795625+02:00",
+    "timestamp": "2026-09-02T11:13:13.210997+02:00",
     "dati": {
       "fornitore": "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.",
       "numero_ddt": "5100",
@@ -137,35 +136,35 @@
     }
   },
   {
-    "id": "e18a24c7-2c60-47e6-b4c0-f8132b806b50",
+    "id": "8a62a11c-d7e4-44d8-9a2a-493851d011d3",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:18:04.376920+02:00",
+    "timestamp": "2026-09-02T11:13:18.209714+02:00",
     "dati": {
       "fornitore": "MARIANANTONI SILVIO SRLS",
       "numero_ddt": "3098/A/2026",
       "data_ddt": "03-07-2026",
       "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA GIACOMO ANDREASSI 30, 00123 ROMA",
+      "indirizzo_consegna": "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)",
       "leggibilita_bassa": false
     }
   },
   {
-    "id": "cc6b0b69-6928-4fbf-bfba-289376948bbb",
+    "id": "3a8437ed-5a28-438c-8d8b-952190de97c0",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:18:29.214931+02:00",
+    "timestamp": "2026-09-02T11:13:23.400993+02:00",
     "dati": {
       "fornitore": "CEREALDOLCI SRL",
       "numero_ddt": "11439/DT",
       "data_ddt": "08-07-2026",
       "ragione_sociale_consegna": "PAC 2000A SOCIETÀ COOPERATIVA",
-      "indirizzo_consegna": "VIA DEL RAME 2, 06134 PERUGIA (PG)",
+      "indirizzo_consegna": "VIA DEL RAME 2, 06134 PERUGIA (PG) ITALIA",
       "leggibilita_bassa": false
     }
   },
   {
-    "id": "00b6931e-9a6e-465b-8f4b-4b1a1076b4cd",
+    "id": "55388ecb-371d-46c6-a469-dec45ba29401",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:18:53.943621+02:00",
+    "timestamp": "2026-09-02T11:13:28.608429+02:00",
     "dati": {
       "fornitore": "COKY SRL SOCIETÀ AGRICOLA",
       "numero_ddt": "2 7071",
@@ -176,23 +175,9 @@
     }
   },
   {
-    "id": "120e8e02-2cbd-437e-8ba4-23d8160fcb96",
+    "id": "2fc3b2df-ec6b-4e06-b6df-84aadc125a25",
     "file_origine": "test2.pdf",
-    "numero_pagine": 2,
-    "timestamp": "2026-08-30T11:19:18.631641+02:00",
-    "dati": {
-      "fornitore": "VITAKRAFT ITALIA SPA",
-      "numero_ddt": "858336",
-      "data_ddt": "02-07-2026",
-      "ragione_sociale_consegna": "CONAD / RM_PEPERINO",
-      "indirizzo_consegna": "VIA DI QUARTO PEPERINO 168, 00189 ROMA (RM)",
-      "leggibilita_bassa": false
-    }
-  },
-  {
-    "id": "ed3327fb-fcaf-46ea-950b-08e80ea901a2",
-    "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:20:55.889628+02:00",
+    "timestamp": "2026-09-02T11:13:53.456544+02:00",
     "dati": {
       "fornitore": "EUROFRESH SRL",
       "numero_ddt": "11921",
@@ -203,15 +188,94 @@
     }
   },
   {
-    "id": "bfebda45-629e-4bf1-be39-40c140c395ae",
+    "id": "1feca833-882d-429c-92cb-ae13430f6c37",
     "file_origine": "test2.pdf",
-    "timestamp": "2026-08-30T11:21:20.967336+02:00",
+    "timestamp": "2026-09-02T11:13:58.628674+02:00",
     "dati": {
       "fornitore": "PERFETTI VAN MELLE SPA",
       "numero_ddt": "2668111283",
       "data_ddt": "17-07-2026",
       "ragione_sociale_consegna": "C.R. MARKET SRL",
       "indirizzo_consegna": "VIA QUARTO PEPERINO 168/170, 00188 ROMA (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "dcc3b960-a7da-4801-b401-9e33ea2a87c6",
+    "file_origine": "test.pdf",
+    "timestamp": "2026-09-02T11:14:05.958511+02:00",
+    "dati": {
+      "fornitore": "FRANCIA LATTICINI SPA",
+      "numero_ddt": "002336/160",
+      "data_ddt": "12-06-2026",
+      "ragione_sociale_consegna": "C.R. MARKET SRL",
+      "indirizzo_consegna": "VIA M.VISINTINI 51, 00012 GUIDONIA (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "35856e37-d327-43dc-a028-880d3cbf02de",
+    "file_origine": "test.pdf",
+    "timestamp": "2026-09-02T11:14:10.927100+02:00",
+    "dati": {
+      "fornitore": "MANZI GIOVANNI SRL",
+      "numero_ddt": "B27/3617",
+      "data_ddt": "25-07-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA MARIO VISINTINI 51, 00012 GUIDONIA (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "d23ec703-0c88-4991-9620-a96d2b25b780",
+    "file_origine": "test.pdf",
+    "timestamp": "2026-09-02T11:14:15.927570+02:00",
+    "dati": {
+      "fornitore": "UNIVERSO PANE SRL",
+      "numero_ddt": "133221/B0",
+      "data_ddt": "02-07-2026",
+      "ragione_sociale_consegna": "C.R. MARKET SRL",
+      "indirizzo_consegna": "VIA VISINTINI, 51, 00012 GUIDONIA (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "2d38b8d2-b453-4fe5-8fc3-3ff5d0709d5f",
+    "file_origine": "test.pdf",
+    "timestamp": "2026-09-02T11:14:21.081771+02:00",
+    "dati": {
+      "fornitore": "PERFETTI VAN MELLE SPA",
+      "numero_ddt": "2667108505",
+      "data_ddt": "06-07-2026",
+      "ragione_sociale_consegna": "C.R. MARKET SRL",
+      "indirizzo_consegna": "VIA MARIO VISINTINI 51, 00012 GUIDONIA MONTECELIO (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "d203614b-867a-43dd-a1f4-4f6f63f76a17",
+    "file_origine": "test.pdf",
+    "timestamp": "2026-09-02T11:14:26.193313+02:00",
+    "dati": {
+      "fornitore": "PASTIFICIO RANA SPA",
+      "numero_ddt": "26735128",
+      "data_ddt": "04-05-2026",
+      "ragione_sociale_consegna": "PAC 2000A - CONAD",
+      "indirizzo_consegna": "VIA MARIO VISINTINI 51, 00012 GUIDONIA MONTECELIO (RM)",
+      "leggibilita_bassa": false
+    }
+  },
+  {
+    "id": "584040e1-8223-4274-8c78-84cff5a4de72",
+    "file_origine": "test3.pdf",
+    "numero_pagine": 4,
+    "timestamp": "2026-09-02T11:37:06.011085+02:00",
+    "dati": {
+      "fornitore": "VITAKRAFT ITALIA SPA",
+      "numero_ddt": "858336",
+      "data_ddt": "02-07-2026",
+      "ragione_sociale_consegna": "CONAD / RM_PEPERINO",
+      "indirizzo_consegna": "VIA DI QUARTO PEPERINO 168, 00189 ROMA (RM)",
       "leggibilita_bassa": false
     }
   }

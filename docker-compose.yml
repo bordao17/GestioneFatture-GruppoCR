@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_HOST=http://10.1.20.25:11434
       - GENERIC_TIMEZONE=Europe/Rome
       # Zoom di rendering PDF→PNG: 2.5 ≈ 180 DPI. Alzare a 3.5 se il modello
       # sbaglia cifre sui documenti scansionati male (costa tempo per pagina).

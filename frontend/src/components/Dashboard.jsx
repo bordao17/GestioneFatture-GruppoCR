@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckCircle, AlertTriangle, XOctagon } from 'lucide-react';
 import DocumentTable from './DocumentTable'; // Importiamo il tuo componente
 
-export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, onDelete }) {
+export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, onDelete, selectedIds, onToggleSelect }) {
   // Filtriamo i documenti in base al tab selezionato
   const filteredDocs = documents.filter(doc => doc.status === activeTab);
 
@@ -52,6 +52,8 @@ export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, 
           documents={filteredDocs} 
           onEdit={onEdit} 
           onDelete={onDelete} 
+          selectedIds={selectedIds}
+          onToggleSelect={onToggleSelect}
         />
       </div>
     </div>

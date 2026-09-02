@@ -8,7 +8,7 @@ Monorepo con due servizi containerizzati (Docker + `docker-compose`, orchestrati
 - **Frontend:** React 19 + Vite, Bootstrap 5, `lucide-react` (icone), `react-pdf`/iframe per l'anteprima PDF, Nginx per servire la build in produzione.
 - **Container:** Docker + `docker-compose` (3 servizi: `api-gestione-fatture`, `frontend-gestione-fatture`, `n8n`).
 - **Infrastruttura Hardware:** AMD Ryzen 7 5700X3D, 32GB RAM, AMD Radeon RX 7600 XT, NVMe SSD.
-- **Motore AI:** Ollama (esposto sulla LAN tramite `OLLAMA_HOST=0.0.0.0`), raggiunto dal container backend via `host.docker.internal:11434`.
+- **Motore AI:** Ollama su una **macchina separata in LAN aziendale** (`10.1.20.25:11434`, esposto con `OLLAMA_HOST=0.0.0.0`), raggiunta dal container backend tramite la variabile `OLLAMA_HOST` in `docker-compose.yml` — la libreria python `ollama` la legge da sola, in `llm_engine.py` non c'è nessun host hardcoded (spostato dal locale `host.docker.internal` il 2026-09-02). È una GPU **condivisa** con altri modelli (`qwen2.5-coder:32b`, `qwen3.6:35b`, `deepseek-r1:32b`): un'estrazione può attendere se qualcun altro la sta occupando. L'`extra_hosts: host.docker.internal` resta nel compose perché serve ancora a n8n.
 - **Modello Attuale:** `qwen2.5vl:7b` (Modello Vision multimodale nativo — nome esatto usato in `src/llm_engine.py`, senza trattino tra "qwen2.5" e "vl").
 - **Automazione:** n8n (container separato) monitora `fatture_da_leggere/`, chiama l'API di estrazione e gestisce notifiche/report; dati persistiti in `n8n_config/`.
 - **Storico Decisioni:** Inizialmente usava Surya OCR + Llama 3.1 testuale. È stato scartato a favore di un approccio "Pure Vision" (Qwen2.5-VL) per azzerare la perdita di contesto spaziale, eliminando la necessità di estrarre preventivamente il testo grezzo.
@@ -43,6 +43,12 @@ Il prompt chiede formati precisi ma un 7B non li rispetta in modo affidabile (mi
 ### Accorpamento Pagine Multi-DDT (`src/raggruppatore.py` + `src/accorpatore.py`)
 Un D.D.T. può occupare più pagine: ogni pagina viene comunque analizzata ed elaborata singolarmente (per non rallentare la pipeline), poi un passaggio **a posteriori** (`accorpa_documenti()`, invocato a fine batch dentro `POST /estrai-ddt`) rilegge tutte le voci già salvate in `OK.json`/`CHECK.json`, raggruppa quelle con lo stesso `numero_ddt` (match esatto) e fornitore simile (`SequenceMatcher` ratio ≥ 0.5), fonde i PDF di pagina in un unico multi-pagina e riscrive i registri con una voce per documento reale. Lo stato finale viene ricalcolato sui dati uniti (due pagine `CHECK` che insieme coprono tutti i campi possono diventare `OK`).
 
+**Unione manuale da dashboard (`POST /api/documents/unisci` + `MergeBar.jsx`, 2026-09-02).** L'accorpamento automatico pretende un `numero_ddt` **identico**: basta una cifra letta male su una pagina e le pagine dello stesso D.D.T. restano separate, spesso in tab diversi (il caso che ha motivato la feature: 4 pagine, 2 in `OK` e 2 in `CHECK` solo per un numero letto male). `unisci_documenti_manuale(ids)` in `accorpatore.py` bypassa il confronto e unisce quello che l'utente ha selezionato:
+- **L'ordine degli `ids` conta**: il primo è il documento principale, i suoi dati vincono e gli altri riempiono solo i campi vuoti (stesso `unisci_dati_pagina` dell'automatico, quindi il numero DDT sbagliato non sovrascrive quello giusto). I PDF si concatenano nello stesso ordine.
+- A differenza di `accorpa_documenti()` lavora anche su **KO** (`STATI_TUTTI`): una pagina illeggibile appartiene comunque a un documento reale. La voce finale parte dal master (per non perdere metadati suoi tipo `inserimento: manuale`) e riceve `unione: "manuale"`, `numero_pagine` sommato e i `file_origine` uniti.
+- Lo stato finale è ricalcolato con `determina_stato()` sui dati uniti, come nell'automatico. Il risultato non viene mai ri-spezzato: `accorpa_documenti()` sa solo raggruppare, non dividere.
+- Lato frontend la selezione vive in `App.jsx` e **non** in `Dashboard`, apposta: deve sopravvivere al cambio tab, perché le pagine da unire stanno per definizione in stati diversi.
+
 ### Gestione Memoria Fornitori (`backend/src/memory_manager.py`)
 Il sistema include un gestore di memoria basato su `backend/data/fornitori_memoria.json` (path relativo `data/fornitori_memoria.json`, montato come volume Docker su `./backend/data`).
 - Serve a iniettare regole personalizzate nel prompt se l'AI riconosce un fornitore specifico (es. "Se vedi UNIVERSO PANE S.R.L., ignora l'indirizzo di Ponte Felcino"). Le regole vengono iniettate SOLO se il fornitore ha `"confermato": "yes"` nel JSON — l'utente le approva dalla dashboard (`SuppliersManager.jsx`) dopo che l'AI le ha auto-censite alla prima occorrenza (`aggiorna_fornitore`, chiamata da `main.py` dopo ogni estrazione).
@@ -62,11 +68,12 @@ Il sistema include un gestore di memoria basato su `backend/data/fornitori_memor
 - `GET /riepilogo?da=<ISO8601>` — conteggi OK/CHECK/KO e dettaglio voci CHECK da un timestamp in poi (consumato da n8n per le notifiche).
 - `GET /api/documents`, `GET /api/documents/{id}`, `PUT /api/documents/{id}`, `DELETE /api/documents/{id}` — CRUD sui registri OK/CHECK/KO (usato dalla dashboard).
 - `POST /api/documents/manuale` — inserimento manuale (multipart: `file` + i 5 campi come `Form`). Archivia il documento **senza interpellare il modello**. Dettagli in "Inserimento manuale" qui sotto.
+- `POST /api/documents/unisci` — unione manuale di più documenti in un unico multi-pagina (body `{"ids": [...]}`, ordine significativo). Dettagli in "Accorpamento Pagine Multi-DDT".
 - `GET /api/pdf/{id}.pdf` — serve il PDF associato a un documento (con fallback di ricerca sulla root di `fatture_lette` per documenti "vecchi").
 - `GET /api/fornitori`, `PUT /api/fornitori` — lettura/scrittura della memoria fornitori (usato da `SuppliersManager.jsx`).
 
 ### Frontend (`frontend/src/`)
-Dashboard React (tema dark) composta da `Header`, `Stats`, `Dashboard` (tab OK/CHECK/KO) → `DocumentTable`, `ComparisonModal` (confronto PDF/dati estratti + editing + download con nome file generato da fornitore/data), `SuppliersManager` (editor della memoria fornitori). `App.jsx` fa da router minimale tra dashboard e gestione fornitori.
+Dashboard React (tema dark) composta da `Header`, `Stats`, `Dashboard` (tab OK/CHECK/KO) → `DocumentTable`, `ComparisonModal` (confronto PDF/dati estratti + editing + download con nome file generato da fornitore/data), `SuppliersManager` (editor della memoria fornitori), `MergeBar` (barra di unione manuale, visibile quando ci sono righe selezionate). `App.jsx` fa da router minimale tra dashboard e gestione fornitori.
 - L'URL dell'API è letto da `import.meta.env.VITE_API_URL` (fallback `http://localhost:8000`). Essendo Vite, questa variabile va iniettata **in fase di build**, non a runtime: `frontend/Dockerfile` accetta `ARG VITE_API_URL` e `docker-compose.yml` la passa tramite `build.args` (corretto il 2026-08-30: prima veniva passata a runtime come `REACT_APP_API_URL`, senza alcun effetto).
 
 ### Inserimento manuale (`POST /api/documents/manuale` + `ManualEntryModal.jsx`)
@@ -95,4 +102,5 @@ Obiettivo dichiarato dal committente (2026-08-30, non ancora implementato): estr
 - Prima di irrigidire il prompt per un problema di formato, chiediti se è una regola esatta: in quel caso va in `normalizzatore.py`, non nel prompt. Il modello è inaffidabile sui formati, Python no.
 - La risoluzione di rendering è in `PDF_RENDER_ZOOM` (default `2.5` ≈ 180 DPI, definita in `docker-compose.yml`): è la leva da alzare quando il modello perde cifre nei numeri DDT, al costo di più tempo per pagina.
 - Le pagine vengono sempre elaborate singolarmente prima e accorpate dopo (`accorpatore.py`/`raggruppatore.py`): non spostare la logica di merge dentro il loop di estrazione per pagina, è una scelta deliberata per non rallentare l'analisi.
+- I log del backend devono restare leggibili in tempo reale: `backend/Dockerfile` imposta `ENV PYTHONUNBUFFERED=1` (2026-09-02). Senza, i `print` per pagina restano nel buffer di stdout e compaiono tutti insieme a fine elaborazione, rendendo inutile il tracciamento pagina per pagina.
 - Non toccare `n8n_config/` a cuor leggero: contiene stato runtime reale di n8n (workflow, credenziali, esecuzioni), non solo configurazione statica.
