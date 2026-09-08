@@ -1,10 +1,15 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XOctagon } from 'lucide-react';
 import DocumentTable from './DocumentTable'; // Importiamo il tuo componente
+import Paginazione, { usePaginazione } from './Paginazione';
 
-export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, onDelete, selectedIds, onToggleSelect }) {
+export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, onDelete, selectedIds, onToggleSelect, onApriFattura, chiaveVista }) {
   // Filtriamo i documenti in base al tab selezionato
   const filteredDocs = documents.filter(doc => doc.status === activeTab);
+  // La selezione per l'unione vive in App e non nella pagina: le pagine da
+  // unire possono stare su pagine diverse della tabella, come gia' stavano su
+  // tab diversi.
+  const pagine = usePaginazione(filteredDocs, `${chiaveVista}|${activeTab}`);
 
   return (
     <div className="card bg-dark border-secondary shadow-sm">
@@ -49,12 +54,15 @@ export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, 
       <div className="card-body p-0">
         {/* Usiamo il tuo componente passandogli solo i dati filtrati */}
         <DocumentTable 
-          documents={filteredDocs} 
+          documents={pagine.visibili} 
           onEdit={onEdit} 
           onDelete={onDelete} 
           selectedIds={selectedIds}
           onToggleSelect={onToggleSelect}
+          onApriFattura={onApriFattura}
         />
+
+        <Paginazione {...pagine} etichetta="documenti" />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { FilePlus, Upload, X } from 'lucide-react';
 
 const CAMPI_VUOTI = {
   fornitore: '',
+  partita_iva: '',
   numero_ddt: '',
   data_ddt: '',
   ragione_sociale_consegna: '',
@@ -65,8 +66,13 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
         throw new Error(dettaglio.detail || 'Salvataggio non riuscito.');
       }
 
+      // Anche l'inserimento manuale fa ripartire il ricontrollo delle fatture
+      // in coda: la risposta dice quali pratiche si sono chiuse, e chi ci ascolta
+      // lo mostra invece di lasciarlo succedere in silenzio.
+      const esito = await risposta.json().catch(() => ({}));
+
       chiudi();
-      onSaved();
+      onSaved(esito);
     } catch (err) {
       console.error('Errore inserimento manuale:', err);
       setErrore(err.message || 'Impossibile contattare il server.');
@@ -88,6 +94,9 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
         placeholder={opzioni.placeholder}
         onChange={(e) => setDati({ ...dati, [nome]: e.target.value })}
       />
+      {opzioni.nota && (
+        <div className="form-text text-secondary" style={{ fontSize: '0.72rem' }}>{opzioni.nota}</div>
+      )}
     </>
   );
 
@@ -154,6 +163,17 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
             {/* Dati del documento */}
             <div className="mb-3">
               {campoTesto('fornitore', 'Fornitore')}
+            </div>
+
+            {/* Una P.IVA digitata da chi ha il documento in mano vale come
+                confermata: entra in anagrafica senza passare dalla coda delle
+                conferme, ed e' da li' in poi la chiave del fornitore. */}
+            <div className="mb-3">
+              {campoTesto('partita_iva', 'Partita IVA fornitore', {
+                facoltativo: true,
+                placeholder: '11 cifre',
+                nota: 'Se la scrivi qui viene salvata in anagrafica come confermata.',
+              })}
             </div>
 
             <div className="row mb-3">

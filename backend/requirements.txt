@@ -11,3 +11,7 @@ python-multipart>=0.0.6
 pydantic>=2.0.0
 Pillow
 tzdata
+
+# Sbustamento delle fatture elettroniche firmate (.xml.p7m): pura ASN.1, niente
+# compilazione. Regge anche le buste BER che un parser fatto in casa romperebbe.
+asn1crypto>=1.5.1

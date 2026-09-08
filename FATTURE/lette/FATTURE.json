@@ -1,0 +1,114 @@
+[
+  {
+    "id": "f32a16e5-427e-4970-8400-37e92a6fc363",
+    "file_origine": "1200195893.xml",
+    "timestamp": "2026-09-08T15:16:20.730700+02:00",
+    "stato": "ABBINATA",
+    "tipo_abbinamento": "differita",
+    "dati": {
+      "fornitore": "G&B SRL",
+      "fornitore_xml": "G&B s.r.l.",
+      "partita_iva": "02635960608",
+      "cessionario": "CREF SRL",
+      "partita_iva_cessionario": "14065791007",
+      "numero_fattura": "2250",
+      "data_fattura": "31-08-2026",
+      "tipo_documento": "TD01",
+      "importo_totale": "561.64",
+      "trasporto": {}
+    },
+    "ddt": [
+      {
+        "numero_ddt": "3108",
+        "data_ddt": "06-08-2026",
+        "numero_ddt_xml": "3108",
+        "origine": "",
+        "esito": "abbinato",
+        "motivo": "numero DDT e fornitore corrispondenti",
+        "documento_id": "4b350099-71f1-4e98-ada3-55f3bed5c398",
+        "stato_ddt": "OK",
+        "numero_ddt_letto": "3108",
+        "data_ddt_letta": "06-08-2026",
+        "fornitore_letto": "G & B SRL",
+        "gia_abbinato": ""
+      },
+      {
+        "numero_ddt": "3113",
+        "data_ddt": "06-08-2026",
+        "numero_ddt_xml": "3113",
+        "origine": "",
+        "esito": "abbinato",
+        "motivo": "numero DDT e fornitore corrispondenti",
+        "documento_id": "f3c89e04-fa7e-4466-8515-e961e3908da2",
+        "stato_ddt": "OK",
+        "numero_ddt_letto": "3113",
+        "data_ddt_letta": "06-08-2026",
+        "fornitore_letto": "G&B SRL",
+        "gia_abbinato": ""
+      },
+      {
+        "numero_ddt": "3290",
+        "data_ddt": "20-08-2026",
+        "numero_ddt_xml": "3290",
+        "origine": "",
+        "esito": "abbinato",
+        "motivo": "numero DDT e fornitore corrispondenti",
+        "documento_id": "e89685f0-5567-45cb-967d-b8530104435b",
+        "stato_ddt": "OK",
+        "numero_ddt_letto": "3290",
+        "data_ddt_letta": "20-08-2026",
+        "fornitore_letto": "G & B SRL",
+        "gia_abbinato": ""
+      },
+      {
+        "numero_ddt": "3291",
+        "data_ddt": "20-08-2026",
+        "numero_ddt_xml": "3291",
+        "origine": "",
+        "esito": "abbinato",
+        "motivo": "numero DDT e fornitore corrispondenti",
+        "documento_id": "4a3a998c-54ad-4499-a8ea-d74a0490e88e",
+        "stato_ddt": "OK",
+        "numero_ddt_letto": "3291",
+        "data_ddt_letta": "20-08-2026",
+        "fornitore_letto": "G&B SRL",
+        "gia_abbinato": ""
+      },
+      {
+        "numero_ddt": "3383",
+        "data_ddt": "27-08-2026",
+        "numero_ddt_xml": "3383",
+        "origine": "",
+        "esito": "abbinato",
+        "motivo": "numero DDT e fornitore corrispondenti",
+        "documento_id": "fefa42b8-b87a-4e44-ac94-1b038219f820",
+        "stato_ddt": "OK",
+        "numero_ddt_letto": "3383",
+        "data_ddt_letta": "27-08-2026",
+        "fornitore_letto": "G & B SRL",
+        "gia_abbinato": ""
+      }
+    ],
+    "ddt_allegati": [
+      "4b350099-71f1-4e98-ada3-55f3bed5c398",
+      "f3c89e04-fa7e-4466-8515-e961e3908da2",
+      "e89685f0-5567-45cb-967d-b8530104435b",
+      "4a3a998c-54ad-4499-a8ea-d74a0490e88e",
+      "fefa42b8-b87a-4e44-ac94-1b038219f820"
+    ],
+    "numero_pagine": 6,
+    "segnalazioni": [
+      {
+        "codice": "piva_diversa",
+        "messaggio": "In anagrafica 'G & B SRL' ha la P.IVA confermata 14065791007, la fattura porta 02635960608.",
+        "partita_iva_anagrafica": "14065791007",
+        "partita_iva_fattura": "02635960608",
+        "fornitore_anagrafica": "G & B SRL"
+      }
+    ],
+    "controlli": 6,
+    "ultimo_controllo": "2026-09-08T15:22:19.364313+02:00",
+    "completata": "2026-09-08T15:22:25.878974+02:00",
+    "fascicolo": "G_B_SRL_2250_31-08-2026_f32a16e5.pdf"
+  }
+]

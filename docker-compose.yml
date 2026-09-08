@@ -8,15 +8,51 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # ATTENZIONE: dal 2026-09-08 queste variabili sono il RIPIEGO, non la
+      # fonte. La sezione Configurazione della dashboard scrive in
+      # backend/data/configurazione.json, che vince su quanto sta qui e ha
+      # effetto senza ricostruire il container. Quello che segue e' il valore
+      # che vale finche' nessuno tocca la dashboard (e quello a cui si torna
+      # svuotando il campo). Vedi src/comune/configurazione.py.
       - OLLAMA_HOST=http://10.1.20.25:11434
       - GENERIC_TIMEZONE=Europe/Rome
       # Zoom di rendering PDF→PNG: 2.5 ≈ 180 DPI. Alzare a 3.5 se il modello
       # sbaglia cifre sui documenti scansionati male (costa tempo per pagina).
+      # PROVATO il 2026-09-03 a 3.5 e RIMESSO a 2.5: con l'immagine più grande
+      # il 7B ha letto PEGGIO, non meglio (più campi sbagliati sullo stesso PDF).
       - PDF_RENDER_ZOOM=2.5
+      # Modello vision e finestra di contesto. Vanno considerati INSIEME: il
+      # costo fisso di una pagina e' l'immagine (~4500 token a zoom 2.5), quindi
+      # num_ctx meno quel costo e' cio' che resta per generare la risposta.
+      # qwen2.5vl:7b non ragiona: genera ~120 token, 8192 gli bastano.
+      # qwen3-vl RAGIONA SEMPRE (2000-3300 token) e il suo template non
+      # implementa il toggle, quindi think=false viene accettato e ignorato:
+      # sotto 16384 esaurisce la finestra ragionando e torna 'content' vuoto.
+      # MISURATO il 2026-09-07 sulla stessa pagina: qwen2.5vl:7b 24s, qwen3-vl
+      # a 16384 68s, per dati identici. Il ragionamento qui non si ripaga.
+      - MODELLO_VISION=qwen2.5vl:7b
+      - MODELLO_NUM_CTX=8192
+      # Dopo quanti giorni una fattura ferma in coda (IN_ATTESA: i suoi DDT non
+      # sono ancora tutti arrivati) finisce nella mail di sollecito. Non è una
+      # soglia tecnica ma organizzativa — quanto si è disposti ad aspettare una
+      # bolla cartacea — quindi sta qui e non nel codice.
+      - GIORNI_ATTESA_SOLLECITO=30
+      # Soglia gemella ma piu' corta: qui la pratica non aspetta un documento,
+      # aspetta un CLICK (nessuno ha ancora chiesto l'abbinamento, oppure i DDT
+      # sono stati trovati e manca la firma sull'accoppiamento). Una settimana,
+      # perche' il rimedio e' aprire la dashboard, non cercare in magazzino.
+      - GIORNI_ATTESA_ACCOPPIAMENTO=7
     volumes:
       - ./backend/data:/app/data
-      - ./fatture_da_leggere:/fatture
-      - ./fatture_lette:/fatture_lette
+      # Un albero per flusso: DDT (scansioni) e FATTURE (XML elettronici).
+      # I percorsi nel container sono identici a quelli sull'host, così un
+      # path visto in un log di n8n si ritrova subito sul disco.
+      - ./DDT:/DDT
+      - ./FATTURE:/FATTURE
+      # Il prodotto finito: il file unico fattura+DDT che l'operatore conferma
+      # col pulsante ACCOPPIA. E' l'unica cartella che una persona apre a mano,
+      # quindi sta alla radice accanto alle altre due e non dentro FATTURE/.
+      - ./ACCOPPIATE:/ACCOPPIATE
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -50,13 +86,14 @@ services:
       - WEBHOOK_URL=http://localhost:5678/
       - GENERIC_TIMEZONE=Europe/Rome
       - N8N_USER_FOLDER=/home/node/.n8n
-      - N8N_RESTRICT_FILE_ACCESS_TO=/fatture;/fatture_lette
+      - N8N_RESTRICT_FILE_ACCESS_TO=/DDT;/FATTURE;/ACCOPPIATE
       - N8N_DIAGNOSTICS_ENABLED=false
       - N8N_HIDE_USAGE_PAGE=true
       - N8N_COMMUNITY_PACKAGES_ENABLED=false
     volumes:
       - ./n8n_config:/home/node/.n8n
-      - ./fatture_da_leggere:/fatture
-      - ./fatture_lette:/fatture_lette
+      - ./DDT:/DDT
+      - ./FATTURE:/FATTURE
+      - ./ACCOPPIATE:/ACCOPPIATE
     extra_hosts:
       - "host.docker.internal:host-gateway"

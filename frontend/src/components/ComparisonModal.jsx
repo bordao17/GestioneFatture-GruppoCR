@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
-import { Download } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Download, Sparkles, Receipt, KeyRound, Check, Lock } from 'lucide-react';
+import { STATI_DDT, ORDINE_STATI, infoStato } from './etichetteDdt';
 
-export default function ComparisonModal({ selectedDoc, editData, setEditData, onClose, onSave, isSaving, apiUrl }) {
+export default function ComparisonModal({ selectedDoc, editData, setEditData, onClose, onSave, isSaving, onReanalyze, isReanalyzing, onCambiaStato, isCambiandoStato, onConfermaPiva, isConfermandoPiva, apiUrl, onApriFattura }) {
   const [isDownloading, setIsDownloading] = useState(false);
+
+  // Il cache-buster va calcolato SOLO al cambio di documento (o dopo una
+  // rianalisi, che riscrive il PDF). Calcolato nel corpo del componente
+  // cambiava a ogni render: con il polling di /api/elaborazione ogni 2 secondi
+  // l'iframe si ricaricava di continuo mentre si rivedeva il documento.
+  // useMemo sta prima del return anticipato: gli hook non possono essere
+  // condizionali.
+  const idDocumento = selectedDoc?.id;
+  const timestampRianalisi = selectedDoc?.rianalisi;
+  const pdfUrlWithCache = useMemo(
+    () => `${apiUrl}/api/pdf/${idDocumento}.pdf?t=${Date.now()}#toolbar=0&navpanes=0`,
+    [apiUrl, idDocumento, timestampRianalisi]
+  );
 
   if (!selectedDoc) return null;
 
   const pdfUrl = `${apiUrl}/api/pdf/${selectedDoc.id}.pdf`;
-  const pdfUrlWithCache = `${pdfUrl}?t=${Date.now()}#toolbar=0&navpanes=0`;
+
+  // Lo stato della P.IVA non sta sul documento ma in anagrafica: lo calcola il
+  // backend in lettura (annota_stato_piva). Una volta confermata la chiave e'
+  // decisa e qui il campo si blocca: si conferma UNA volta, con il PDF a
+  // fianco, poi si corregge solo dall'anagrafica.
+  const pivaConfermata = selectedDoc.partita_iva_confermata === true;
 
   // Funzione che scarica il file bypassando le restrizioni
   const handleDownloadPDF = async () => {
@@ -25,8 +44,11 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
       nomeFornitore = nomeFornitore.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_');
       dataDocumento = dataDocumento.replace(/[\/\\:*?"<>|]/g, '-').replace(/\s+/g, '_');
 
-      // 3. Creiamo il nome finale
-      const nomeFileFinale = `Fattura_${nomeFornitore}_${dataDocumento}.pdf`;
+      // 3. Creiamo il nome finale. Il prefisso e' DDT_ e non Fattura_: adesso
+      //    esistono anche i fascicoli veri delle fatture elettroniche, e due
+      //    file "Fattura_ROSSI_..." che sono cose diverse finirebbero nella
+      //    stessa cartella.
+      const nomeFileFinale = `DDT_${nomeFornitore}_${dataDocumento}.pdf`;
       
       const link = document.createElement('a');
       link.href = url;
@@ -97,6 +119,25 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                 </div>
                 
                 <div className="flex-grow-1 overflow-auto p-4">
+                  {/* Un D.D.T. non cambia stato quando finisce in un fascicolo:
+                      resta dov'era, e senza questa riga niente direbbe che una
+                      fattura lo cita gia'. Correggerne il numero adesso rifa'
+                      partire l'abbinamento, quindi vale la pena saperlo. */}
+                  {selectedDoc.fattura?.numero_fattura && (
+                    <div className="alert bg-success bg-opacity-10 border border-success border-opacity-25 text-light small d-flex justify-content-between align-items-center gap-2 py-2 mb-4">
+                      <span>
+                        Agganciato alla fattura <strong>{selectedDoc.fattura.numero_fattura}</strong>
+                        {selectedDoc.fattura.data_fattura && ` del ${selectedDoc.fattura.data_fattura}`}
+                      </span>
+                      <button
+                        className="btn btn-sm btn-outline-success d-flex align-items-center gap-1 flex-shrink-0"
+                        onClick={() => onApriFattura?.(selectedDoc.fattura.id_fattura)}
+                      >
+                        <Receipt size={14} /> Fascicolo
+                      </button>
+                    </div>
+                  )}
+
                   {selectedDoc.status === 'KO' && (
                     <div className="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger small mb-4">
                       <strong>Estrazione Fallita:</strong> Compila manualmente i dati guardando il PDF.
@@ -113,6 +154,70 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                     />
                   </div>
                   
+                  {/* La P.IVA e' la chiave che lega il D.D.T. alla fattura, ed
+                      e' l'unico campo verificabile da solo (11 cifre con
+                      carattere di controllo). Il modello la legge solo per i
+                      fornitori che non ce l'hanno ancora: qui, con il PDF a
+                      fianco, si controlla e si conferma una volta per tutte —
+                      da quel momento la mette l'anagrafica e nessuno la
+                      rilegge piu'. */}
+                  <div className="mb-3">
+                    <label className="form-label small fw-bold text-secondary">Partita IVA fornitore</label>
+                    {pivaConfermata ? (
+                      <>
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className="form-control bg-black text-secondary border-secondary font-monospace"
+                            value={editData.partita_iva || selectedDoc.partita_iva_anagrafica || ''}
+                            readOnly
+                            disabled
+                          />
+                          <span className="input-group-text bg-success bg-opacity-25 border-success text-success d-flex align-items-center gap-1">
+                            <Lock size={14} /> Confermata
+                          </span>
+                        </div>
+                        <div className="form-text text-secondary" style={{ fontSize: '0.75rem' }}>
+                          Già confermata in anagrafica per <strong>{editData.fornitore || 'questo fornitore'}</strong>:
+                          da qui non si tocca più. Si corregge dalla sezione <strong>Fornitori</strong>.
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className="form-control bg-dark text-light border-secondary font-monospace"
+                            value={editData.partita_iva || ''}
+                            onChange={(e) => setEditData({...editData, partita_iva: e.target.value.replace(/\D/g, '')})}
+                            placeholder="11 cifre"
+                            maxLength={11}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-outline-primary d-flex align-items-center gap-1"
+                            onClick={() => onConfermaPiva?.(editData.partita_iva)}
+                            disabled={!/^\d{11}$/.test(editData.partita_iva || '') || isConfermandoPiva || isSaving || isReanalyzing}
+                            title="Salva questa partita IVA in anagrafica come confermata: dai prossimi D.D.T. verrà usata questa"
+                          >
+                            {isConfermandoPiva ? <span className="spinner-border spinner-border-sm" /> : <><KeyRound size={15} /> <Check size={15} /></>}
+                            Conferma
+                          </button>
+                        </div>
+                        <div className="form-text text-info" style={{ fontSize: '0.75rem' }}>
+                          Letta dal documento e ancora da confermare: controllala sul PDF qui a fianco,
+                          correggila se sbagliata, poi conferma. È l'unica volta che serve farlo.
+                        </div>
+                      </>
+                    )}
+                    {editData.partita_iva_scartata && (
+                      <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
+                        Sul documento il modello aveva letto <code>{editData.partita_iva_scartata}</code>:
+                        scartata perché l'anagrafica ne ha già una confermata.
+                      </div>
+                    )}
+                  </div>
+
                   <div className="row mb-3">
                     <div className="col-6">
                       <label className="form-label small fw-bold text-secondary">Numero D.D.T.</label>
@@ -156,13 +261,62 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                   </div>
                 </div>
 
-                <div className="p-3 border-top border-secondary text-end bg-dark">
-                  <button className="btn btn-outline-secondary me-2 px-4" onClick={onClose}>
-                    Annulla
+                <div className="p-3 border-top border-secondary bg-dark d-flex flex-column gap-3">
+                  {/* Lo stato lo calcola determina_stato() contando i campi
+                      letti, ma solo chi guarda il PDF sa se il documento vale
+                      qualcosa: una bolla con tutti i campi pieni ma sbagliati
+                      resta OK, un retro bianco non ha modo di finire in errore.
+                      Da qui si scavalca la classificazione. */}
+                  <div>
+                    <label className="form-label small fw-bold text-secondary">Stato del documento</label>
+                    <div className="btn-group w-100" role="group" aria-label="Stato del documento">
+                      {ORDINE_STATI.map((stato) => {
+                        const info = STATI_DDT[stato];
+                        const attivo = selectedDoc.status === stato;
+                        return (
+                          <button
+                            key={stato}
+                            type="button"
+                            className={`btn btn-sm ${attivo ? `btn-${info.colore} fw-bold` : `btn-outline-${info.colore}`}`}
+                            onClick={() => !attivo && onCambiaStato?.(stato)}
+                            disabled={isCambiandoStato || isReanalyzing || isSaving}
+                            aria-pressed={attivo}
+                            title={info.spiegazione}
+                          >
+                            {info.etichetta}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="form-text text-secondary">
+                      {isCambiandoStato
+                        ? 'Spostamento in corso...'
+                        : selectedDoc.stato_manuale
+                          ? `Stato impostato a mano il ${new Date(selectedDoc.stato_manuale).toLocaleString('it-IT')}: lo sposta subito, i dati restano questi.`
+                          : `Attualmente ${infoStato(selectedDoc.status).etichetta.toLowerCase()} per il classificatore. Spostarlo non modifica i dati estratti.`}
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn btn-outline-info w-100 d-flex align-items-center justify-content-center gap-2"
+                    onClick={onReanalyze}
+                    disabled={isReanalyzing || isSaving || isCambiandoStato}
+                    title="Rimanda il PDF al modello AI e sostituisci i dati con la nuova lettura"
+                  >
+                    {isReanalyzing
+                      ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      : <Sparkles size={16} />}
+                    {isReanalyzing ? 'Rianalisi in corso...' : 'Rianalizza con AI'}
                   </button>
-                  <button className="btn btn-primary px-4 fw-bold" onClick={onSave} disabled={isSaving}>
-                    {isSaving ? 'Salvataggio...' : 'Salva e Approva'}
-                  </button>
+
+                  <div className="d-flex justify-content-end align-items-center gap-2">
+                    <button className="btn btn-outline-secondary px-4 text-nowrap" onClick={onClose} disabled={isReanalyzing || isCambiandoStato}>
+                      Annulla
+                    </button>
+                    <button className="btn btn-primary px-4 fw-bold text-nowrap" onClick={onSave} disabled={isSaving || isReanalyzing || isCambiandoStato}>
+                      {isSaving ? 'Salvataggio...' : 'Salva e Approva'}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

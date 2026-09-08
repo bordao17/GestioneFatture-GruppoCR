@@ -1,15 +1,8 @@
 import React from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, Receipt } from 'lucide-react';
+import { infoStato } from './etichetteDdt';
 
-export default function DocumentTable({ documents, onEdit, onDelete, selectedIds = [], onToggleSelect }) {
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'OK': return 'bg-success text-white';
-      case 'CHECK': return 'bg-warning text-dark';
-      case 'KO': return 'bg-danger text-white';
-      default: return 'bg-secondary text-white';
-    }
-  };
+export default function DocumentTable({ documents, onEdit, onDelete, selectedIds = [], onToggleSelect, onApriFattura }) {
 
   // I campi non estratti restano evidenti invece di sparire in un grigio spento:
   // su questa tabella si lavora proprio per trovare i buchi da correggere.
@@ -30,13 +23,14 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                 <th className="py-3 border-0">Fornitore</th>
                 <th className="py-3 border-0">N. DDT</th>
                 <th className="py-3 border-0">Data DDT</th>
+                <th className="py-3 border-0" title="Fattura che ha agganciato questo D.D.T.">Fattura</th>
                 <th className="px-4 py-3 text-end border-0">Azioni</th>
               </tr>
             </thead>
             <tbody className="border-top-0">
               {documents.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-5 text-secondary">
+                  <td colSpan="9" className="text-center py-5 text-secondary">
                     Nessun documento trovato in questa categoria.
                   </td>
                 </tr>
@@ -63,10 +57,34 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                     </td>
                     <td className="text-light small">{new Date(doc.timestamp).toLocaleString('it-IT')}</td>
                     <td className="fw-medium text-light">{doc.file_origine}</td>
-                    <td><span className={`badge rounded-pill ${getStatusBadge(doc.status)}`}>{doc.status}</span></td>
+                    <td>
+                      <span
+                        className={`badge rounded-pill ${infoStato(doc.status).badge}`}
+                        title={doc.stato_manuale
+                          ? 'Stato impostato a mano dalla revisione, non dal classificatore.'
+                          : infoStato(doc.status).spiegazione}
+                      >
+                        {doc.status}{doc.stato_manuale && '*'}
+                      </span>
+                    </td>
                     <td className="text-white fw-medium">{doc.dati?.fornitore || campoMancante}</td>
                     <td className="font-monospace text-white fw-bold">{doc.dati?.numero_ddt || campoMancante}</td>
                     <td className="font-monospace text-white">{doc.dati?.data_ddt || campoMancante}</td>
+                    <td>
+                      {doc.fattura?.numero_fattura ? (
+                        <button
+                          className="btn btn-sm btn-outline-success py-0 px-2 d-inline-flex align-items-center gap-1 font-monospace"
+                          onClick={() => onApriFattura?.(doc.fattura.id_fattura)}
+                          title={`Apri il fascicolo della fattura ${doc.fattura.numero_fattura}`}
+                        >
+                          <Receipt size={14} /> {doc.fattura.numero_fattura}
+                        </button>
+                      ) : (
+                        <span className="text-secondary small" title="Nessuna fattura ha ancora citato questo D.D.T.">
+                          attesa
+                        </span>
+                      )}
+                    </td>
                     <td className="px-4 text-end">
                       <button className="btn btn-sm btn-outline-info me-2 shadow-sm" onClick={() => onEdit(doc)}>
                         <Edit2 size={16} className="me-1" /> Revisiona

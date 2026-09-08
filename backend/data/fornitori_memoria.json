@@ -1,94 +1,73 @@
 {
-    "FRANCIA LATTICINI SPA": {
+    "COOKERY SRL": {
+        "autorizzato": true,
         "confermato": "no",
-        "note_specifiche": ""
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
     },
-    "MANZI GIOVANNI SRL": {
+    "FARCHIONI OLII SPA": {
+        "autorizzato": true,
         "confermato": "no",
-        "note_specifiche": ""
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "15634031007",
+        "partita_iva_confermata": false,
+        "regole_campo": []
     },
-    "UNIVERSO PANE SRL": {
+    "G & B SRL": {
+        "autorizzato": true,
         "confermato": "yes",
-        "note_specifiche": "IGNORA ASSOLUTAMENTE l'indirizzo 'VIA DEL RAME 06077 PONTE FELCINO PG'. Quello NON è la destinazione. Il vero indirizzo di consegna (che cambia in base al punto vendita) si trova in alto a destra, esattamente sotto l'etichetta 'Luogo di consegna'. Estrai solo l'indirizzo scritto lì sotto."
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [
+            "G&B"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "14065791007",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Indirizzo Spedizione"
+            },
+            {
+                "campo": "partita_iva",
+                "etichetta": "la voce Sede legale"
+            }
+        ]
     },
-    "PERFETTI VAN MELLE SPA": {
+    "GUERRA SPA": {
+        "autorizzato": true,
         "confermato": "no",
-        "note_specifiche": ""
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01638541001",
+        "partita_iva_confermata": true,
+        "regole_campo": []
     },
-    "PASTIFICIO RANA SPA": {
+    "MARCHESI FRESCOBALDI SOCIETA AGRICOLA SRL": {
+        "autorizzato": true,
         "confermato": "no",
-        "note_specifiche": ""
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01770300489",
+        "partita_iva_confermata": true,
+        "regole_campo": []
     },
-    "TRASPORTO IO SRL": {
+    "ROSSI ALIMENTARI SRL": {
+        "autorizzato": true,
         "confermato": "no",
-        "note_specifiche": ""
-    },
-    "M SRL": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "MOLINO VIGEVANO GIUSTO": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "GRANDEIMPERO": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "CENTRALE DEL LATTE DI ROMA SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "ANDRIANI SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "GABBIANO SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "OSCAR'78 SRL": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "NUTRITION & SANTÈ ITALIA SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "PETRUCCI": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "GRANAROLO SPA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "ABC ITALIA SRL": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "PANIFICIO MARIANANTONI SILVIO SRLS": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "CEREALDOLCI SRL": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "COKY SRL SOCIETÀ AGRICOLA": {
-        "confermato": "no",
-        "note_specifiche": ""
-    },
-    "VITAKRAFT ITALIA SPA": {
-        "confermato": "yes",
-        "note_specifiche": "Il numero DDT sta sempre sotto la voce \"Bolla Nr.\" e NON usare la voce Nr. ordine d'acquisto"
-    },
-    "EUROFRESH SRL": {
-        "confermato": "no",
-        "note_specifiche": ""
+        "indirizzi_vietati": [],
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00522110543",
+        "partita_iva_confermata": true,
+        "regole_campo": []
     }
 }
