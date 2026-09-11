@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Paginazione, { usePaginazione } from './Paginazione';
-import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check } from 'lucide-react';
+import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check, Loader2, Pencil, X } from 'lucide-react';
 
 // I campi che una regola mirata può indirizzare. Devono restare allineati a
 // CAMPI_REGOLABILI in backend/src/comune/memory_manager.py: una regola su un
@@ -14,7 +14,7 @@ const CAMPI_REGOLABILI = [
   { valore: 'fornitore', etichetta: 'Fornitore' },
 ];
 
-export default function SuppliersManager({ apiUrl, onSaved }) {
+export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica = 0 }) {
   const [suppliers, setSuppliers] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI
@@ -23,10 +23,35 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
   // PUT /api/fornitori sovrascrive l'INTERO file: finche' non si salva, le
   // modifiche vivono solo qui e un F5 le perde. Meglio dirlo che scoprirlo.
   const [modificato, setModificato] = useState(false);
+  // Quale voce sta confermando la P.IVA in questo momento (la conferma e' una
+  // chiamata al server, non una modifica di bozza: vedi confermaPiva).
+  const [pivaInCorso, setPivaInCorso] = useState(null);
+  // La voce che si sta rinominando: { vecchio, nuovo, tieniAlias }. Una sola
+  // alla volta, e null quando non si sta rinominando niente.
+  const [rinomina, setRinomina] = useState(null);
 
   useEffect(() => {
     fetchSuppliers();
   }, []);
+
+  // L'anagrafica e' cambiata altrove: dal modale di revisione di un D.D.T., che
+  // resta aperto anche passando a questa sezione. Va riletta, perche' la PUT di
+  // "Salva Anagrafica" sovrascrive TUTTO e salvare una bozza vecchia
+  // riporterebbe a "da confermare" una P.IVA appena confermata. Con modifiche
+  // in corso non si rilegge — si perderebbero — ma si dice che c'e' da rileggere.
+  useEffect(() => {
+    if (!versioneAnagrafica) return;
+    if (modificato) {
+      setSaveMessage({
+        type: 'warning',
+        text: "L'anagrafica e' cambiata da un'altra parte (una P.IVA confermata dal D.D.T.). "
+            + 'Salvando ora le tue modifiche la sovrascrivi: ricarica la pagina se non sei sicuro.',
+      });
+      return;
+    }
+    fetchSuppliers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [versioneAnagrafica]);
 
   const fetchSuppliers = async () => {
     try {
@@ -54,6 +79,48 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
       setSaveMessage({ type: 'danger', text: 'Errore durante il salvataggio.' });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  // Confermare una P.IVA NON e' una modifica di bozza: e' il passaggio che
+  // trasforma una proposta letta dal modello in una CHIAVE, la stessa con cui
+  // una fattura ritrova il suo cedente. Finche' era un updateSupplier, chi
+  // premeva la spunta e non premeva anche "Salva Anagrafica" non aveva
+  // confermato niente e non aveva modo di accorgersene — mentre lo stesso
+  // gesto, fatto dal modale del D.D.T., salva subito. Ora la strada e' una
+  // sola: PUT /api/fornitori/partita-iva, che verifica anche il carattere di
+  // controllo e rifiuta con 400 un numero impossibile.
+  const confermaPiva = async (name) => {
+    const piva = (suppliers[name]?.partita_iva || '').trim();
+    setPivaInCorso(name);
+    setSaveMessage(null);
+    try {
+      const res = await axios.put(`${apiUrl}/api/fornitori/partita-iva`, {
+        fornitore: name,
+        partita_iva: piva,
+      });
+      if (modificato) {
+        // C'e' una bozza in corso: rileggere la cancellerebbe. Si allinea la
+        // sola voce toccata, il resto resta com'e' sotto le mani dell'utente.
+        setSuppliers((prev) => ({
+          ...prev,
+          [name]: { ...prev[name], partita_iva: res.data.partita_iva, partita_iva_confermata: true },
+        }));
+      } else {
+        // Nessuna bozza: si rilegge, cosi' si vede anche l'eventuale fusione
+        // di voci fatta da unifica_memoria().
+        await fetchSuppliers();
+      }
+      setSaveMessage({ type: 'success', text: `Partita IVA di ${res.data.fornitore} confermata.` });
+      setTimeout(() => setSaveMessage(null), 4000);
+      onSaved?.();
+    } catch (err) {
+      setSaveMessage({
+        type: 'danger',
+        text: err.response?.data?.detail || 'Impossibile confermare la partita IVA.',
+      });
+    } finally {
+      setPivaInCorso(null);
     }
   };
 
@@ -111,6 +178,59 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
       delete copia[name];
       return copia;
     });
+  };
+
+  // Il nome del fornitore non e' un campo come gli altri: e' la CHIAVE
+  // dell'anagrafica, ed e' anche il nome che applica_nome_canonico() scrive sul
+  // D.D.T. al posto di quello letto dal modello. Rinominare significa quindi
+  // togliere una chiave e rimetterne un'altra, non cambiare un valore: per
+  // questo non passa da updateSupplier.
+  const avviaRinomina = (name) => setRinomina({ vecchio: name, nuovo: name, tieniAlias: true });
+
+  const confermaRinomina = () => {
+    if (!rinomina) return;
+    const { vecchio, tieniAlias } = rinomina;
+    // Solo il maiuscolo, che e' meta' della convenzione delle chiavi e costa una
+    // riga. L'altra meta' — la forma giuridica compatta, "S.r.l." -> "SRL" — la
+    // applica normalizza_azienda() in salvataggio e NON si ricopia qui: e' una
+    // regola sola e riscriverla in JavaScript vorrebbe dire tenerne allineate
+    // due (e' gia' il prezzo che si paga per CAMPI_REGOLABILI). La voce puo'
+    // quindi cambiare ancora un po' al salvataggio, e la rilettura lo mostra.
+    const nuovo = (rinomina.nuovo || '').trim().toUpperCase();
+
+    if (!nuovo || nuovo === vecchio) { setRinomina(null); return; }
+    if (suppliers[nuovo]) {
+      setSaveMessage({
+        type: 'danger',
+        text: `Esiste già una voce “${nuovo}”: rinominare così la sovrascriverebbe. `
+          + `Se sono lo stesso fornitore, aggiungi “${vecchio}” fra i suoi nomi alternativi e cancella questa voce.`,
+      });
+      return;
+    }
+
+    setModificato(true);
+    setSuppliers(prev => {
+      const voce = { ...prev[vecchio] };
+      if (tieniAlias) {
+        // Il vecchio nome e' quello sotto cui il modello ha letto questo
+        // fornitore fino a ieri, ed e' quello scritto sui D.D.T. gia'
+        // archiviati: tenerlo fra i nomi alternativi e' cio' che permette a
+        // trova_fornitore_simile() di riconoscerlo ancora.
+        const alias = Array.isArray(voce.nomi_alternativi) ? voce.nomi_alternativi : [];
+        if (!alias.some(a => (a || '').trim().toUpperCase() === vecchio.toUpperCase())) {
+          voce.nomi_alternativi = [...alias, vecchio];
+        }
+      }
+      const copia = { ...prev };
+      delete copia[vecchio];
+      copia[nuovo] = voce;
+      return copia;
+    });
+
+    // In ordine alfabetico e a 50 per pagina la voce rinominata può finire fuori
+    // schermo, o fuori dalla ricerca in corso: stessa cura di addNewSupplier.
+    if (!nuovo.toLowerCase().includes(searchTerm.toLowerCase())) setSearchTerm(nuovo);
+    setRinomina(null);
   };
 
   const addNewSupplier = () => {
@@ -279,6 +399,56 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
               <div key={name} className="list-group-item p-4">
                 <div className="row">
                   <div className="col-md-3 border-end">
+                    {rinomina?.vecchio === name ? (
+                      <div>
+                        <div className="input-group input-group-sm">
+                          <input
+                            type="text"
+                            className="form-control form-control-sm fw-bold"
+                            value={rinomina.nuovo}
+                            autoFocus
+                            onChange={(e) => setRinomina({ ...rinomina, nuovo: e.target.value })}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') confermaRinomina();
+                              if (e.key === 'Escape') setRinomina(null);
+                            }}
+                          />
+                          <button
+                            className="btn btn-success"
+                            onClick={confermaRinomina}
+                            title="Applica il nuovo nome (diventa definitivo con Salva Anagrafica)"
+                          >
+                            <Check size={14} />
+                          </button>
+                          <button
+                            className="btn btn-outline-secondary"
+                            onClick={() => setRinomina(null)}
+                            title="Annulla"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                        <div className="form-check mt-2">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={`alias-rinomina-${name}`}
+                            checked={rinomina.tieniAlias}
+                            onChange={(e) => setRinomina({ ...rinomina, tieniAlias: e.target.checked })}
+                          />
+                          <label className="form-check-label small text-body-secondary" htmlFor={`alias-rinomina-${name}`}>
+                            Tieni “{name}” fra i nomi alternativi
+                          </label>
+                        </div>
+                        <div className="form-text text-body-secondary" style={{ fontSize: '0.72rem' }}>
+                          Il nome è la chiave dell'anagrafica, ed è quello che finisce sul D.D.T. al posto di
+                          quello letto dal modello. I documenti già archiviati conservano il nome vecchio:
+                          lasciarlo fra i nomi alternativi è ciò che li fa ancora riconoscere.
+                          La rinomina diventa definitiva solo con "Salva Anagrafica", che porta il nome
+                          in maiuscolo e compatta la forma giuridica (S.r.l. → SRL).
+                        </div>
+                      </div>
+                    ) : (
                     <div className="d-flex justify-content-between align-items-start gap-2">
                     {/* L'icona dice a colpo d'occhio di che voce si tratta:
                         un cliente marcato "mai fornitore" non è un fornitore a
@@ -292,14 +462,24 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                             : <ShieldCheck size={16} className="text-success flex-shrink-0" />}
                         {name}
                       </h6>
-                      <button
-                        className="btn btn-sm btn-outline-danger py-0 px-2 flex-shrink-0"
-                        onClick={() => removeSupplier(name)}
-                        title="Rimuovi dall'anagrafica (utile per i vettori censiti per sbaglio e le letture troncate)"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      <div className="d-flex gap-1 flex-shrink-0">
+                        <button
+                          className="btn btn-sm btn-outline-secondary py-0 px-2"
+                          onClick={() => avviaRinomina(name)}
+                          title="Rinomina il fornitore (il nome è la chiave dell'anagrafica)"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-danger py-0 px-2"
+                          onClick={() => removeSupplier(name)}
+                          title="Rimuovi dall'anagrafica (utile per i vettori censiti per sbaglio e le letture troncate)"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
+                    )}
 
                     <label className="form-label small text-primary mb-1 mt-3 d-flex align-items-center gap-2">
                       Partita IVA
@@ -320,10 +500,13 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       {pivaDaConfermare(data) && (
                         <button
                           className="btn btn-primary d-flex align-items-center gap-1"
-                          onClick={() => updateSupplier(name, 'partita_iva_confermata', true)}
-                          title="Confermo che questa è la partita IVA del fornitore"
+                          onClick={() => confermaPiva(name)}
+                          disabled={pivaInCorso === name || !/^\d{11}$/.test(data.partita_iva || '')}
+                          title="Confermo che questa è la partita IVA del fornitore (si salva subito)"
                         >
-                          <Check size={14} /> Conferma
+                          {pivaInCorso === name
+                            ? <Loader2 size={14} className="fa-spin" />
+                            : <Check size={14} />} Conferma
                         </button>
                       )}
                     </div>
@@ -331,7 +514,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       {data.mai_fornitore
                         ? 'È la P.IVA del cliente: quando il modello la legge su un D.D.T. il campo viene svuotato, mai attribuito al fornitore.'
                         : pivaDaConfermare(data)
-                          ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma.'
+                          ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma. La conferma si salva da sola, senza "Salva Anagrafica".'
                           : 'Si compila da sola: dalla prima fattura di questo fornitore, o dalla lettura del suo primo D.D.T.'}
                     </div>
 

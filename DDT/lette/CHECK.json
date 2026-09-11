@@ -1,0 +1,178 @@
+[
+  {
+    "id": "75f958e0-589f-4d19-98f5-2b3bd0ffea07",
+    "file_origine": "20260911112653890.pdf",
+    "numero_pagine": 2,
+    "timestamp": "2026-09-11T11:23:40.196031+02:00",
+    "dati": {
+      "fornitore": "VITAKRAFT ITALIA SPA",
+      "numero_ddt": "377074",
+      "data_ddt": "07-08-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "",
+      "leggibilita_bassa": false,
+      "partita_iva": "02267570543"
+    }
+  },
+  {
+    "id": "7257c0fa-570c-4f94-a5b5-6f93da6039f0",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:25:52.506532+02:00",
+    "dati": {
+      "fornitore": "",
+      "numero_ddt": "241FZBB50908",
+      "data_ddt": "04-07-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "V. VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "fornitore_scartato": "CREF SRL"
+    }
+  },
+  {
+    "id": "e333b69e-507f-4865-b72f-208db5ccc358",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:27:24.362270+02:00",
+    "dati": {
+      "fornitore": "",
+      "numero_ddt": "5601/1",
+      "data_ddt": "04-08-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "fornitore_scartato": "CREF SRL"
+    }
+  },
+  {
+    "id": "388a9243-84b1-4ba1-9f45-65e5e7cf3caa",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:25:12.843135+02:00",
+    "dati": {
+      "fornitore": "PROZIS.COM, S.A.",
+      "numero_ddt": "PRS/293176",
+      "data_ddt": "08-10-2025",
+      "ragione_sociale_consegna": "SPAZIO CONAD CITTADUCATE (RI)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 - CITTADUCATE (RI) ITALIA",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "partita_iva_scartata": "00163040546"
+    },
+    "stato_manuale": "2026-09-11T12:37:38.321973+02:00"
+  },
+  {
+    "id": "1e4a97cb-03a7-4511-852c-dcadd5aab391",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:27:01.710322+02:00",
+    "dati": {
+      "fornitore": "VERCHA EXPRESS SRL",
+      "numero_ddt": "2025135013",
+      "data_ddt": "29-10-2025",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "01041010156"
+    },
+    "rianalisi": "2026-09-11T12:05:45.221097+02:00",
+    "stato_manuale": "2026-09-11T12:37:47.327447+02:00"
+  },
+  {
+    "id": "1996d4be-2111-4e9f-b529-b15b26938cf4",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:49.546874+02:00",
+    "dati": {
+      "fornitore": "PASTIFICIO RANA SPA",
+      "numero_ddt": "3103",
+      "data_ddt": "31-08-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015, CITTADUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "01397480235",
+      "fornitore_letto": "PASTIFICIO RANA"
+    },
+    "rianalisi": "2026-09-11T12:47:11.462349+02:00",
+    "stato_manuale": "2026-09-11T12:48:48.132001+02:00"
+  },
+  {
+    "id": "a0096599-c857-425f-b608-57b73b34fb5a",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:55.091979+02:00",
+    "dati": {
+      "fornitore": "PASTIFICIO RANA SPA",
+      "numero_ddt": "351",
+      "data_ddt": "30-01-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "01397480235",
+      "fornitore_letto": "PASTIFICIO RANA"
+    },
+    "rianalisi": "2026-09-11T12:48:39.656033+02:00",
+    "stato_manuale": "2026-09-11T12:48:53.241469+02:00"
+  },
+  {
+    "id": "84275a9b-e455-4f51-9dfb-065e2b8bedb8",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:44.023763+02:00",
+    "dati": {
+      "fornitore": "SAIS SRL",
+      "numero_ddt": "1649507",
+      "data_ddt": "17-02-2026",
+      "ragione_sociale_consegna": "IPERMERCATO RIETI",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE N.20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "13205901005"
+    },
+    "stato_manuale": "2026-09-11T12:50:44.444036+02:00"
+  },
+  {
+    "id": "0eed15e0-b335-4312-838c-ffcf6ff4dab4",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:38.507453+02:00",
+    "dati": {
+      "fornitore": "SAGEM SRL",
+      "numero_ddt": "64870",
+      "data_ddt": "01-09-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOC.COOP.",
+      "indirizzo_consegna": "",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "partita_iva_scartata": "00745180349",
+      "indirizzo_scartato": "VIA DEL RAME, 06134 PONTE FELCINO PG (IT)"
+    },
+    "rianalisi": "2026-09-11T12:51:58.394343+02:00"
+  },
+  {
+    "id": "f126b4c8-612b-43a9-8580-4505be3bb38e",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:21.360743+02:00",
+    "dati": {
+      "fornitore": "SAL. PI UNO SRL",
+      "numero_ddt": "6.233/00",
+      "data_ddt": "11-08-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "",
+      "leggibilita_bassa": false,
+      "partita_iva": "00810470674",
+      "fornitore_letto": "SALPI SRL INDUSTRIA SALUMI",
+      "indirizzo_scartato": "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)"
+    },
+    "rianalisi": "2026-09-11T13:02:27.925581+02:00"
+  },
+  {
+    "id": "d5cecec9-bc9a-4731-bcf9-2c64120a76f2",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:23:23.726275+02:00",
+    "dati": {
+      "fornitore": "HARIBO ITALIA SRL",
+      "numero_ddt": "615099",
+      "data_ddt": "13-08-2026",
+      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOPERATIVA",
+      "indirizzo_consegna": "",
+      "leggibilita_bassa": false,
+      "partita_iva": "06132770154",
+      "indirizzo_scartato": "VIA DEL RAME, 06134 PONTE FELCINO Z. IND (PG)"
+    },
+    "rianalisi": "2026-09-11T14:10:32.708671+02:00"
+  }
+]

@@ -35,6 +35,13 @@ function App() {
   const [isReanalyzing, setIsReanalyzing] = useState(false);
   const [isCambiandoStato, setIsCambiandoStato] = useState(false);
   const [isConfermandoPiva, setIsConfermandoPiva] = useState(false);
+  // Il modale di revisione sta FUORI dai blocchi per vista, quindi puo'
+  // restare aperto mentre si passa alla sezione Fornitori. Confermando una
+  // P.IVA di li', l'anagrafica cambia sotto la bozza che SuppliersManager ha
+  // letto al mount — e la sua PUT sovrascrive l'INTERA anagrafica, quindi
+  // salvarla dopo riporterebbe la P.IVA a "da confermare". Questo contatore
+  // e' il modo in cui la sezione viene a saperlo.
+  const [versioneAnagrafica, setVersioneAnagrafica] = useState(0);
   const [showManualEntry, setShowManualEntry] = useState(false);
 
   // Unione manuale: la selezione vive qui e non nel Dashboard, così resta viva
@@ -320,6 +327,7 @@ function App() {
       });
       fetchDocuments();
       fetchDaAutorizzare();
+      setVersioneAnagrafica((v) => v + 1);
     } catch (err) {
       setError(err.response?.data?.detail || 'Impossibile confermare la partita IVA.');
     } finally {
@@ -555,8 +563,14 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
       {vista === 'FORNITORI' && (
         <SuppliersManager
           apiUrl={API_URL}
+          versioneAnagrafica={versioneAnagrafica}
           onSaved={() => {
             fetchDaAutorizzare();
+            // Lo stato della P.IVA non e' scritto sul documento: lo calcola
+            // annota_stato_piva() a ogni GET /api/documents. Senza rileggerli,
+            // il modale del D.D.T. continua a mostrare il campo editabile e il
+            // pulsante "Conferma" per una P.IVA appena confermata di qua.
+            fetchDocuments();
             // Toccare l'anagrafica cambia il riconoscimento del cedente (nomi
             // alternativi, P.IVA confermate): gli abbinamenti possibili non
             // sono più gli stessi, quindi la coda va riguardata.
