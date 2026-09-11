@@ -9,11 +9,11 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
   const campoMancante = <span className="text-warning fst-italic">Mancante</span>;
 
   return (
-    <div className="card bg-dark border-0">
+    <div className="card border-0">
       <div className="card-body p-0">
         <div className="table-responsive">
-          {/* Aggiunto table-dark, table-striped per migliorare la leggibilità */}
-          <table className="table table-dark table-striped table-hover align-middle mb-0">
+          {/* table-striped per la leggibilità: i colori li mette il tema (data-bs-theme) */}
+          <table className="table table-striped table-hover align-middle mb-0">
             <thead className="table-secondary">
               <tr>
                 <th className="px-4 py-3 border-0" style={{ width: '52px' }} title="Seleziona per unire più pagine in un unico documento"></th>
@@ -30,7 +30,7 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
             <tbody className="border-top-0">
               {documents.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="text-center py-5 text-secondary">
+                  <td colSpan="9" className="text-center py-5 text-body-secondary">
                     Nessun documento trovato in questa categoria.
                   </td>
                 </tr>
@@ -55,8 +55,8 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                         )}
                       </div>
                     </td>
-                    <td className="text-light small">{new Date(doc.timestamp).toLocaleString('it-IT')}</td>
-                    <td className="fw-medium text-light">{doc.file_origine}</td>
+                    <td className="text-body small">{new Date(doc.timestamp).toLocaleString('it-IT')}</td>
+                    <td className="fw-medium text-body">{doc.file_origine}</td>
                     <td>
                       <span
                         className={`badge rounded-pill ${infoStato(doc.status).badge}`}
@@ -80,7 +80,7 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                           <Receipt size={14} /> {doc.fattura.numero_fattura}
                         </button>
                       ) : (
-                        <span className="text-secondary small" title="Nessuna fattura ha ancora citato questo D.D.T.">
+                        <span className="text-body-secondary small" title="Nessuna fattura ha ancora citato questo D.D.T.">
                           attesa
                         </span>
                       )}

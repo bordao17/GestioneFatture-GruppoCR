@@ -175,7 +175,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
           <h4 className="fw-bold mb-1 d-flex align-items-center gap-2 text-info">
             <BrainCircuit size={28} /> Anagrafica Fornitori
           </h4>
-          <div className="text-secondary small">
+          <div className="text-body-secondary small">
             Chi è ammesso nel flusso fatture e come il modello deve leggere i suoi D.D.T.
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
       )}
 
       {daConfermare > 0 && (
-        <div className="alert bg-primary bg-opacity-10 border border-primary border-opacity-25 text-light d-flex align-items-center gap-3 shadow-sm">
+        <div className="alert bg-primary bg-opacity-10 border border-primary border-opacity-25 text-body d-flex align-items-center gap-3 shadow-sm">
           <KeyRound size={22} className="text-primary flex-shrink-0" />
           <div className="small">
             <strong>{daConfermare} partit{daConfermare === 1 ? 'a' : 'e'} IVA lett{daConfermare === 1 ? 'a' : 'e'} dal modello,
@@ -216,7 +216,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
       )}
 
       {/* BOX ISTRUZIONI AIUTO */}
-      <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-light mb-4 shadow-sm">
+      <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-body mb-4 shadow-sm">
         <h6 className="fw-bold text-info d-flex align-items-center gap-2 mb-3">
           <Info size={20} /> Che cosa fa ogni campo
         </h6>
@@ -239,9 +239,9 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
           Se un indirizzo non è <em>mai</em> la consegna per quel fornitore, mettilo in <strong>Indirizzi MAI di consegna</strong>:
           quello non è un consiglio ma un controllo automatico fatto dopo l'estrazione, e non può essere ignorato.
         </p>
-        <div className="bg-dark p-3 rounded border border-secondary mt-3">
+        <div className="bg-body-tertiary p-3 rounded border mt-3">
           <span className="badge bg-success mb-2">Esempio Eccellente</span>
-          <code className="d-block text-light" style={{ fontSize: '0.85rem' }}>
+          <code className="d-block text-body" style={{ fontSize: '0.85rem' }}>
             "IGNORA ASSOLUTAMENTE l'indirizzo 'VIA DEL RAME 06077 PONTE FELCINO PG'. Quella è la sede legale.
             Il vero indirizzo di consegna si trova in alto a destra, esattamente sotto l'etichetta 'Luogo di destinazione'.
             Estrai solo l'indirizzo scritto lì sotto."
@@ -249,13 +249,13 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
         </div>
       </div>
 
-      <div className="card bg-dark border-secondary shadow-sm mb-5">
-        <div className="card-header border-secondary d-flex justify-content-between align-items-center py-3 gap-3 flex-wrap">
+      <div className="card shadow-sm mb-5">
+        <div className="card-header d-flex justify-content-between align-items-center py-3 gap-3 flex-wrap">
           <div className="position-relative" style={{ minWidth: '260px', flex: '1 1 320px' }}>
-            <Search className="position-absolute top-50 translate-middle-y text-secondary ms-3" size={18} />
+            <Search className="position-absolute top-50 translate-middle-y text-body-secondary ms-3" size={18} />
             <input
               type="text"
-              className="form-control bg-black text-light border-secondary ps-5 focus-ring"
+              className="form-control ps-5 focus-ring"
               placeholder="Cerca fornitore..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -267,7 +267,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
             {pulsanteFiltro('PIVA', 'P.IVA da confermare', daConfermare, 'primary')}
             {pulsanteFiltro('REGOLE', 'Con regola AI', voci.filter(([, d]) => d.confermato === 'yes' || regoleDi(d).length > 0).length, 'info')}
             {pulsanteFiltro('CLIENTI', 'Mai fornitori', voci.filter(([, d]) => d.mai_fornitore === true).length, 'danger')}
-            <button className="btn btn-outline-light btn-sm d-flex align-items-center gap-1" onClick={addNewSupplier}>
+            <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" onClick={addNewSupplier}>
               <Plus size={16} /> Aggiungi
             </button>
           </div>
@@ -276,15 +276,15 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
         <div className="card-body p-0">
           <div className="list-group list-group-flush rounded-bottom">
             {pagine.visibili.map(([name, data]) => (
-              <div key={name} className="list-group-item bg-dark border-secondary p-4">
+              <div key={name} className="list-group-item p-4">
                 <div className="row">
-                  <div className="col-md-3 border-end border-secondary">
+                  <div className="col-md-3 border-end">
                     <div className="d-flex justify-content-between align-items-start gap-2">
                     {/* L'icona dice a colpo d'occhio di che voce si tratta:
                         un cliente marcato "mai fornitore" non è un fornitore a
                         cui manca qualcosa, è una voce che serve a FERMARE una
                         lettura, e aprirla per scoprirlo sarebbe un giro inutile. */}
-                    <h6 className="fw-bold text-light mb-1 d-flex align-items-center gap-2">
+                    <h6 className="fw-bold text-body mb-1 d-flex align-items-center gap-2">
                         {data.mai_fornitore
                           ? <Ban size={16} className="text-danger flex-shrink-0" />
                           : pivaDaConfermare(data)
@@ -312,7 +312,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                     <div className="input-group input-group-sm">
                       <input
                         type="text"
-                        className={`form-control form-control-sm bg-black text-light font-monospace ${pivaDaConfermare(data) ? 'border-primary' : 'border-secondary'}`}
+                        className={`form-control form-control-sm font-monospace ${pivaDaConfermare(data) ? 'border-primary' : ''}`}
                         placeholder="Non ancora nota"
                         value={data.partita_iva || ''}
                         onChange={(e) => updateSupplier(name, 'partita_iva', e.target.value.replace(/\D/g, ''))}
@@ -327,7 +327,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                         </button>
                       )}
                     </div>
-                    <div className="form-text text-secondary" style={{ fontSize: '0.72rem' }}>
+                    <div className="form-text text-body-secondary" style={{ fontSize: '0.72rem' }}>
                       {data.mai_fornitore
                         ? 'È la P.IVA del cliente: quando il modello la legge su un D.D.T. il campo viene svuotato, mai attribuito al fornitore.'
                         : pivaDaConfermare(data)
@@ -350,7 +350,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                         checked={data.confermato === 'yes'}
                         onChange={(e) => updateSupplier(name, 'confermato', e.target.checked ? 'yes' : 'no')}
                       />
-                      <label className="form-check-label small text-secondary" htmlFor={`switch-${name}`}>
+                      <label className="form-check-label small text-body-secondary" htmlFor={`switch-${name}`}>
                         Regola attiva — lettura D.D.T.
                       </label>
                     </div>
@@ -385,7 +385,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                     {regoleDi(data).map((regola, i) => (
                       <div className="input-group input-group-sm mb-2" key={i}>
                         <select
-                          className="form-select bg-black text-light border-secondary"
+                          className="form-select"
                           style={{ maxWidth: '17rem' }}
                           value={regola.campo || 'indirizzo_consegna'}
                           onChange={(e) => aggiornaRegola(name, i, 'campo', e.target.value)}
@@ -394,12 +394,12 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                             <option key={c.valore} value={c.valore}>{c.etichetta}</option>
                           ))}
                         </select>
-                        <span className="input-group-text bg-dark text-secondary border-secondary small">
+                        <span className="input-group-text text-body-secondary small">
                           sta sotto
                         </span>
                         <input
                           type="text"
-                          className="form-control bg-black text-light border-secondary font-monospace"
+                          className="form-control font-monospace"
                           placeholder="l'etichetta stampata, es. LUOGO DI DESTINAZIONE"
                           value={regola.etichetta || ''}
                           onChange={(e) => aggiornaRegola(name, i, 'etichetta', e.target.value)}
@@ -419,7 +419,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       <Plus size={13} className="me-1" /> Aggiungi regola mirata
                     </button>
 
-                    <div className="form-text text-secondary" style={{ fontSize: '0.75rem' }}>
+                    <div className="form-text text-body-secondary" style={{ fontSize: '0.75rem' }}>
                       Dopo l'estrazione il backend fa <strong>una domanda secca</strong> al modello
                       (“sotto questa dicitura cosa c'è scritto?”) e sovrascrive il campo: costa circa
                       un secondo e funziona dove la stessa regola scritta qui sotto in prosa viene ignorata.
@@ -427,18 +427,18 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       Non usare frasi al negativo: indica dov'è il dato, non dove non è.
                     </div>
 
-                    <label className="form-label small text-light fw-bold mb-1 mt-3 d-flex align-items-center gap-2">
+                    <label className="form-label small text-body fw-bold mb-1 mt-3 d-flex align-items-center gap-2">
                       <Tags size={14} /> Altri nomi di questo fornitore (uno per riga)
                     </label>
                     <textarea
-                      className="form-control bg-black text-light border-secondary font-monospace"
+                      className="form-control font-monospace"
                       rows="2"
                       placeholder="Es. SA.BA DI SABATINI EUGENIO FISH VENDITA SURGELATI"
                       value={(data.nomi_alternativi || []).join('\n')}
                       onChange={(e) => updateSupplier(name, 'nomi_alternativi', e.target.value.split('\n'))}
                       style={{ fontSize: '0.85rem' }}
                     />
-                    <div className="form-text text-secondary" style={{ fontSize: '0.75rem' }}>
+                    <div className="form-text text-body-secondary" style={{ fontSize: '0.75rem' }}>
                       Serve quando il modello legge la ragione sociale per esteso mentre qui è
                       registrata in forma corta (o viceversa): senza, le regole e gli indirizzi vietati
                       scattano solo su alcune scansioni dello stesso fornitore.
@@ -446,7 +446,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
 
                     <label className="form-label small text-info fw-bold mb-1 mt-3">Regola per il Modello AI (Prompt)</label>
                     <textarea
-                      className="form-control bg-black text-light border-secondary font-monospace"
+                      className="form-control font-monospace"
                       rows="3"
                       placeholder="Nessuna regola specifica per questo fornitore. Il modello userà la logica standard."
                       value={data.note_specifiche}
@@ -458,14 +458,14 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       <Ban size={14} /> Indirizzi MAI di consegna (uno per riga)
                     </label>
                     <textarea
-                      className="form-control bg-black text-light border-secondary font-monospace"
+                      className="form-control font-monospace"
                       rows="2"
                       placeholder="Es. VIA DEL RAME 2, 06134 PERUGIA (PG)"
                       value={(data.indirizzi_vietati || []).join('\n')}
                       onChange={(e) => updateSupplier(name, 'indirizzi_vietati', e.target.value.split('\n'))}
                       style={{ fontSize: '0.85rem' }}
                     />
-                    <div className="form-text text-secondary" style={{ fontSize: '0.75rem' }}>
+                    <div className="form-text text-body-secondary" style={{ fontSize: '0.75rem' }}>
                       Controllo esatto fatto in Python dopo l'estrazione, non una richiesta al modello:
                       se legge uno di questi indirizzi il campo viene svuotato e il documento finisce in CHECK.
                       Vale sempre, anche a regola non attiva. Basta la parte stabile (via e civico).
@@ -476,7 +476,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
             ))}
 
             {filteredSuppliers.length === 0 && (
-              <div className="text-center py-5 text-secondary">
+              <div className="text-center py-5 text-body-secondary">
                 Nessun fornitore trovato con questi criteri.
               </div>
             )}

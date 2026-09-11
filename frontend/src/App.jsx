@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
+import useTema from './components/useTema';
 import DdtSection from './components/DdtSection';
 import FattureSection from './components/FattureSection';
 import SuppliersManager from './components/SuppliersManager';
@@ -15,6 +17,11 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 function App() {
   // Le tre sezioni del gestionale: D.D.T., Fatture, Fornitori.
   const [vista, setVista] = useState('DDT');
+
+  // Chiaro/scuro. Sta qui e non nella barra laterale perche' e' una preferenza
+  // dell'applicazione, non del menu: la barra lo mostra e lo commuta, ma la
+  // riga che tocca l'<html> deve restarne una sola.
+  const [tema, cambiaTema] = useTema();
 
   // --- D.D.T. ---------------------------------------------------------------
   const [documents, setDocuments] = useState([]);
@@ -461,20 +468,34 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
     FORNITORI: daAutorizzare,
   };
 
-  return (
-    <div className="bg-dark min-vh-100 text-light pb-5">
+  const apriInserimentoManuale = () => {
+    setVista('DDT');
+    setShowManualEntry(true);
+  };
 
-      <Header
+  return (
+    <div className="guscio">
+
+      <Sidebar
         vista={vista}
         onVista={setVista}
-        onRefresh={ricaricaTutto}
-        isLoading={loading || loadingFatture}
-        onManualAdd={() => {
-          setVista('DDT');
-          setShowManualEntry(true);
-        }}
         badge={badge}
+        tema={tema}
+        onCambiaTema={cambiaTema}
       />
+
+      {/* Il contenuto. La barra in alto e' sticky e sta DENTRO questa colonna,
+          non sopra tutta la pagina: deve scorrere con cio' che descrive. */}
+      <div className="contenuto d-flex flex-column min-vh-100">
+
+        <TopBar
+          vista={vista}
+          onRefresh={ricaricaTutto}
+          isLoading={loading || loadingFatture}
+          onManualAdd={apriInserimentoManuale}
+        />
+
+        <main className="flex-grow-1 pt-4 pb-5">
 
       {error && (
         <div className="container-fluid px-4">
@@ -559,6 +580,8 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
         />
       )}
 
+        </main>
+
       {/* Inserimento manuale: allega il file e scrivi i dati, senza AI */}
       <ManualEntryModal
         show={showManualEntry}
@@ -605,7 +628,8 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
         isConfermando={isConfermandoAccoppiamento}
       />
 
-      <Toast avviso={avviso} onClose={() => setAvviso(null)} />
+        <Toast avviso={avviso} onClose={() => setAvviso(null)} />
+      </div>
     </div>
   );
 }

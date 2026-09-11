@@ -14,7 +14,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
 
   return (
     <div className="table-responsive">
-      <table className="table table-dark table-striped table-hover align-middle mb-0">
+      <table className="table table-striped table-hover align-middle mb-0">
         <thead className="table-secondary">
           <tr>
             <th className="px-4 py-3 border-0">Ricevuta il</th>
@@ -33,7 +33,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
         <tbody className="border-top-0">
           {fatture.length === 0 ? (
             <tr>
-              <td colSpan="9" className="text-center py-5 text-secondary">
+              <td colSpan="9" className="text-center py-5 text-body-secondary">
                 Nessuna fattura in questa categoria.
               </td>
             </tr>
@@ -52,7 +52,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
 
               return (
                 <tr key={fattura.id}>
-                  <td className="px-4 text-light small text-nowrap">
+                  <td className="px-4 text-body small text-nowrap">
                     {fattura.timestamp ? new Date(fattura.timestamp).toLocaleString('it-IT') : '—'}
                     {fattura.giorni_attesa > 0 && (
                       <span
@@ -74,7 +74,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
                   <td className="text-white fw-medium">
                     {dati.fornitore || campoMancante}
                     {dati.partita_iva && (
-                      <div className="text-secondary font-monospace" style={{ fontSize: '0.75rem' }}>
+                      <div className="text-body-secondary font-monospace" style={{ fontSize: '0.75rem' }}>
                         P.IVA {dati.partita_iva}
                       </div>
                     )}
@@ -94,7 +94,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
 
                   <td className="text-nowrap">
                     {totali === 0 ? (
-                      <span className="text-secondary small">nessuno</span>
+                      <span className="text-body-secondary small">nessuno</span>
                     ) : (
                       <>
                         <span className={`font-monospace fw-bold ${abbinati === totali ? 'text-success' : 'text-warning'}`}>

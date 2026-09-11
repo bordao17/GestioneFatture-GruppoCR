@@ -1,12 +1,32 @@
 <!doctype html>
-<html lang="it" data-bs-theme="dark">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestione Fatture</title>
+    <script>
+      // Il tema va scritto sull'<html> PRIMA che il browser dipinga: se lo
+      // facesse solo React, la pagina lampeggerebbe nel tema sbagliato per un
+      // fotogramma a ogni apertura. La stessa scelta la rifa' temaIniziale()
+      // in src/components/useTema.js, ed e' l'unica riga volutamente duplicata.
+      (function () {
+        var tema = 'dark';
+        try {
+          var salvato = localStorage.getItem('gestionale-tema');
+          if (salvato === 'light' || salvato === 'dark') {
+            tema = salvato;
+          } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            tema = 'light';
+          }
+        } catch (e) {
+          // localStorage negato: si resta sullo scuro, che e' il default.
+        }
+        document.documentElement.setAttribute('data-bs-theme', tema);
+      })();
+    </script>
   </head>
-  <body class="bg-dark text-light">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

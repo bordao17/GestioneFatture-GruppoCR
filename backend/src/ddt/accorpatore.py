@@ -25,6 +25,7 @@ import fitz  # PyMuPDF, già usato in pdf_processor.py
 
 from src.ddt.raggruppatore import stesso_documento, unisci_dati_pagina
 from src.ddt.classificatore import determina_stato, CAMPI_OBBLIGATORI
+from src.ddt.impronte import CAMPO_FIRME, firme_di
 from src.comune.percorsi import CARTELLA_DDT
 
 CARTELLA_BASE = CARTELLA_DDT
@@ -74,6 +75,23 @@ def _pulisci_voce(voce):
     voce = dict(voce)
     voce.pop("_stato_origine", None)
     return voce
+
+
+def _firme_unite(voci):
+    """Le impronte delle pagine di piu' voci, nell'ordine in cui si uniscono.
+
+    Va portata a mano perche' sia qui sia nell'unione manuale la voce finale
+    viene RICOSTRUITA: senza questa riga un documento accorpato perderebbe
+    l'identita' delle sue pagine, e la stessa bolla riscansionata domani
+    tornerebbe a passare come nuova. E' lo stesso motivo per cui si tiene
+    numero_pagine.
+    """
+    unite = []
+    for voce in voci:
+        for firma in firme_di(voce):
+            if firma not in unite:
+                unite.append(firma)
+    return unite
 
 
 def accorpa_documenti():
@@ -143,6 +161,7 @@ def accorpa_documenti():
             "file_origine": voci_gruppo[0].get("file_origine"),
             "numero_pagine": len(voci_gruppo),
             "timestamp": voci_gruppo[0].get("timestamp"),
+            CAMPO_FIRME: _firme_unite(voci_gruppo),
             "dati": dati_uniti
         })
         pagine_accorpate += len(voci_gruppo)
@@ -242,6 +261,7 @@ def unisci_documenti_manuale(ids):
     voce_finale["dati"] = dati_uniti
     voce_finale["numero_pagine"] = sum(v.get("numero_pagine", 1) for _, v in voci_ordinate)
     voce_finale["file_origine"] = " + ".join(file_origini)
+    voce_finale[CAMPO_FIRME] = _firme_unite([v for _, v in voci_ordinate])
     voce_finale["unione"] = "manuale"
 
     ids_da_rimuovere = set(ids_unici)

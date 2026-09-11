@@ -101,9 +101,9 @@ export default function InvoiceModal({
 
   const campo = (etichetta, valore, monospace = false) => (
     <div className="mb-3">
-      <label className="form-label small fw-bold text-secondary mb-1">{etichetta}</label>
-      <div className={`form-control bg-black border-secondary text-light ${monospace ? 'font-monospace' : ''}`}>
-        {valore || <span className="text-secondary fst-italic">non presente</span>}
+      <label className="form-label small fw-bold text-body-secondary mb-1">{etichetta}</label>
+      <div className={`form-control ${monospace ? 'font-monospace' : ''}`}>
+        {valore || <span className="text-body-secondary fst-italic">non presente</span>}
       </div>
     </div>
   );
@@ -111,16 +111,16 @@ export default function InvoiceModal({
   return (
     <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }} tabIndex="-1">
       <div className="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-lg-down">
-        <div className="modal-content bg-dark text-light border-secondary shadow-lg" style={{ height: '90vh' }}>
+        <div className="modal-content shadow-lg" style={{ height: '90vh' }}>
 
-          <div className="modal-header border-secondary py-3">
+          <div className="modal-header py-3">
             <div>
               <h5 className="modal-title fw-bold d-flex align-items-center gap-2">
                 Fattura {dati.numero_fattura || '(senza numero)'}
                 <span className={`badge rounded-pill ${stato.badge}`}>{stato.etichetta}</span>
                 <span className={`badge rounded-pill ${forma.badge}`}>{forma.etichetta}</span>
               </h5>
-              <small className="text-secondary">
+              <small className="text-body-secondary">
                 {dati.fornitore || 'fornitore sconosciuto'} · File: {fattura.file_origine || '—'}
               </small>
             </div>
@@ -131,9 +131,9 @@ export default function InvoiceModal({
             <div className="row g-0 h-100">
 
               {/* Sinistra: il fascicolo PDF, generato dall'XML su richiesta */}
-              <div className="col-lg-7 h-100 bg-black border-end border-secondary d-flex flex-column">
-                <div className="p-2 border-bottom border-secondary d-flex justify-content-between align-items-center bg-dark gap-2">
-                  <span className="small fw-bold text-secondary text-uppercase ps-2">
+              <div className="col-lg-7 h-100 bg-body-secondary border-end d-flex flex-column">
+                <div className="p-2 border-bottom d-flex justify-content-between align-items-center bg-body-tertiary gap-2">
+                  <span className="small fw-bold text-body-secondary text-uppercase ps-2">
                     Fascicolo (fattura + D.D.T.)
                   </span>
                   <button
@@ -159,7 +159,7 @@ export default function InvoiceModal({
 
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center" style={{ minHeight: 0 }}>
                   {caricamento && (
-                    <div className="text-center text-secondary">
+                    <div className="text-center text-body-secondary">
                       <div className="spinner-border text-info mb-3" role="status" />
                       <div className="small">Costruzione del fascicolo dall’XML…</div>
                     </div>
@@ -183,13 +183,13 @@ export default function InvoiceModal({
               </div>
 
               {/* Destra: i dati letti dall'XML e gli abbinamenti */}
-              <div className="col-lg-5 h-100 d-flex flex-column bg-dark">
-                <div className="p-2 border-bottom border-secondary text-center small fw-bold text-secondary text-uppercase">
+              <div className="col-lg-5 h-100 d-flex flex-column bg-body-tertiary">
+                <div className="p-2 border-bottom text-center small fw-bold text-body-secondary text-uppercase">
                   Dati della fattura elettronica
                 </div>
 
                 <div className="flex-grow-1 overflow-auto p-4">
-                  <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-light small d-flex gap-2 py-2">
+                  <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-body small d-flex gap-2 py-2">
                     <Info size={16} className="text-info flex-shrink-0 mt-1" />
                     <span>
                       {forma.spiegazione} I campi arrivano dall’XML firmato e non si correggono da qui:
@@ -218,7 +218,7 @@ export default function InvoiceModal({
                       perche' una P.IVA che non torna e' l'unica chiave esatta
                       fra i due lati del sistema, ed e' qui che si guarda. */}
                   {(fattura.segnalazioni || []).length > 0 && (
-                    <div className="alert bg-warning bg-opacity-10 border border-warning border-opacity-25 text-light small d-flex gap-2 py-2">
+                    <div className="alert bg-warning bg-opacity-10 border border-warning border-opacity-25 text-body small d-flex gap-2 py-2">
                       <AlertTriangle size={16} className="text-warning flex-shrink-0 mt-1" />
                       <div>
                         <strong className="d-block mb-1">Da controllare in anagrafica</strong>
@@ -230,7 +230,7 @@ export default function InvoiceModal({
                   )}
 
                   {/* Abbinamenti ai D.D.T. */}
-                  <hr className="border-secondary my-4" />
+                  <hr className="my-4" />
 
                   {daFirmare && (() => {
                     const colore = daAbbinare ? 'primary' : (completa ? 'success' : 'warning');
@@ -241,7 +241,7 @@ export default function InvoiceModal({
                         : 'L’abbinamento non è completo. Puoi cercare di nuovo (i D.D.T. arrivati nel frattempo verranno agganciati) oppure confermare così com’è: nel file unico finiranno solo i documenti trovati.');
 
                     return (
-                      <div className={`alert bg-${colore} bg-opacity-10 border border-${colore} border-opacity-25 text-light small d-flex gap-2 py-2 mb-0`}>
+                      <div className={`alert bg-${colore} bg-opacity-10 border border-${colore} border-opacity-25 text-body small d-flex gap-2 py-2 mb-0`}>
                         <Link2 size={16} className={`text-${colore} flex-shrink-0 mt-1`} />
                         <span>{testo}</span>
                       </div>
@@ -249,7 +249,7 @@ export default function InvoiceModal({
                   })()}
 
                   <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h6 className="fw-bold text-light mb-0">Documenti di trasporto</h6>
+                    <h6 className="fw-bold text-body mb-0">Documenti di trasporto</h6>
                     {totali > 0 && (
                       daAbbinare
                         ? <span className="badge bg-primary text-white">{totali} da cercare</span>
@@ -262,7 +262,7 @@ export default function InvoiceModal({
                   </div>
 
                   {righe.length === 0 && (
-                    <div className="text-secondary small fst-italic">
+                    <div className="text-body-secondary small fst-italic">
                       La fattura non cita nessun documento di trasporto.
                     </div>
                   )}
@@ -273,15 +273,15 @@ export default function InvoiceModal({
                     return (
                       <div
                         key={`${riga.numero_ddt}-${indice}`}
-                        className={`card bg-black border-${esito.colore} border-opacity-50 mb-3`}
+                        className={`card border-${esito.colore} border-opacity-50 mb-3`}
                       >
                         <div className="card-body p-3">
                           <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
                             <div>
-                              <div className="font-monospace fw-bold text-light">
+                              <div className="font-monospace fw-bold text-body">
                                 {riga.numero_ddt || '(senza numero)'}
                               </div>
-                              <div className="text-secondary" style={{ fontSize: '0.78rem' }}>
+                              <div className="text-body-secondary" style={{ fontSize: '0.78rem' }}>
                                 {riga.data_ddt ? `del ${riga.data_ddt}` : 'senza data'}
                                 {riga.origine === 'numero_fattura' && ' · numero della fattura stessa'}
                               </div>
@@ -291,18 +291,18 @@ export default function InvoiceModal({
                             </span>
                           </div>
 
-                          <div className="text-secondary small mb-2">{riga.motivo}</div>
+                          <div className="text-body-secondary small mb-2">{riga.motivo}</div>
 
                           {riga.documento_id && (
-                            <div className="bg-dark rounded p-2 mb-2 small">
-                              <div className="text-secondary" style={{ fontSize: '0.75rem' }}>
+                            <div className="bg-body-tertiary rounded p-2 mb-2 small">
+                              <div className="text-body-secondary" style={{ fontSize: '0.75rem' }}>
                                 D.D.T. archiviato ({riga.stato_ddt})
                               </div>
-                              <div className="text-light">
+                              <div className="text-body">
                                 <span className="font-monospace fw-bold">{riga.numero_ddt_letto || '—'}</span>
                                 {riga.data_ddt_letta && <span className="font-monospace"> · {riga.data_ddt_letta}</span>}
                               </div>
-                              <div className="text-secondary">{riga.fornitore_letto}</div>
+                              <div className="text-body-secondary">{riga.fornitore_letto}</div>
                               {riga.gia_abbinato && (
                                 <div className="text-warning" style={{ fontSize: '0.75rem' }}>
                                   Già citato dalla fattura {riga.gia_abbinato}
@@ -332,7 +332,7 @@ export default function InvoiceModal({
                   })}
                 </div>
 
-                <div className="p-3 border-top border-secondary bg-dark d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                <div className="p-3 border-top bg-body-tertiary d-flex justify-content-between align-items-center gap-2 flex-wrap">
                   <button
                     className="btn btn-outline-danger px-3 text-nowrap"
                     onClick={() => onElimina(fattura)}

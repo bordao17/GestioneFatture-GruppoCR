@@ -1,111 +1,153 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/* Gli stili del guscio del gestionale.
+ *
+ * Qui c'e' SOLO cio' che Bootstrap non sa fare da solo: la colonna di sinistra
+ * che si richiude e un paio di dettagli. Tutto il resto — colori, bordi,
+ * tabelle, form — viene dalle variabili di Bootstrap 5.3, che discendono da
+ * data-bs-theme sull'<html>. Per questo qui dentro non c'e' NESSUN colore
+ * scritto a mano: un #1e1e1e messo "solo per la barra laterale" sarebbe il
+ * primo pezzo di interfaccia a non seguire il tema chiaro.
+ *
+ * Prima di questo file c'era il CSS del template di Vite (il contatore, il
+ * logo, .hero), che per giunta nessuno importava: main.jsx caricava solo
+ * Bootstrap.
+ */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+/* Il guscio: barra laterale + contenuto, affiancati. */
+.guscio {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+.barra-laterale {
+  --larghezza-barra: 264px;
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  flex: 0 0 var(--larghezza-barra);
+  width: var(--larghezza-barra);
+  /* sticky e non fixed: cosi' il contenuto non ha bisogno di un margine
+     sinistro da tenere allineato alla larghezza della barra, che e' proprio
+     la cosa che si scorda di aggiornare quando la barra si richiude. */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 1030;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  overflow: hidden;
+  transition: flex-basis 0.18s ease, width 0.18s ease;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.barra-laterale.ridotta {
+  --larghezza-barra: 76px;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* Ridotta: restano le sole icone, centrate. */
+.barra-laterale.ridotta .etichetta-menu,
+.barra-laterale.ridotta .solo-estesa {
+  display: none;
+}
+
+.barra-laterale.ridotta .voce-menu {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* min-width: 0 non e' un dettaglio: senza, una tabella larga allarga il
+   contenuto invece di farlo scorrere, e la barra laterale finisce spinta
+   fuori dallo schermo. */
+.contenuto {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.barra-alta {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.marchio {
+  width: 36px;
+  height: 36px;
+}
+
+/* La voce di menu: un <button>, perche' non naviga a un URL ma cambia una
+   vista, e un <a href="#"> che non porta da nessuna parte e' una bugia per
+   chi usa la tastiera o un lettore di schermo. */
+.voce-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--bs-body-color);
+  text-align: left;
+  white-space: nowrap;
+  font-size: 0.925rem;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.voce-menu:hover {
+  background: var(--bs-secondary-bg);
+}
+
+.voce-menu:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: -2px;
+}
+
+.voce-menu.attiva,
+.voce-menu.attiva:hover {
+  background: var(--bs-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Sotto i 768 px la barra resta ridotta e basta: un menu a scomparsa sopra il
+   contenuto vorrebbe anche uno sfondo, una chiusura al tocco e la gestione del
+   focus, e questo gestionale si usa su un monitor. */
+@media (max-width: 767.98px) {
+  .barra-laterale,
+  .barra-laterale.ridotta {
+    --larghezza-barra: 64px;
+  }
+
+  .barra-laterale .etichetta-menu,
+  .barra-laterale .solo-estesa {
+    display: none;
+  }
+
+  .barra-laterale .voce-menu {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+/* L'icona che gira mentre si sincronizza. Prima era marcata "fa-spin", che e'
+   di Font Awesome: non essendo mai stato caricato, quell'icona non ha mai
+   girato. */
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
   }
 }
-p {
-  margin: 0;
+
+.gira {
+  animation: gira 1s linear infinite;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+@media (prefers-reduced-motion: reduce) {
+  .barra-laterale,
+  .voce-menu {
+    transition: none;
+  }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  .gira {
+    animation: none;
+  }
 }

@@ -15,7 +15,7 @@ export default function ProcessingBar({ lavori }) {
   if (!lavori || lavori.length === 0) return null;
 
   return (
-    <div className="card bg-dark border-info border-opacity-50 shadow-sm mb-4">
+    <div className="card border-info border-opacity-50 shadow-sm mb-4">
       <div className="card-body py-3">
         {lavori.map((lavoro, indice) => {
           const totale = lavoro.pagine_totali || 0;
@@ -37,14 +37,14 @@ export default function ProcessingBar({ lavori }) {
                     {lavoro.tipo === 'rianalisi' ? 'Rianalisi AI' : 'Analisi AI'}: {lavoro.file}
                   </span>
                 </span>
-                <span className="text-secondary text-nowrap">
+                <span className="text-body-secondary text-nowrap">
                   {indeterminata ? 'preparazione pagine...' : `pagina ${corrente} di ${totale}`}
                   {' · '}
                   {formattaDurata(lavoro.secondi)}
                 </span>
               </div>
 
-              <div className="progress bg-black" style={{ height: '8px' }}>
+              <div className="progress" style={{ height: '8px' }}>
                 <div
                   className="progress-bar bg-info progress-bar-striped progress-bar-animated"
                   role="progressbar"

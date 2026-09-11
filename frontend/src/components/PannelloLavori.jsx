@@ -84,9 +84,9 @@ export default function PannelloLavori({ apiUrl, versione = 0, onFatto, onAvviso
   const notifiche = stato.notifiche || {};
 
   return (
-    <div className="card bg-dark border-secondary shadow-sm mb-4">
-      <div className="card-header border-secondary d-flex justify-content-between align-items-center py-3 flex-wrap gap-2">
-        <h6 className="mb-0 text-light d-flex align-items-center gap-2">
+    <div className="card shadow-sm mb-4">
+      <div className="card-header d-flex justify-content-between align-items-center py-3 flex-wrap gap-2">
+        <h6 className="mb-0 text-body d-flex align-items-center gap-2">
           <AlarmClock size={18} className="text-warning" /> Lavori automatici
           {!stato.attivo && <span className="badge bg-danger">pianificatore fermo</span>}
         </h6>
@@ -103,19 +103,19 @@ export default function PannelloLavori({ apiUrl, versione = 0, onFatto, onAvviso
       </div>
 
       <div className="card-body">
-        <div className="d-flex align-items-start gap-2 mb-3 small text-secondary">
+        <div className="d-flex align-items-start gap-2 mb-3 small text-body-secondary">
           <Mail size={16} className="flex-shrink-0 mt-1" />
           {notifiche.configurata ? (
             <span>
-              Le mail partono da <span className="text-light">{notifiche.mittente || '—'}</span> via{' '}
-              <span className="text-light">{notifiche.server}:{notifiche.porta}</span> ({notifiche.sicurezza}) e
-              arrivano a <span className="text-light">{(notifiche.destinatari || []).join(', ')}</span>.
+              Le mail partono da <span className="text-body">{notifiche.mittente || '—'}</span> via{' '}
+              <span className="text-body">{notifiche.server}:{notifiche.porta}</span> ({notifiche.sicurezza}) e
+              arrivano a <span className="text-body">{(notifiche.destinatari || []).join(', ')}</span>.
             </span>
           ) : (
             <span>
               Nessuna mail configurata: i lavori girano lo stesso, ma nessuno riceve il riepilogo.
-              Compila <code className="text-secondary">SMTP_HOST</code> e{' '}
-              <code className="text-secondary">MAIL_DESTINATARI</code> qui sotto.
+              Compila <code className="text-body-secondary">SMTP_HOST</code> e{' '}
+              <code className="text-body-secondary">MAIL_DESTINATARI</code> qui sotto.
             </span>
           )}
         </div>
@@ -124,18 +124,18 @@ export default function PannelloLavori({ apiUrl, versione = 0, onFatto, onAvviso
           const attivo = lavoro.in_corso || inCorso === lavoro.chiave;
 
           return (
-            <div className="row align-items-center py-2 border-top border-secondary border-opacity-25" key={lavoro.chiave}>
+            <div className="row align-items-center py-2 border-top border-opacity-25" key={lavoro.chiave}>
               <div className="col-lg-4">
-                <div className="text-light fw-semibold">{lavoro.etichetta}</div>
+                <div className="text-body fw-semibold">{lavoro.etichetta}</div>
                 {lavoro.orario ? (
-                  <small className="text-secondary">
+                  <small className="text-body-secondary">
                     ogni giorno alle <span className="text-warning">{lavoro.orario}</span>
                     {lavoro.prossima && <> &bull; poi {quando(lavoro.prossima)}</>}
                   </small>
                 ) : (
-                  <small className="text-secondary">
+                  <small className="text-body-secondary">
                     non pianificato &mdash; scrivi un orario in{' '}
-                    <code className="text-secondary">{lavoro.impostazione}</code>
+                    <code className="text-body-secondary">{lavoro.impostazione}</code>
                   </small>
                 )}
               </div>
@@ -146,14 +146,14 @@ export default function PannelloLavori({ apiUrl, versione = 0, onFatto, onAvviso
                     <Loader2 size={14} className="spinner-border-sm" /> in corso…
                   </small>
                 ) : lavoro.ultima ? (
-                  <small className={lavoro.errore ? 'text-danger' : 'text-secondary'}>
+                  <small className={lavoro.errore ? 'text-danger' : 'text-body-secondary'}>
                     {lavoro.errore
                       ? <XCircle size={14} className="me-1" />
                       : <CheckCircle2 size={14} className="me-1 text-success" />}
                     {quando(lavoro.ultima)} &bull; {lavoro.esito} ({lavoro.durata}s)
                   </small>
                 ) : (
-                  <small className="text-secondary">mai eseguito da quando il backend è acceso</small>
+                  <small className="text-body-secondary">mai eseguito da quando il backend è acceso</small>
                 )}
               </div>
 

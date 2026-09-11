@@ -155,10 +155,10 @@ export default function FattureSection({
 
   const cartaConteggio = (etichetta, valore, colore, Icona, titolo) => (
     <div className="col-md-3">
-      <div className={`card bg-dark border-secondary shadow-sm h-100 border-start border-4 border-${colore}`} title={titolo}>
+      <div className={`card shadow-sm h-100 border-start border-4 border-${colore}`} title={titolo}>
         <div className="card-body py-3 d-flex justify-content-between align-items-center">
           <div>
-            <h6 className="text-secondary mb-1 text-uppercase fw-bold" style={{ fontSize: '0.75rem' }}>{etichetta}</h6>
+            <h6 className="text-body-secondary mb-1 text-uppercase fw-bold" style={{ fontSize: '0.75rem' }}>{etichetta}</h6>
             <h3 className={`mb-0 fw-bold text-${colore === 'primary' ? 'light' : colore}`}>{valore}</h3>
           </div>
           <Icona size={28} className={`text-${colore} opacity-50`} />
@@ -192,7 +192,7 @@ export default function FattureSection({
       {conteggi.attesa > 0 && (
         <div className="row g-3 mb-4">
           <div className="col-md-6">
-            <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-light h-100 mb-0 py-3">
+            <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-body h-100 mb-0 py-3">
               <h6 className="fw-bold text-info d-flex align-items-center gap-2">
                 <Clock size={18} /> {conteggi.daConfermare} da confermare a mano
               </h6>
@@ -203,7 +203,7 @@ export default function FattureSection({
             </div>
           </div>
           <div className="col-md-6">
-            <div className="alert bg-warning bg-opacity-10 border border-warning border-opacity-25 text-light h-100 mb-0 py-3">
+            <div className="alert bg-warning bg-opacity-10 border border-warning border-opacity-25 text-body h-100 mb-0 py-3">
               <h6 className="fw-bold text-warning d-flex align-items-center gap-2">
                 <Truck size={18} /> {conteggi.mancanti} in attesa di bolle mai arrivate
               </h6>
@@ -223,15 +223,15 @@ export default function FattureSection({
         </div>
       )}
 
-      <div className="card bg-dark border-secondary shadow-sm mb-4">
-        <div className="card-header border-secondary d-flex justify-content-between align-items-center py-3 gap-3 flex-wrap">
+      <div className="card shadow-sm mb-4">
+        <div className="card-header d-flex justify-content-between align-items-center py-3 gap-3 flex-wrap">
           <div className="input-group" style={{ maxWidth: '420px' }}>
-            <span className="input-group-text bg-secondary border-secondary text-white">
+            <span className="input-group-text">
               <Search size={18} />
             </span>
             <input
               type="text"
-              className="form-control bg-black text-white border-secondary"
+              className="form-control"
               placeholder="Cerca per n. fattura, fornitore, P.IVA o numero D.D.T.…"
               value={ricerca}
               onChange={(e) => setRicerca(e.target.value)}
@@ -278,7 +278,7 @@ export default function FattureSection({
 
         <div className="card-body p-0">
           {loading && fatture.length === 0 ? (
-            <div className="text-center py-5 text-secondary">Caricamento fatture…</div>
+            <div className="text-center py-5 text-body-secondary">Caricamento fatture…</div>
           ) : (
             <>
               <InvoiceTable
@@ -293,24 +293,24 @@ export default function FattureSection({
           )}
         </div>
 
-        <div className="card-footer border-secondary text-secondary small py-2">
+        <div className="card-footer text-body-secondary small py-2">
           {filtrate.length} di {fatture.length} fatture
         </div>
       </div>
 
       {/* L'attesa dall'altro lato: bolle archiviate che nessuna fattura cita. */}
-      <div className="card bg-dark border-secondary shadow-sm mb-5">
+      <div className="card shadow-sm mb-5">
         <button
-          className="card-header border-secondary bg-transparent w-100 text-start d-flex justify-content-between align-items-center py-3 border-0"
+          className="card-header bg-transparent w-100 text-start d-flex justify-content-between align-items-center py-3 border-0"
           onClick={() => setMostraDdtSoli((v) => !v)}
         >
-          <span className="fw-bold text-light d-flex align-items-center gap-2">
+          <span className="fw-bold text-body d-flex align-items-center gap-2">
             {mostraDdtSoli ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
             <Truck size={18} className="text-warning" />
             D.D.T. senza fattura
             <span className="badge bg-secondary">{ddtSoli.length}</span>
           </span>
-          <span className="text-secondary small">
+          <span className="text-body-secondary small">
             Bolle archiviate che nessuna fattura ha ancora agganciato
           </span>
         </button>
@@ -318,12 +318,12 @@ export default function FattureSection({
         {mostraDdtSoli && (
           <div className="card-body p-0">
             {ddtSoli.length === 0 ? (
-              <div className="text-center py-4 text-secondary small">
+              <div className="text-center py-4 text-body-secondary small">
                 Nessuna: ogni D.D.T. archiviato è già finito in un fascicolo.
               </div>
             ) : (
               <>
-                <div className="px-4 pt-3 text-secondary small">
+                <div className="px-4 pt-3 text-body-secondary small">
                   Da questo lato non c’è niente da correggere: una bolla si aggancia quando la sua fattura
                   viene caricata e qualcuno preme <strong>Abbina</strong>. Se aspetta da troppo, o la fattura
                   non è mai arrivata, oppure è in archivio e nessuno ne ha ancora chiesto l’abbinamento —
@@ -332,7 +332,7 @@ export default function FattureSection({
                 </div>
 
                 <div className="table-responsive mt-3">
-                  <table className="table table-dark table-striped table-hover align-middle mb-0">
+                  <table className="table table-striped table-hover align-middle mb-0">
                     <thead className="table-secondary">
                       <tr>
                         <th className="px-4 py-2 border-0">Fornitore</th>
@@ -354,7 +354,7 @@ export default function FattureSection({
                               {ddt.stato}
                             </span>
                           </td>
-                          <td className="text-secondary">{ddt.giorni_attesa} giorn{ddt.giorni_attesa === 1 ? 'o' : 'i'}</td>
+                          <td className="text-body-secondary">{ddt.giorni_attesa} giorn{ddt.giorni_attesa === 1 ? 'o' : 'i'}</td>
                           <td className="px-4 text-end">
                             <button className="btn btn-sm btn-outline-info" onClick={() => onApriDdt(ddt.id)}>
                               Apri il D.D.T.

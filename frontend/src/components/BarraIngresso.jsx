@@ -66,17 +66,27 @@ export default function BarraIngresso({
       // lo stesso (dal 2026-09-08 non si scarta piu' niente per il fornitore).
       // Vanno pero' dette qui, perche' e' il momento in cui qualcuno guarda.
       const segnalate = res.data.segnalate || [];
+      // Le pagine gia' archiviate non sono un errore e non chiedono niente a
+      // nessuno: si dicono perche' senza, i conteggi non tornerebbero con la
+      // pila di fogli appena messa nello scanner.
+      const duplicate = res.data.duplicati || [];
       const fatti = tipo === 'ddt'
         ? `${res.data.elaborati.length} documenti (${res.data.pagine_totali} pagine)`
         : `${res.data.totale} fatture`;
 
       setInAttesa(0);
       setUltimo({
-        tipo: (falliti.length > 0 || segnalate.length > 0) ? 'warning' : 'success',
+        tipo: (falliti.length > 0 || segnalate.length > 0)
+          ? 'warning'
+          : (duplicate.length > 0 ? 'info' : 'success'),
         testo: `Analizzati ${fatti}`
           + (falliti.length > 0
             ? ` — ${falliti.length} non elaborati, restano in cartella: ${falliti.map((f) => f.file).join(', ')}`
             : '.')
+          + (duplicate.length > 0
+            ? ` ${duplicate.length} ${duplicate.length === 1 ? 'pagina già archiviata' : 'pagine già archiviate'}, `
+              + 'saltate senza rileggerle.'
+            : '')
           + (segnalate.length > 0
             ? ` ${segnalate.length} con anomalie sul fornitore (archiviate lo stesso): `
               + segnalate.map((s) => `${s.numero_fattura} — ${s.messaggi.join(' ')}`).join(' · ')
@@ -93,9 +103,9 @@ export default function BarraIngresso({
   const occupato = inCaricamento || inAnalisi;
 
   return (
-    <div className="card bg-dark border-secondary shadow-sm mb-3">
+    <div className="card shadow-sm mb-3">
       <div className="card-body py-3 d-flex flex-wrap align-items-center gap-3">
-        <div className="d-flex align-items-center gap-2 text-secondary flex-grow-1">
+        <div className="d-flex align-items-center gap-2 text-body-secondary flex-grow-1">
           <Inbox size={18} />
           <small>{descrizione}</small>
         </div>
@@ -111,7 +121,7 @@ export default function BarraIngresso({
 
         <button
           type="button"
-          className="btn btn-outline-light d-flex align-items-center gap-2"
+          className="btn btn-outline-secondary d-flex align-items-center gap-2"
           onClick={() => input.current?.click()}
           disabled={occupato}
           title={`Copia i file nella cartella in ingresso, senza analizzarli`}
@@ -134,7 +144,7 @@ export default function BarraIngresso({
       </div>
 
       {ultimo && (
-        <div className={`card-footer bg-transparent border-secondary py-2 text-${ultimo.tipo === 'warning' ? 'warning' : 'success'}`}>
+        <div className={`card-footer bg-transparent py-2 text-${ultimo.tipo}`}>
           <small>{ultimo.testo}</small>
         </div>
       )}

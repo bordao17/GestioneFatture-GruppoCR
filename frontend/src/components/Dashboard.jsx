@@ -12,12 +12,12 @@ export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, 
   const pagine = usePaginazione(filteredDocs, `${chiaveVista}|${activeTab}`);
 
   return (
-    <div className="card bg-dark border-secondary shadow-sm">
-      <div className="card-header border-secondary bg-transparent pt-3 pb-3 px-4">
+    <div className="card shadow-sm">
+      <div className="card-header bg-transparent pt-3 pb-3 px-4">
         <ul className="nav nav-pills gap-2">
           <li className="nav-item">
             <button 
-              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'OK' ? 'active bg-success text-white fw-bold' : 'text-secondary border border-secondary'}`}
+              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'OK' ? 'active bg-success text-white fw-bold' : 'text-body-secondary border'}`}
               onClick={() => setActiveTab('OK')}
             >
               <CheckCircle size={18} /> Completati
@@ -28,7 +28,7 @@ export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, 
           </li>
           <li className="nav-item">
             <button 
-              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'CHECK' ? 'active bg-warning text-dark fw-bold' : 'text-secondary border border-secondary'}`}
+              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'CHECK' ? 'active bg-warning text-dark fw-bold' : 'text-body-secondary border'}`}
               onClick={() => setActiveTab('CHECK')}
             >
               <AlertTriangle size={18} /> Da Verificare
@@ -39,7 +39,7 @@ export default function Dashboard({ documents, activeTab, setActiveTab, onEdit, 
           </li>
           <li className="nav-item">
             <button 
-              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'KO' ? 'active bg-danger text-white fw-bold' : 'text-secondary border border-secondary'}`}
+              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'KO' ? 'active bg-danger text-white fw-bold' : 'text-body-secondary border'}`}
               onClick={() => setActiveTab('KO')}
             >
               <XOctagon size={18} /> Errori

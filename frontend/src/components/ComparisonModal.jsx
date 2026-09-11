@@ -69,12 +69,12 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
   return (
     <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }} tabIndex="-1">
       <div className="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-lg-down">
-        <div className="modal-content bg-dark text-light border-secondary shadow-lg" style={{ height: '90vh' }}>
+        <div className="modal-content shadow-lg" style={{ height: '90vh' }}>
           
-          <div className="modal-header border-secondary py-3">
+          <div className="modal-header py-3">
             <div>
               <h5 className="modal-title fw-bold">Validazione Documento</h5>
-              <small className="text-secondary">
+              <small className="text-body-secondary">
                 File: {selectedDoc.file_origine}
               </small>
             </div>
@@ -85,11 +85,11 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
             <div className="row g-0 h-100">
               
               {/* Sinistra: Anteprima PDF */}
-              <div className="col-lg-7 h-100 bg-black border-end border-secondary d-flex flex-column">
+              <div className="col-lg-7 h-100 bg-body-secondary border-end d-flex flex-column">
                 
                 {/* Header del PDF con il bottone di download */}
-                <div className="p-2 border-bottom border-secondary d-flex justify-content-between align-items-center bg-dark">
-                  <span className="small fw-bold text-secondary text-uppercase ps-2">
+                <div className="p-2 border-bottom d-flex justify-content-between align-items-center bg-body-tertiary">
+                  <span className="small fw-bold text-body-secondary text-uppercase ps-2">
                     Documento Scansionato
                   </span>
                   <button 
@@ -113,8 +113,8 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
               </div>
 
               {/* Destra: Form Dati */}
-              <div className="col-lg-5 h-100 d-flex flex-column bg-dark">
-                <div className="p-2 border-bottom border-secondary text-center small fw-bold text-secondary text-uppercase">
+              <div className="col-lg-5 h-100 d-flex flex-column bg-body-tertiary">
+                <div className="p-2 border-bottom text-center small fw-bold text-body-secondary text-uppercase">
                   Dati Estratti
                 </div>
                 
@@ -124,7 +124,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                       fattura lo cita gia'. Correggerne il numero adesso rifa'
                       partire l'abbinamento, quindi vale la pena saperlo. */}
                   {selectedDoc.fattura?.numero_fattura && (
-                    <div className="alert bg-success bg-opacity-10 border border-success border-opacity-25 text-light small d-flex justify-content-between align-items-center gap-2 py-2 mb-4">
+                    <div className="alert bg-success bg-opacity-10 border border-success border-opacity-25 text-body small d-flex justify-content-between align-items-center gap-2 py-2 mb-4">
                       <span>
                         Agganciato alla fattura <strong>{selectedDoc.fattura.numero_fattura}</strong>
                         {selectedDoc.fattura.data_fattura && ` del ${selectedDoc.fattura.data_fattura}`}
@@ -145,10 +145,10 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                   )}
 
                   <div className="mb-3">
-                    <label className="form-label small fw-bold text-secondary">Fornitore</label>
+                    <label className="form-label small fw-bold text-body-secondary">Fornitore</label>
                     <input
                       type="text"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control"
                       value={editData.fornitore || ''}
                       onChange={(e) => setEditData({...editData, fornitore: e.target.value})}
                     />
@@ -183,13 +183,13 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                       da quel momento la mette l'anagrafica e nessuno la
                       rilegge piu'. */}
                   <div className="mb-3">
-                    <label className="form-label small fw-bold text-secondary">Partita IVA fornitore</label>
+                    <label className="form-label small fw-bold text-body-secondary">Partita IVA fornitore</label>
                     {pivaConfermata ? (
                       <>
                         <div className="input-group">
                           <input
                             type="text"
-                            className="form-control bg-black text-secondary border-secondary font-monospace"
+                            className="form-control text-body-secondary font-monospace"
                             value={editData.partita_iva || selectedDoc.partita_iva_anagrafica || ''}
                             readOnly
                             disabled
@@ -198,7 +198,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                             <Lock size={14} /> Confermata
                           </span>
                         </div>
-                        <div className="form-text text-secondary" style={{ fontSize: '0.75rem' }}>
+                        <div className="form-text text-body-secondary" style={{ fontSize: '0.75rem' }}>
                           Già confermata in anagrafica per <strong>{editData.fornitore || 'questo fornitore'}</strong>:
                           da qui non si tocca più. Si corregge dalla sezione <strong>Fornitori</strong>.
                         </div>
@@ -208,7 +208,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                         <div className="input-group">
                           <input
                             type="text"
-                            className="form-control bg-dark text-light border-secondary font-monospace"
+                            className="form-control font-monospace"
                             value={editData.partita_iva || ''}
                             onChange={(e) => setEditData({...editData, partita_iva: e.target.value.replace(/\D/g, '')})}
                             placeholder="11 cifre"
@@ -243,19 +243,19 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
 
                   <div className="row mb-3">
                     <div className="col-6">
-                      <label className="form-label small fw-bold text-secondary">Numero D.D.T.</label>
+                      <label className="form-label small fw-bold text-body-secondary">Numero D.D.T.</label>
                       <input
                         type="text"
-                        className="form-control bg-dark text-light border-secondary"
+                        className="form-control"
                         value={editData.numero_ddt || ''}
                         onChange={(e) => setEditData({...editData, numero_ddt: e.target.value})}
                       />
                     </div>
                     <div className="col-6">
-                      <label className="form-label small fw-bold text-secondary">Data D.D.T.</label>
+                      <label className="form-label small fw-bold text-body-secondary">Data D.D.T.</label>
                       <input
                         type="text"
-                        className="form-control bg-dark text-light border-secondary"
+                        className="form-control"
                         value={editData.data_ddt || ''}
                         onChange={(e) => setEditData({...editData, data_ddt: e.target.value})}
                         placeholder="GG-MM-AAAA"
@@ -264,34 +264,34 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label small fw-bold text-secondary">Ragione Sociale Consegna</label>
+                    <label className="form-label small fw-bold text-body-secondary">Ragione Sociale Consegna</label>
                     <input
                       type="text"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control"
                       value={editData.ragione_sociale_consegna || ''}
                       onChange={(e) => setEditData({...editData, ragione_sociale_consegna: e.target.value})}
                     />
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label small fw-bold text-secondary">Indirizzo di Consegna</label>
+                    <label className="form-label small fw-bold text-body-secondary">Indirizzo di Consegna</label>
                     <textarea
                       rows="3"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control"
                       value={editData.indirizzo_consegna || ''}
                       onChange={(e) => setEditData({...editData, indirizzo_consegna: e.target.value})}
                     />
                   </div>
                 </div>
 
-                <div className="p-3 border-top border-secondary bg-dark d-flex flex-column gap-3">
+                <div className="p-3 border-top bg-body-tertiary d-flex flex-column gap-3">
                   {/* Lo stato lo calcola determina_stato() contando i campi
                       letti, ma solo chi guarda il PDF sa se il documento vale
                       qualcosa: una bolla con tutti i campi pieni ma sbagliati
                       resta OK, un retro bianco non ha modo di finire in errore.
                       Da qui si scavalca la classificazione. */}
                   <div>
-                    <label className="form-label small fw-bold text-secondary">Stato del documento</label>
+                    <label className="form-label small fw-bold text-body-secondary">Stato del documento</label>
                     <div className="btn-group w-100" role="group" aria-label="Stato del documento">
                       {ORDINE_STATI.map((stato) => {
                         const info = STATI_DDT[stato];
@@ -311,7 +311,7 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                         );
                       })}
                     </div>
-                    <div className="form-text text-secondary">
+                    <div className="form-text text-body-secondary">
                       {isCambiandoStato
                         ? 'Spostamento in corso...'
                         : selectedDoc.stato_manuale

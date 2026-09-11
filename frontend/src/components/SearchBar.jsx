@@ -24,17 +24,17 @@ export default function SearchBar({ searchTerm, setSearchTerm, searchField, setS
   }[searchField];
 
   return (
-    <div className="card bg-dark border-secondary shadow-sm mb-3">
+    <div className="card shadow-sm mb-3">
       <div className="card-body py-3 px-4">
         <div className="row g-2 align-items-center">
           <div className="col-12 col-md">
             <div className="input-group">
-              <span className="input-group-text bg-secondary border-secondary text-white">
+              <span className="input-group-text">
                 <Search size={18} />
               </span>
               <input
                 type="text"
-                className="form-control bg-dark text-white border-secondary"
+                className="form-control"
                 placeholder={placeholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -54,7 +54,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, searchField, setS
 
           <div className="col-12 col-md-auto">
             <select
-              className="form-select bg-dark text-white border-secondary"
+              className="form-select"
               value={searchField}
               onChange={(e) => setSearchField(e.target.value)}
               aria-label="Campo su cui cercare"

@@ -83,19 +83,19 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
 
   const campoTesto = (nome, etichetta, opzioni = {}) => (
     <>
-      <label className="form-label small fw-bold text-secondary">
+      <label className="form-label small fw-bold text-body-secondary">
         {etichetta}
-        {opzioni.facoltativo && <span className="text-muted fw-normal"> (facoltativo)</span>}
+        {opzioni.facoltativo && <span className="text-body-secondary fw-normal"> (facoltativo)</span>}
       </label>
       <input
         type="text"
-        className="form-control bg-dark text-light border-secondary"
+        className="form-control"
         value={dati[nome]}
         placeholder={opzioni.placeholder}
         onChange={(e) => setDati({ ...dati, [nome]: e.target.value })}
       />
       {opzioni.nota && (
-        <div className="form-text text-secondary" style={{ fontSize: '0.72rem' }}>{opzioni.nota}</div>
+        <div className="form-text text-body-secondary" style={{ fontSize: '0.72rem' }}>{opzioni.nota}</div>
       )}
     </>
   );
@@ -103,14 +103,14 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
   return (
     <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }} tabIndex="-1">
       <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div className="modal-content bg-dark text-light border-secondary shadow-lg">
+        <div className="modal-content shadow-lg">
 
-          <div className="modal-header border-secondary py-3">
+          <div className="modal-header py-3">
             <div className="d-flex align-items-center gap-2">
               <FilePlus size={22} className="text-success" />
               <div>
                 <h5 className="modal-title fw-bold mb-0">Aggiunta Manuale</h5>
-                <small className="text-secondary">
+                <small className="text-body-secondary">
                   Allega il documento e trascrivi i dati: l'AI non viene interpellata.
                 </small>
               </div>
@@ -127,7 +127,7 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
 
             {/* Allegato */}
             <div className="mb-4">
-              <label className="form-label small fw-bold text-secondary">Documento da allegare</label>
+              <label className="form-label small fw-bold text-body-secondary">Documento da allegare</label>
               <div className="d-flex align-items-center gap-3">
                 <label className="btn btn-outline-info d-flex align-items-center gap-2 mb-0">
                   <Upload size={18} />
@@ -141,7 +141,7 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
                 </label>
 
                 {file ? (
-                  <span className="d-flex align-items-center gap-2 text-light small">
+                  <span className="d-flex align-items-center gap-2 text-body small">
                     <span className="text-truncate" style={{ maxWidth: '320px' }}>{file.name}</span>
                     <button
                       type="button"
@@ -153,12 +153,12 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
                     </button>
                   </span>
                 ) : (
-                  <span className="text-secondary small">Nessun file selezionato (PDF, JPG o PNG)</span>
+                  <span className="text-body-secondary small">Nessun file selezionato (PDF, JPG o PNG)</span>
                 )}
               </div>
             </div>
 
-            <hr className="border-secondary" />
+            <hr className="" />
 
             {/* Dati del documento */}
             <div className="mb-3">
@@ -190,24 +190,24 @@ export default function ManualEntryModal({ show, onClose, onSaved, apiUrl }) {
             </div>
 
             <div className="mb-2">
-              <label className="form-label small fw-bold text-secondary">Indirizzo di Consegna</label>
+              <label className="form-label small fw-bold text-body-secondary">Indirizzo di Consegna</label>
               <textarea
                 rows="2"
-                className="form-control bg-dark text-light border-secondary"
+                className="form-control"
                 value={dati.indirizzo_consegna}
                 onChange={(e) => setDati({ ...dati, indirizzo_consegna: e.target.value })}
               />
             </div>
 
             {!campiCompleti && (
-              <small className="text-secondary">
+              <small className="text-body-secondary">
                 Fornitore, numero, data e indirizzo di consegna servono per archiviare
                 il documento come completato.
               </small>
             )}
           </div>
 
-          <div className="p-3 border-top border-secondary text-end">
+          <div className="p-3 border-top text-end">
             <button className="btn btn-outline-secondary me-2 px-4" onClick={chiudi} disabled={isSaving}>
               Annulla
             </button>

@@ -95,13 +95,13 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
    * discorso per le tre sicurezze SMTP, che sono un elenco chiuso.
    */
   const campo = (impostazione, valore, cambiata, cambia) => {
-    const classe = `form-control bg-black text-white ${cambiata ? 'border-warning' : 'border-secondary'}`;
+    const classe = `form-control ${cambiata ? 'border-warning' : ''}`;
 
     if (impostazione.tipo === 'scelta') {
       return (
         <select
           id={impostazione.chiave}
-          className={`form-select bg-black text-white ${cambiata ? 'border-warning' : 'border-secondary'}`}
+          className={`form-select ${cambiata ? 'border-warning' : ''}`}
           value={valore}
           onChange={(e) => cambia(e.target.value)}
         >
@@ -139,18 +139,18 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
   const badgeOrigine = (origine) => {
     if (origine === 'dashboard') return { classe: 'bg-info text-dark', testo: 'da questa pagina' };
     if (origine === 'ambiente') return { classe: 'bg-secondary text-white', testo: 'da docker-compose' };
-    return { classe: 'bg-dark border border-secondary text-secondary', testo: 'valore predefinito' };
+    return { classe: 'bg-body-tertiary border text-body-secondary', testo: 'valore predefinito' };
   };
 
   if (caricamento) {
-    return <div className="container-fluid px-4 text-center py-5 text-secondary">Caricamento configurazione…</div>;
+    return <div className="container-fluid px-4 text-center py-5 text-body-secondary">Caricamento configurazione…</div>;
   }
 
   return (
     <div className="container-fluid px-4">
-      <div className="card bg-dark border-secondary shadow-sm mb-4">
-        <div className="card-header border-secondary d-flex justify-content-between align-items-center py-3 flex-wrap gap-2">
-          <h5 className="mb-0 text-light d-flex align-items-center gap-2">
+      <div className="card shadow-sm mb-4">
+        <div className="card-header d-flex justify-content-between align-items-center py-3 flex-wrap gap-2">
+          <h5 className="mb-0 text-body d-flex align-items-center gap-2">
             <Sliders size={20} className="text-primary" /> Configurazione
           </h5>
 
@@ -186,7 +186,7 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
             onFatto={onRicarica}
           />
 
-          <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-light py-2 d-flex gap-2 align-items-start">
+          <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-body py-2 d-flex gap-2 align-items-start">
             <Info size={18} className="text-info flex-shrink-0 mt-1" />
             <small className="mb-0">
               I valori salvati qui <strong>vincono sul docker-compose</strong> e hanno effetto subito, senza
@@ -204,7 +204,7 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
 
           {gruppi.map(([gruppo, voci]) => (
             <div key={gruppo} className="mb-4">
-              <h6 className="text-secondary text-uppercase fw-bold border-bottom border-secondary pb-2 mb-3">
+              <h6 className="text-body-secondary text-uppercase fw-bold border-bottom pb-2 mb-3">
                 {gruppo}
               </h6>
 
@@ -215,11 +215,11 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
                 return (
                   <div className="row align-items-start mb-3" key={impostazione.chiave}>
                     <div className="col-lg-4">
-                      <label className="form-label text-light mb-1 fw-semibold" htmlFor={impostazione.chiave}>
+                      <label className="form-label text-body mb-1 fw-semibold" htmlFor={impostazione.chiave}>
                         {impostazione.etichetta}
                       </label>
                       <div className="d-flex align-items-center gap-2">
-                        <code className="text-secondary" style={{ fontSize: '0.75rem' }}>{impostazione.chiave}</code>
+                        <code className="text-body-secondary" style={{ fontSize: '0.75rem' }}>{impostazione.chiave}</code>
                         <span className={`badge ${origine.classe}`} style={{ fontSize: '0.65rem' }}>
                           {origine.testo}
                         </span>
@@ -230,12 +230,12 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
                       {campo(impostazione, bozza[impostazione.chiave] ?? '', cambiata,
                         (v) => setBozza((prec) => ({ ...prec, [impostazione.chiave]: v })))}
                       {impostazione.minimo !== undefined && (
-                        <small className="text-secondary">
+                        <small className="text-body-secondary">
                           ammesso da {impostazione.minimo} a {impostazione.massimo}
                         </small>
                       )}
                       {impostazione.tipo === 'orario' && (
-                        <small className="text-secondary">vuoto = non pianificato</small>
+                        <small className="text-body-secondary">vuoto = non pianificato</small>
                       )}
                       {impostazione.segreto && cambiata && !bozza[impostazione.chiave] && (
                         <small className="text-warning">verr&agrave; rimossa al salvataggio</small>
@@ -243,7 +243,7 @@ export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }
                     </div>
 
                     <div className="col-lg-5">
-                      <small className="text-secondary">{impostazione.aiuto}</small>
+                      <small className="text-body-secondary">{impostazione.aiuto}</small>
                     </div>
                   </div>
                 );

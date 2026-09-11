@@ -54,7 +54,7 @@ export default function Paginazione({ pagina, pagine, totale, inizio, setPagina,
     <li key={chiave} className={`page-item ${disabilitato ? 'disabled' : ''}`}>
       <button
         type="button"
-        className="page-link bg-dark border-secondary text-light"
+        className="page-link"
         onClick={azione}
         disabled={disabilitato}
         title={titolo}
@@ -66,7 +66,7 @@ export default function Paginazione({ pagina, pagine, totale, inizio, setPagina,
 
   return (
     <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 px-4 py-2">
-      <span className="text-secondary small">
+      <span className="text-body-secondary small">
         {inizio + 1}–{Math.min(inizio + ELEMENTI_PER_PAGINA, totale)} di {totale} {etichetta}
       </span>
 
@@ -78,7 +78,7 @@ export default function Paginazione({ pagina, pagine, totale, inizio, setPagina,
             <li key={n} className={`page-item ${n === pagina ? 'active' : ''}`}>
               <button
                 type="button"
-                className={`page-link ${n === pagina ? 'bg-info border-info text-dark fw-bold' : 'bg-dark border-secondary text-light'}`}
+                className={`page-link ${n === pagina ? 'bg-info border-info text-dark fw-bold' : ''}`}
                 onClick={() => vai(n)}
               >
                 {n}

@@ -27,41 +27,74 @@ Il sistema utilizza un modello di linguaggio locale (Ollama) per analizzare i do
 GestioneFatture - GruppoCR/
 ├── docker-compose.yml       # Orchestrazione container (API + Frontend + Postgres)
 ├── backend/                 # Microservizio Python (FastAPI)
-│   ├── main.py              # Server API principale
+│   ├── main.py              # SOLO l'avvio: app, CORS, include_router, pianificatore
 │   ├── requirements.txt     # Dipendenze Python
 │   ├── Dockerfile           # Configurazione Docker per l'API
 │   ├── data/
 │   │   └── fornitori_memoria.json  # Copia di scorta dell'anagrafica fornitori
 │   │                               # (la fonte e' Postgres, vedi Note tecniche)
-│   └── src/                 # Moduli del sistema
-│       ├── pdf_processor.py    # Conversione PDF in immagini
-│       ├── llm_engine.py       # Integrazione con Ollama per estrazione dati
-│       ├── classificatore.py   # Logica di classificazione documenti (OK/CHECK/KO)
-│       ├── registro.py         # Gestione registro documenti elaborati
-│       ├── pdf_writer.py       # Salvataggio PDF multipagina
-│       ├── raggruppatore.py    # Confronto pagine per capire se appartengono allo stesso DDT
-│       ├── accorpatore.py      # Unione a posteriori dei documenti multi-pagina
-│       ├── normalizzatore.py   # Pulizia formati dei campi estratti (date, numeri, indirizzi)
-│       ├── memory_manager.py   # Regole e decisioni sull'anagrafica fornitori
-│       ├── database.py         # Connessione a Postgres (nessuna tabella qui)
-│       ├── archivio_fornitori.py # Tabelle dell'anagrafica fornitori
-│       └── notificatore.py     # Calcolo riepiloghi per le mail di notifica
+│   └── src/                 # Moduli del sistema, divisi per flusso
+│       ├── api/             # Le route HTTP, una per entita'
+│       │   ├── supporto.py     # Aiutanti condivisi dalle route (nessuna route)
+│       │   ├── lavorazione.py  # elabora_ddt() ed elabora_fattura()
+│       │   ├── fornitori.py    # /api/fornitori*
+│       │   ├── documenti.py    # /api/documents*, /api/pdf, /riepilogo, /estrai-ddt
+│       │   ├── fatture.py      # /abbina-fattura, /api/fatture*, /api/pdf-fattura
+│       │   ├── ingresso.py     # carica/scansiona + i tre lavori pianificati
+│       │   └── impostazioni.py # /api/pianificazione*, /api/configurazione
+│       ├── ddt/             # Flusso D.D.T. (scansione -> modello vision)
+│       │   ├── pdf_processor.py  # Conversione PDF in immagini
+│       │   ├── llm_engine.py     # Integrazione con Ollama per estrazione dati
+│       │   ├── classificatore.py # Classificazione documenti (OK/CHECK/KO)
+│       │   ├── raggruppatore.py  # Confronto pagine dello stesso DDT
+│       │   ├── accorpatore.py    # Unione a posteriori dei multi-pagina
+│       │   ├── impronte.py       # Firma di una pagina, per saltarla se torna
+│       │   └── notificatore.py   # Calcolo riepiloghi per le mail
+│       ├── fatture/         # Flusso fatture elettroniche (XML -> DDT)
+│       │   ├── lettore_xml.py    # Sbustamento .p7m e parsing FatturaPA
+│       │   ├── abbinatore.py     # Confronto riferimenti fattura <-> DDT
+│       │   ├── fascicolatore.py  # Il PDF unico fattura + DDT
+│       │   └── coda.py           # ATTESA.json: chi aspetta cosa
+│       ├── comune/          # Cio' che serve a entrambi i flussi
+│       │   ├── registro.py       # Gestione registri documenti
+│       │   ├── pdf_writer.py     # Salvataggio PDF multipagina
+│       │   ├── normalizzatore.py # Pulizia formati (date, numeri, indirizzi)
+│       │   ├── memory_manager.py # Regole e decisioni sull'anagrafica fornitori
+│       │   ├── database.py       # Connessione a Postgres (nessuna tabella qui)
+│       │   ├── archivio_fornitori.py # Tabelle dell'anagrafica fornitori
+│       │   ├── percorsi.py       # Unica fonte di verita' dei path su disco
+│       │   ├── configurazione.py # Impostazioni a caldo dalla dashboard
+│       │   ├── pianificatore.py  # L'orologio dei lavori automatici
+│       │   ├── stato_elaborazione.py # Avanzamento per la barra
+│       │   └── tempo.py          # Fuso e formato dei timestamp
+│       └── notifiche/       # Il postino: le mail, e nient'altro
+│           ├── mailer.py         # L'unico punto che parla con SMTP
+│           ├── impaginazione.py  # Mattoni HTML comuni
+│           ├── riepilogo_ddt.py  # Fine scansione bolle
+│           ├── riepilogo_fatture.py # Fine scansione fatture
+│           └── sollecito.py      # Cio' che e' fermo da troppi giorni
 ├── frontend/                # Dashboard web React (Vite)
 │   ├── src/
-│   │   ├── App.jsx          # Componente principale / routing dashboard-fornitori
+│   │   ├── App.jsx          # Componente principale / negozio dei dati
 │   │   ├── main.jsx         # Punto di ingresso React
-│   │   └── components/      # Header, Stats, Dashboard, DocumentTable,
-│   │                        # ComparisonModal, SuppliersManager
+│   │   ├── index.css        # Guscio: barra laterale richiudibile
+│   │   └── components/      # Sidebar, TopBar, useTema, Stats, Dashboard,
+│   │                        # DocumentTable, ComparisonModal, SuppliersManager
 │   ├── public/               # File statici pubblici
 │   ├── package.json          # Dipendenze Node.js
 │   ├── Dockerfile            # Build Vite + Nginx
 │   └── nginx.conf            # Configurazione server web
-├── fatture_da_leggere/       # Cartella input per nuovi documenti
-├── fatture_lette/            # Cartella output documenti elaborati
-│   ├── OK.json / CHECK.json / KO.json   # Registri dei documenti per stato
-│   ├── OK/                   # PDF dei documenti completi
-│   ├── CHECK/                # PDF dei documenti da verificare
-│   └── KO/                   # PDF dei documenti non elaborabili
+├── DDT/                      # Flusso bolle
+│   ├── da_leggere/           # Scansioni in attesa di estrazione
+│   └── lette/                # Archivio
+│       ├── OK.json / CHECK.json / KO.json  # Registri dei documenti per stato
+│       ├── OK/               # PDF dei documenti completi
+│       ├── CHECK/            # PDF dei documenti da verificare
+│       └── KO/               # PDF dei documenti non elaborabili
+├── FATTURE/                  # Flusso fatture elettroniche
+│   ├── da_leggere/           # .xml / .xml.p7m in attesa
+│   └── lette/                # FATTURE.json (chiuse) + ATTESA.json (coda) + XML originali
+├── ACCOPPIATE/               # I file unici fattura+DDT confermati dall'operatore
 ├── postgre/dati/             # File di Postgres: le anagrafiche (ignorato da git)
 └── n8n_snippets/              # Nodi Code del vecchio n8n: fonte storica delle mail
 ```
@@ -288,7 +321,9 @@ I valori restituiti dal modello passano poi da `backend/src/normalizzatore.py`, 
 
 Un documento è classificato `OK` solo se `fornitore`, `numero_ddt`, `data_ddt` e `indirizzo_consegna` sono tutti presenti e `leggibilita_bassa` è `false` (vedi `backend/src/classificatore.py`).
 
-Se un DDT occupa più pagine, ogni pagina viene analizzata singolarmente e poi le pagine con stesso `numero_ddt`/fornitore vengono riaccorpate automaticamente a fine elaborazione, unendo PDF e dati in un unico documento (`backend/src/accorpatore.py`).
+Se un DDT occupa più pagine, ogni pagina viene analizzata singolarmente e poi le pagine con stesso `numero_ddt`/fornitore vengono riaccorpate automaticamente a fine elaborazione, unendo PDF e dati in un unico documento (`backend/src/ddt/accorpatore.py`).
+
+Una pagina già archiviata viene riconosciuta dall'impronta della sua immagine (sha256, `backend/src/ddt/impronte.py`) e saltata prima ancora di chiamare il modello: non produce un secondo documento e compare nell'elenco `duplicati` della risposta, nella barra di analisi e nella mail di riepilogo.
 
 ---
 

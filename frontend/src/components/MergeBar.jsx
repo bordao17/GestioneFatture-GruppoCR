@@ -12,7 +12,7 @@ export default function MergeBar({ selectedDocs, onMerge, onClear, isMerging }) 
   const abbastanza = selectedDocs.length >= 2;
 
   return (
-    <div className="card bg-dark border-info shadow-sm mb-3">
+    <div className="card border-info shadow-sm mb-3">
       <div className="card-body py-3 px-4 d-flex flex-wrap align-items-center gap-3">
         <div className="flex-grow-1">
           <div className="text-info fw-bold d-flex align-items-center gap-2 mb-2">
@@ -22,7 +22,7 @@ export default function MergeBar({ selectedDocs, onMerge, onClear, isMerging }) 
 
           <div className="d-flex flex-wrap gap-2">
             {selectedDocs.map((doc, i) => (
-              <span key={doc.id} className="badge bg-secondary text-light fw-normal">
+              <span key={doc.id} className="badge bg-secondary text-white fw-normal">
                 <span className="badge rounded-pill bg-info text-dark me-2">{i + 1}</span>
                 {doc.dati?.fornitore || 'Fornitore mancante'}
                 <span className="font-monospace ms-2 text-white-50">
@@ -32,7 +32,7 @@ export default function MergeBar({ selectedDocs, onMerge, onClear, isMerging }) 
             ))}
           </div>
 
-          <div className="small text-secondary mt-2">
+          <div className="small text-body-secondary mt-2">
             {abbastanza
               ? 'Le pagine verranno unite in questo ordine. Il n. 1 è il documento principale: i suoi dati restano, gli altri riempiono solo i campi vuoti.'
               : 'Seleziona almeno un altro documento (anche da un altro tab) per poterli unire.'}

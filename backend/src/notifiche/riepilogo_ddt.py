@@ -12,8 +12,8 @@ cui vale la pena leggerla invece di aprire subito la dashboard.
 
 from src.ddt.classificatore import CAMPI_OBBLIGATORI
 from src.notifiche.impaginazione import (
-    AMBRA, ROSSO, VERDE, barra, conteggi, esc, pagina, plurale, riga,
-    scheda, testo_piccolo, valore_o_mancante,
+    AMBRA, GRIGIO, ROSSO, VERDE, barra, conteggi, esc, pagina, plurale, riga,
+    scheda, testo_piccolo, troncamento, valore_o_mancante,
 )
 
 # Oltre questa soglia la mail diventa un elenco che nessuno legge: il resto si
@@ -91,12 +91,14 @@ def _tabella_check(voci):
     )
 
 
-def componi(riepilogo, sbloccate=(), falliti=()):
+def componi(riepilogo, sbloccate=(), falliti=(), duplicati=()):
     """(oggetto, corpo_html) della mail di riepilogo di una scansione D.D.T.
 
     riepilogo: l'uscita di calcola_riepilogo() — ok, check, ko, totale, voci_check.
     sbloccate: le fatture diventate pronte da accoppiare (fatture_sbloccate).
     falliti:   i file che la scansione non ha saputo leggere [{file, motivo}].
+    duplicati: le pagine saltate perche' gia' archiviate
+               [{file_origine, pagina, id_originale, stato_originale}].
     """
     ok = int(riepilogo.get("ok", 0))
     check = int(riepilogo.get("check", 0))
@@ -142,6 +144,29 @@ def componi(riepilogo, sbloccate=(), falliti=()):
             sfondo="#fef2f2",
         ))
 
+    # Le pagine gia' viste, saltate prima di arrivare al modello. Non e' un
+    # errore e non richiede nessun intervento: si dice perche' altrimenti i
+    # conteggi qui sopra non tornerebbero con la pila di fogli che qualcuno ha
+    # messo nello scanner, e chi legge penserebbe a un'estrazione mancata.
+    if duplicati:
+        elenco = "".join(
+            f'<div style="font-size:12px; padding-top:4px;">'
+            f'{esc(d.get("file_origine", ""))} &mdash; pagina {esc(str(d.get("pagina", "")))}, '
+            f'gia&apos; archiviata come <span style="font-family:Consolas,Menlo,monospace;">'
+            f'{esc(str(d.get("id_originale", ""))[:8])}</span> '
+            f'({esc(d.get("stato_originale", ""))})</div>'
+            for d in duplicati[:MAX_RIGHE]
+        )
+        corpo.append(scheda(
+            GRIGIO,
+            f'<div style="font-size:13px; color:#374151;">'
+            f'<strong>{len(duplicati)} {plurale(len(duplicati), "pagina gia&apos; archiviata", "pagine gia&apos; archiviate")}</strong>'
+            f'{elenco}<div style="font-size:12px; padding-top:6px;">Non sono state rilette '
+            f'e non hanno creato nessun documento nuovo: erano identiche a una pagina '
+            f'gia&apos; in archivio.</div></div>',
+        ))
+        corpo.append(troncamento(len(duplicati), MAX_RIGHE, "pagine duplicate"))
+
     if sbloccate:
         elenco = "".join(
             f'<div style="font-size:12px; padding-top:4px;">Fattura '
@@ -166,10 +191,16 @@ def componi(riepilogo, sbloccate=(), falliti=()):
             sfondo="#f0fdf4",
         ))
 
-    if not totale and not falliti:
+    if not totale and not falliti and not duplicati:
         corpo.append(testo_piccolo("Nessun documento elaborato in questa esecuzione."))
 
-    if totale == 0:
+    if totale == 0 and duplicati:
+        # Caso tutto suo: i fogli sono passati, ma erano gia' tutti in archivio.
+        # Dire "nessun documento elaborato" e basta manderebbe a cercare un guasto
+        # che non c'e'.
+        oggetto = f"Riepilogo D.D.T. - {len(duplicati)} pagine gia' archiviate"
+        sottotitolo = "Nessun documento nuovo: erano tutte pagine gia&apos; viste"
+    elif totale == 0:
         oggetto = "Riepilogo D.D.T. - nessun documento elaborato"
         sottotitolo = "Nessuna scansione da leggere in DDT/da_leggere"
     else:
