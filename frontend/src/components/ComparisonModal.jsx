@@ -1,9 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import { Download, Sparkles, Receipt, KeyRound, Check, Lock } from 'lucide-react';
+import { Download, Sparkles, Receipt, KeyRound, Check, Lock, BookUser } from 'lucide-react';
 import { STATI_DDT, ORDINE_STATI, infoStato } from './etichetteDdt';
+import SelettoreFornitore from './SelettoreFornitore';
 
 export default function ComparisonModal({ selectedDoc, editData, setEditData, onClose, onSave, isSaving, onReanalyze, isReanalyzing, onCambiaStato, isCambiandoStato, onConfermaPiva, isConfermandoPiva, apiUrl, onApriFattura }) {
   const [isDownloading, setIsDownloading] = useState(false);
+  // Il selettore dell'anagrafica: un secondo modale sopra questo, aperto solo
+  // su richiesta. Non si apre da solo nemmeno a campo vuoto — chi rivede il
+  // documento sta guardando il PDF, e un pannello che compare da se' gli
+  // coprirebbe proprio quello.
+  const [selettoreAperto, setSelettoreAperto] = useState(false);
 
   // Il cache-buster va calcolato SOLO al cambio di documento (o dopo una
   // rianalisi, che riscrive il PDF). Calcolato nel corpo del componente
@@ -146,12 +152,28 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
 
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-body-secondary">Fornitore</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={editData.fornitore || ''}
-                      onChange={(e) => setEditData({...editData, fornitore: e.target.value})}
-                    />
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className={`form-control ${!editData.fornitore ? 'border-warning' : ''}`}
+                        value={editData.fornitore || ''}
+                        onChange={(e) => setEditData({...editData, fornitore: e.target.value})}
+                      />
+                      {/* Battuto a mano, il nome e' un campo come un altro; preso
+                          dall'anagrafica e' la chiave con cui la fattura
+                          ritrovera' questa bolla. Il pulsante c'e' sempre, anche
+                          a campo pieno: serve anche a sostituire un nome letto
+                          male con quello canonico. */}
+                      <button
+                        type="button"
+                        className={`btn ${editData.fornitore ? 'btn-outline-secondary' : 'btn-warning'} d-flex align-items-center gap-1 text-nowrap`}
+                        onClick={() => setSelettoreAperto(true)}
+                        disabled={isSaving || isReanalyzing}
+                        title="Scegli il fornitore dall'anagrafica: ne riporta il nome esatto e la partita IVA"
+                      >
+                        <BookUser size={15} /> Anagrafica
+                      </button>
+                    </div>
                     {/* Senza questa riga il campo sembrerebbe semplicemente non
                         letto, e chi rivede cercherebbe sul PDF un nome che il
                         modello aveva trovato eccome: solo che era il cliente. */}
@@ -169,8 +191,16 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                     {editData.fornitore_scartato && (
                       <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
                         Il modello aveva letto <code>{editData.fornitore_scartato}</code>, marcato in
-                        anagrafica come <strong>mai un fornitore</strong> (cliente o gruppo d&apos;acquisto):
-                        scritto qui il nome di chi emette la bolla.
+                        anagrafica come <strong>mai un fornitore</strong> (cliente, gruppo d&apos;acquisto
+                        o vettore): scritto qui il nome di chi emette la bolla.
+                      </div>
+                    )}
+                    {!editData.fornitore && (
+                      <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
+                        Senza fornitore la bolla resta in CHECK e nessuna fattura può agganciarla.
+                        Se non riesci a leggerlo sul PDF ma sai di chi è, prendilo da
+                        <strong> Anagrafica</strong>: scrive il nome esatto, quello con cui le fatture
+                        lo cercano, e porta dietro la partita IVA.
                       </div>
                     )}
                   </div>
@@ -346,6 +376,28 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
           </div>
         </div>
       </div>
+
+      {/* Il selettore sta DENTRO questo modale, sopra di esso: chiudendolo si
+          torna al documento con il PDF ancora a fianco, che e' il punto —
+          quello che si sceglie qui va controllato li'. La scelta riempie solo
+          la bozza, come ogni altra correzione: si salva con "Salva e Approva". */}
+      {selettoreAperto && (
+        <SelettoreFornitore
+          apiUrl={apiUrl}
+          onClose={() => setSelettoreAperto(false)}
+          onScegli={({ nome, partita_iva }) => {
+            setEditData({
+              ...editData,
+              fornitore: nome,
+              // La P.IVA si riporta solo se l'anagrafica ce l'ha: scrivere ""
+              // cancellerebbe un numero che il modello aveva letto bene, e un
+              // campo svuotato in silenzio e' peggio di un campo da riempire.
+              ...(partita_iva ? { partita_iva } : {}),
+            });
+            setSelettoreAperto(false);
+          }}
+        />
+      )}
     </div>
   );
 }

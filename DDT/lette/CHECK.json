@@ -15,36 +15,6 @@
     }
   },
   {
-    "id": "7257c0fa-570c-4f94-a5b5-6f93da6039f0",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:52.506532+02:00",
-    "dati": {
-      "fornitore": "",
-      "numero_ddt": "241FZBB50908",
-      "data_ddt": "04-07-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "V. VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "fornitore_scartato": "CREF SRL"
-    }
-  },
-  {
-    "id": "e333b69e-507f-4865-b72f-208db5ccc358",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:24.362270+02:00",
-    "dati": {
-      "fornitore": "",
-      "numero_ddt": "5601/1",
-      "data_ddt": "04-08-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "fornitore_scartato": "CREF SRL"
-    }
-  },
-  {
     "id": "388a9243-84b1-4ba1-9f45-65e5e7cf3caa",
     "file_origine": "20260911112653890.pdf",
     "timestamp": "2026-09-11T11:25:12.843135+02:00",
@@ -78,23 +48,6 @@
     "stato_manuale": "2026-09-11T12:48:48.132001+02:00"
   },
   {
-    "id": "a0096599-c857-425f-b608-57b73b34fb5a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:55.091979+02:00",
-    "dati": {
-      "fornitore": "PASTIFICIO RANA SPA",
-      "numero_ddt": "351",
-      "data_ddt": "30-01-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "01397480235",
-      "fornitore_letto": "PASTIFICIO RANA"
-    },
-    "rianalisi": "2026-09-11T12:48:39.656033+02:00",
-    "stato_manuale": "2026-09-11T12:48:53.241469+02:00"
-  },
-  {
     "id": "84275a9b-e455-4f51-9dfb-065e2b8bedb8",
     "file_origine": "20260911112653890.pdf",
     "timestamp": "2026-09-11T11:24:44.023763+02:00",
@@ -108,23 +61,6 @@
       "partita_iva": "13205901005"
     },
     "stato_manuale": "2026-09-11T12:50:44.444036+02:00"
-  },
-  {
-    "id": "0eed15e0-b335-4312-838c-ffcf6ff4dab4",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:38.507453+02:00",
-    "dati": {
-      "fornitore": "SAGEM SRL",
-      "numero_ddt": "64870",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "PAC 2000A SOC.COOP.",
-      "indirizzo_consegna": "",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00745180349",
-      "indirizzo_scartato": "VIA DEL RAME, 06134 PONTE FELCINO PG (IT)"
-    },
-    "rianalisi": "2026-09-11T12:51:58.394343+02:00"
   },
   {
     "id": "f126b4c8-612b-43a9-8580-4505be3bb38e",

@@ -5,13 +5,14 @@
     "timestamp": "2026-09-11T11:19:39.684422+02:00",
     "dati": {
       "fornitore": "MANZI GIOVANNI SRL",
-      "numero_ddt": "B27/4353",
+      "numero_ddt": "B27/51637",
       "data_ddt": "05-09-2026",
-      "ragione_sociale_consegna": "",
+      "ragione_sociale_consegna": "DEST.NE CREF SRL",
       "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015, CITTADUCALE (RI)",
       "leggibilita_bassa": false,
       "partita_iva": "02423440599"
-    }
+    },
+    "rianalisi": "2026-09-11T15:18:28.887823+02:00"
   },
   {
     "id": "38b437fe-769a-40a7-933e-855f6fce2908",
@@ -91,11 +92,12 @@
       "fornitore": "MARI LIBRI SRL",
       "numero_ddt": "26SV002481",
       "data_ddt": "31-03-2026",
-      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOP.",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "ragione_sociale_consegna": "SPAZIO CONAD CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
       "partita_iva": "02528610427"
-    }
+    },
+    "rianalisi": "2026-09-11T15:13:23.221515+02:00"
   },
   {
     "id": "75dcfc75-5cb7-4847-bb16-bc474c968ebe",
@@ -119,12 +121,13 @@
     "dati": {
       "fornitore": "SO.DI.FER.SRL",
       "numero_ddt": "23326",
-      "data_ddt": "08-07-2026",
-      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA DIV.NORD",
-      "indirizzo_consegna": "VIA DEL RAME 1/2-ZONA IND.LE 20, 06077 PONTE FELCINO (PG)",
+      "data_ddt": "07-08-2026",
+      "ragione_sociale_consegna": "CREF SRL (RIETI) - 151981 CONAD",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
       "partita_iva": "02250740400"
-    }
+    },
+    "rianalisi": "2026-09-11T15:09:06.508215+02:00"
   },
   {
     "id": "96bba681-8aa1-45fc-b68f-31f81cce1019",
@@ -132,14 +135,14 @@
     "timestamp": "2026-09-11T11:20:30.812715+02:00",
     "dati": {
       "fornitore": "WITOR'S SPA",
-      "numero_ddt": "1CRWL125018168",
+      "numero_ddt": "25018168",
       "data_ddt": "10-12-2025",
-      "ragione_sociale_consegna": "CREMONEA 1959",
-      "indirizzo_consegna": "VIA DEL RAME, 2, 06077 PONTE FELCINO PG ITALY",
+      "ragione_sociale_consegna": "CREF SRL - CITTÀ DUCALE (RI)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTÀ DUCALE RI, ITALY",
       "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00163040546"
-    }
+      "partita_iva": "12300660151"
+    },
+    "rianalisi": "2026-09-11T15:07:53.773661+02:00"
   },
   {
     "id": "9107cdf9-b4f5-4c18-9000-64c50f1de0f1",
@@ -176,13 +179,14 @@
     "timestamp": "2026-09-11T11:20:47.733936+02:00",
     "dati": {
       "fornitore": "PARTENOPE DISTRIBUZIONE SRL",
-      "numero_ddt": "5349",
+      "numero_ddt": "4834",
       "data_ddt": "08-06-2026",
-      "ragione_sociale_consegna": "",
+      "ragione_sociale_consegna": "CREF SRL -CITTADUCALE",
       "indirizzo_consegna": "VIA DELLE SCIENZE, 20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
       "partita_iva": "09281311218"
-    }
+    },
+    "rianalisi": "2026-09-11T15:02:50.917257+02:00"
   },
   {
     "id": "54f7c20b-65e9-4179-bdb7-53780f767897",
@@ -190,14 +194,14 @@
     "timestamp": "2026-09-11T11:20:53.863229+02:00",
     "dati": {
       "fornitore": "NT FOOD SRL UNIPERSONALE",
-      "numero_ddt": "2600_0007494",
+      "numero_ddt": "26015205",
       "data_ddt": "08-06-2026",
-      "ragione_sociale_consegna": "PAC 2000 SOCIETA COOPERATIVA",
-      "indirizzo_consegna": "VIA DEL RAME, 2, 06134 PONTE FELCINO (PG)",
+      "ragione_sociale_consegna": "SPAZIO CONAD CREF SRL CITT'A DUCALE RIETI",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00163040546"
-    }
+      "partita_iva": "01354500462"
+    },
+    "rianalisi": "2026-09-11T15:01:59.473457+02:00"
   },
   {
     "id": "9f4921c1-f837-4676-a48f-e9560c8714c3",
@@ -235,11 +239,12 @@
       "fornitore": "IGAM SPA",
       "numero_ddt": "DT25012852",
       "data_ddt": "19-12-2025",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DEL RAME, 06077 PONTE FELCINO (PG) (IT)",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI) (IT)",
       "leggibilita_bassa": false,
       "partita_iva": "07225770721"
-    }
+    },
+    "rianalisi": "2026-09-11T14:57:47.128247+02:00"
   },
   {
     "id": "a262f62f-4ba5-4af1-b256-4c79e7cfcfe2",
@@ -1061,5 +1066,67 @@
     "numero_pagine": 2,
     "firme_pagine": [],
     "unione": "manuale"
+  },
+  {
+    "id": "a0096599-c857-425f-b608-57b73b34fb5a",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:55.091979+02:00",
+    "dati": {
+      "fornitore": "PASTIFICIO RANA SPA",
+      "numero_ddt": "351",
+      "data_ddt": "30-01-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "01397480235",
+      "fornitore_letto": "PASTIFICIO RANA"
+    },
+    "rianalisi": "2026-09-11T15:21:18.205208+02:00",
+    "stato_manuale": "2026-09-11T12:48:53.241469+02:00"
+  },
+  {
+    "id": "e333b69e-507f-4865-b72f-208db5ccc358",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:27:24.362270+02:00",
+    "dati": {
+      "fornitore": "DE SANTIS EMILIO",
+      "numero_ddt": "5601/1",
+      "data_ddt": "04-08-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "10183300580"
+    },
+    "rianalisi": "2026-09-11T15:24:26.955244+02:00"
+  },
+  {
+    "id": "7257c0fa-570c-4f94-a5b5-6f93da6039f0",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:25:52.506532+02:00",
+    "dati": {
+      "fornitore": "SAN CARLO GRUPPO ALIMENTARE SPA",
+      "numero_ddt": "241FZBB50908",
+      "data_ddt": "04-07-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "V. VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04172800155"
+    },
+    "rianalisi": "2026-09-11T15:26:52.718432+02:00"
+  },
+  {
+    "id": "0eed15e0-b335-4312-838c-ffcf6ff4dab4",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:24:38.507453+02:00",
+    "dati": {
+      "fornitore": "SAGEM SRL",
+      "numero_ddt": "64870",
+      "data_ddt": "01-09-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOC.COOP.",
+      "indirizzo_consegna": "VIA DEL RAME, 06134, PONTE FELCINO, PG (IT)",
+      "leggibilita_bassa": false,
+      "partita_iva": "03342820275"
+    },
+    "rianalisi": "2026-09-11T15:34:10.409997+02:00"
   }
 ]

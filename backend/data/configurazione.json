@@ -1,0 +1,18 @@
+{
+    "GIORNI_ATTESA_ACCOPPIAMENTO": 7,
+    "GIORNI_ATTESA_DDT": 30,
+    "GIORNI_ATTESA_FATTURA": 30,
+    "MAIL_DESTINATARI": "lorenzobordi17@gmail.com",
+    "MAIL_MITTENTE": "gestionefatture@gruppocr.it",
+    "MAIL_RIEPILOGO_SCANSIONE": "sempre",
+    "MODELLO_NUM_CTX": 8192,
+    "MODELLO_VISION": "qwen2.5vl:7b",
+    "OLLAMA_HOST": "http://10.1.20.25:11434",
+    "PDF_RENDER_ZOOM": 2.5,
+    "SMTP_HOST": "smtp.office365.com",
+    "SMTP_PASSWORD": "wwxzdyzzbgcxhwbd",
+    "SMTP_PORTA": 587,
+    "SMTP_SICUREZZA": "starttls",
+    "SMTP_UTENTE": "no-reply@gruppocr.it",
+    "URL_DASHBOARD": "http://localhost:3000"
+}

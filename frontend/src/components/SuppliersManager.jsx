@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Paginazione, { usePaginazione } from './Paginazione';
-import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check, Loader2, Pencil, X } from 'lucide-react';
+import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check, Loader2, Pencil, X, Truck } from 'lucide-react';
 
 // I campi che una regola mirata può indirizzare. Devono restare allineati a
 // CAMPI_REGOLABILI in backend/src/comune/memory_manager.py: una regola su un
@@ -14,10 +14,37 @@ const CAMPI_REGOLABILI = [
   { valore: 'fornitore', etichetta: 'Fornitore' },
 ];
 
+// Le parole con cui in Italia si chiama un vettore. Non marcano NIENTE da sole:
+// il flag "mai un fornitore" lo mette solo l'utente, perche' se una societa'
+// possa o no essere un fornitore e' un fatto dell'azienda e non qualcosa che si
+// deduce da una parola nel nome — una ditta di trasporti puo' benissimo
+// fatturarci il trasporto, e in quel caso e' un fornitore a tutti gli effetti.
+// Servono a FAR TROVARE le voci da guardare: il censimento e' automatico, i
+// vettori ci finiscono dentro da soli, e in un'anagrafica di cento voci nessuno
+// li va a cercare a mano.
+//
+// MISURATE sui 111 nomi veri del 2026-09-11 (103 voci di anagrafica + i nomi
+// letti sui D.D.T. archiviati). Le parole "da manuale" — TRASPORT, SPEDIZION,
+// LOGISTIC, CORRIER, VETTORE — su questo archivio prendono ZERO: i due vettori
+// veri si chiamano ITALTRANS SPA e VERCHA EXPRESS SRL. Sono TRANS ed EXPRESS a
+// prenderli, uno a testa e senza nessun falso positivo. Le altre restano perche'
+// non costano niente e sono i nomi che prima o poi arrivano.
+const RADICI_VETTORE = ['TRASPORT', 'SPEDIZION', 'LOGISTIC', 'CORRIER', 'VETTORE',
+                        'TRANS', 'EXPRESS', 'CARGO'];
+// Sigle e nomi dei corrieri, confrontati per PAROLA INTERA: 'GLS' o 'SDA'
+// dentro un'altra parola non vogliono dire niente.
+const SIGLE_VETTORE = ['BRT', 'GLS', 'DHL', 'TNT', 'SDA', 'UPS', 'FEDEX', 'BARTOLINI', 'ARTONI'];
+
+const sembraVettore = (name) => {
+  const n = (name || '').toUpperCase();
+  if (RADICI_VETTORE.some(r => n.includes(r))) return true;
+  return n.split(/[^A-Z0-9]+/).some(p => SIGLE_VETTORE.includes(p));
+};
+
 export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica = 0 }) {
   const [suppliers, setSuppliers] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI
+  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI | VETTORI
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState(null);
   // PUT /api/fornitori sovrascrive l'INTERO file: finche' non si salva, le
@@ -267,12 +294,16 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
     [suppliers]
   );
   const daConfermare = voci.filter(([, data]) => pivaDaConfermare(data)).length;
+  const vettoriDaGuardare = voci.filter(([name, data]) => sembraVettore(name) && data.mai_fornitore !== true).length;
 
   const filteredSuppliers = voci.filter(([name, data]) => {
     if (!name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (filtro === 'PIVA') return pivaDaConfermare(data);
     if (filtro === 'REGOLE') return data.confermato === 'yes' || regoleDi(data).length > 0;
     if (filtro === 'CLIENTI') return data.mai_fornitore === true;
+    // Solo quelli ANCORA da marcare: un elenco che non cala mai smette di
+    // essere letto, ed e' la stessa regola dei badge sulle voci di menu.
+    if (filtro === 'VETTORI') return sembraVettore(name) && data.mai_fornitore !== true;
     return true;
   });
 
@@ -359,6 +390,21 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
           Se un indirizzo non è <em>mai</em> la consegna per quel fornitore, mettilo in <strong>Indirizzi MAI di consegna</strong>:
           quello non è un consiglio ma un controllo automatico fatto dopo l'estrazione, e non può essere ignorato.
         </p>
+        <p className="small mb-2">
+          <Truck size={15} className="text-warning me-1" /> <strong>Se al posto del fornitore viene letto il
+          trasportatore</strong> (o l'insegna del punto vendita, o il gruppo d'acquisto), la risposta non è una frase
+          nella nota: è l'interruttore rosso <strong>"Non è mai un fornitore"</strong> sulla sua voce. Da quel momento,
+          ogni volta che il modello legge quel nome come fornitore il campo viene <em>svuotato</em> e la bolla va in
+          CHECK, invece di essere archiviata a nome del vettore. Il filtro <strong>Sembrano vettori</strong> qui sotto
+          elenca le voci il cui nome contiene "trasporti", "spedizioni", "logistica" e simili e che non sono ancora
+          state marcate: è solo un modo per trovarle, la decisione resta tua — una ditta di trasporti che ci fattura
+          davvero il trasporto è un fornitore vero.
+        </p>
+        <p className="small mb-2">
+          Attenzione alla differenza: quell'interruttore <em>ferma</em> una lettura sbagliata, non la corregge. Se il
+          fornitore vero è stampato sul documento ma il modello guarda nel posto sbagliato, aggiungi anche una riga in
+          <strong> Dove si trova il dato</strong> con l'etichetta sotto cui l'emittente è scritto.
+        </p>
         <div className="bg-body-tertiary p-3 rounded border mt-3">
           <span className="badge bg-success mb-2">Esempio Eccellente</span>
           <code className="d-block text-body" style={{ fontSize: '0.85rem' }}>
@@ -387,6 +433,7 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
             {pulsanteFiltro('PIVA', 'P.IVA da confermare', daConfermare, 'primary')}
             {pulsanteFiltro('REGOLE', 'Con regola AI', voci.filter(([, d]) => d.confermato === 'yes' || regoleDi(d).length > 0).length, 'info')}
             {pulsanteFiltro('CLIENTI', 'Mai fornitori', voci.filter(([, d]) => d.mai_fornitore === true).length, 'danger')}
+            {pulsanteFiltro('VETTORI', 'Sembrano vettori', vettoriDaGuardare, 'warning')}
             <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" onClick={addNewSupplier}>
               <Plus size={16} /> Aggiungi
             </button>
@@ -461,6 +508,14 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                             ? <KeyRound size={16} className="text-primary flex-shrink-0" />
                             : <ShieldCheck size={16} className="text-success flex-shrink-0" />}
                         {name}
+                        {sembraVettore(name) && !data.mai_fornitore && (
+                          <span
+                            className="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 d-flex align-items-center gap-1"
+                            title="Il nome contiene una parola da vettore. Se è il trasportatore e non l'emittente, spegnilo con l'interruttore rosso qui sotto."
+                          >
+                            <Truck size={12} /> vettore?
+                          </span>
+                        )}
                       </h6>
                       <div className="d-flex gap-1 flex-shrink-0">
                         <button
@@ -555,7 +610,7 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                         onChange={(e) => updateSupplier(name, 'mai_fornitore', e.target.checked)}
                       />
                       <label className="form-check-label small text-danger" htmlFor={`cliente-${name}`}>
-                        Non è mai un fornitore (cliente / gruppo)
+                        Non è mai un fornitore (cliente, gruppo d'acquisto, vettore)
                       </label>
                     </div>
                   </div>

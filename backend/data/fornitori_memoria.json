@@ -115,6 +115,22 @@
         "partita_iva_confermata": true,
         "regole_campo": []
     },
+    "C.I.R. SAS DI MECARELLI CLAUDIO & C": {
+        "autorizzato": true,
+        "confermato": "no",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00539930552",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "fornitore",
+                "etichetta": "SI TROVA IN ALTO A SINISTRA"
+            }
+        ]
+    },
     "CEREALDOLCI SRL": {
         "autorizzato": true,
         "confermato": "yes",
@@ -163,6 +179,22 @@
         "partita_iva": "",
         "partita_iva_confermata": false,
         "regole_campo": []
+    },
+    "DE SANTIS EMILIO": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "10183300580",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO"
+            }
+        ]
     },
     "DIVA SRL": {
         "autorizzato": true,
@@ -340,8 +372,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
+        "partita_iva": "17699441006",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "GUERRA SPA": {
@@ -404,14 +436,19 @@
     },
     "IGAM SPA": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "07225770721",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Indirizzo Spedizione"
+            }
+        ]
     },
     "IL ROVERE SPA": {
         "autorizzato": true,
@@ -436,8 +473,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
+        "partita_iva": "13025231005",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "ITALPEPE": {
@@ -448,14 +485,14 @@
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "03633121003",
-        "partita_iva_confermata": true,
+        "partita_iva_confermata": false,
         "regole_campo": []
     },
     "ITALTRANS SPA": {
         "autorizzato": true,
         "confermato": "no",
         "indirizzi_vietati": [],
-        "mai_fornitore": false,
+        "mai_fornitore": true,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01569060161",
@@ -621,14 +658,19 @@
     },
     "MANZI GIOVANNI SRL": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02423440599",
         "partita_iva_confermata": false,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINAZIONE"
+            }
+        ]
     },
     "MARCHESI FRESCOBALDI SOCIETA AGRICOLA SRL": {
         "autorizzato": true,
@@ -643,14 +685,19 @@
     },
     "MARI LIBRI SRL": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02528610427",
         "partita_iva_confermata": false,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce SPEDIRE A"
+            }
+        ]
     },
     "MARIANANTONI SILVIO SRLS": {
         "autorizzato": true,
@@ -767,14 +814,23 @@
     },
     "NT FOOD SRL UNIPERSONALE": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva": "01354500462",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "numero_ddt",
+                "etichetta": "la voce Numero Doc."
+            },
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Spedizione merce"
+            }
+        ]
     },
     "NUOVO SRL": {
         "autorizzato": true,
@@ -853,8 +909,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "00745180349",
-        "partita_iva_confermata": false,
+        "partita_iva": "13075350150",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "OROPAN SRL": {
@@ -864,8 +920,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
+        "partita_iva": "02682220658",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "OSCAR'78 SRL": {
@@ -925,14 +981,19 @@
     },
     "PARTENOPE DISTRIBUZIONE SRL": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "09281311218",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinatario Merce"
+            }
+        ]
     },
     "PASTA RICCA DI FESTUCCIA MONIA": {
         "autorizzato": true,
@@ -1109,15 +1170,18 @@
     "SAGEM SRL": {
         "autorizzato": true,
         "confermato": "yes",
-        "indirizzi_vietati": [
-            "VIA DEL RAME, 06134 PONTE FELCINO PG (IT)"
-        ],
+        "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva": "03342820275",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "l'indirizzo VIA DEL RAME, 06134, PONTE FELCINO, PG (IT)"
+            }
+        ]
     },
     "SAIS SRL": {
         "autorizzato": true,
@@ -1127,7 +1191,7 @@
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "13205901005",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "SAL. PI UNO SRL": {
@@ -1188,6 +1252,22 @@
         "partita_iva_confermata": true,
         "regole_campo": []
     },
+    "SAN CARLO GRUPPO ALIMENTARE SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04172800155",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinatario e Luogo di Consegna"
+            }
+        ]
+    },
     "SAPORÀ SRL": {
         "autorizzato": true,
         "confermato": "yes",
@@ -1224,7 +1304,12 @@
         "note_specifiche": "",
         "partita_iva": "02250740400",
         "partita_iva_confermata": false,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Luogo di Destinazione"
+            }
+        ]
     },
     "SODICO SRL": {
         "autorizzato": true,
@@ -1302,14 +1387,19 @@
     },
     "URBANI TARTUFI SRL CON SOCIO UNICO": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02554550547",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO"
+            }
+        ]
     },
     "VERCHA EXPRESS SRL": {
         "autorizzato": true,
@@ -1367,14 +1457,23 @@
     },
     "WITOR'S SPA": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva": "12300660151",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "accanto la voce Destinatario"
+            },
+            {
+                "campo": "numero_ddt",
+                "etichetta": "la voce Num. Documento"
+            }
+        ]
     },
     "YAKULT": {
         "autorizzato": true,
@@ -1383,8 +1482,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
+        "partita_iva": "05513080969",
+        "partita_iva_confermata": true,
         "regole_campo": []
     }
 }
