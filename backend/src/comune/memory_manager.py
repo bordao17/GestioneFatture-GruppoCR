@@ -4,8 +4,19 @@ import re
 from difflib import SequenceMatcher
 
 from src.comune.normalizzatore import normalizza_azienda, partita_iva_valida
+from src.comune import archivio_fornitori, database
 
-# Ora il file vive dentro la cartella data/
+# DOVE VIVE L'ANAGRAFICA, dal 2026-09-11: nel database (vedi
+# src/comune/archivio_fornitori.py). Questo file resta come COPIA DI SCORTA —
+# riscritto dopo ogni salvataggio andato a buon fine, riletto solo quando il
+# database non risponde. Non e' una seconda fonte di verita': niente lo scrive
+# se non salva_memoria(), e il database vince sempre quando c'e'.
+#
+# Serve a tre cose che valgono il paio di millisecondi che costa: e' cio' da cui
+# l'anagrafica viene importata la prima volta che il database parte vuoto; tiene
+# in piedi le estrazioni se il container Postgres e' giu' (con un'anagrafica di
+# ieri invece che con nessuna anagrafica); ed e' l'unica forma in cui le regole
+# dei fornitori restano leggibili e diffabili senza aprire un client SQL.
 FILE_MEMORIA = os.path.join('data', 'fornitori_memoria.json')
 
 # Forme giuridiche e qualificatori generici: irrilevanti per capire SE due voci
@@ -99,6 +110,20 @@ CHIAVE_PIVA_CONFERMATA = "partita_iva_confermata"
 # non sposta nessun confronto automatico.
 CHIAVE_ALIAS = "nomi_alternativi"
 
+# Ragioni sociali che NON sono mai un fornitore: il gruppo d'acquisto, le
+# insegne dei punti vendita, il cessionario. Sul DDT il loro nome e la loro
+# P.IVA sono stampati con la stessa evidenza di quelli dell'emittente, spesso
+# piu' in alto e piu' in grande, e il modello ci casca: nell'archivio del
+# 2026-09-10 "CREF SRL" e "PAC 2000 C/O CREF SRL" erano censiti come fornitori,
+# e la P.IVA 00163040546 (di PAC 2000) risultava attaccata ad altre TRE voci.
+#
+# E' la stessa idea di CHIAVE_INDIRIZZI_VIETATI, portata dall'indirizzo al
+# nome: dire al modello "non e' quello" non funziona, confrontare due stringhe
+# si'. E come quella lista, questa la marca solo l'utente — se sia un fornitore
+# o un cliente e' un fatto dell'azienda, non qualcosa che il codice puo'
+# dedurre da un documento.
+CHIAVE_MAI_FORNITORE = "mai_fornitore"
+
 
 def normalizza_piva(valore):
     """Solo cifre: "IT 16834201002", "IT16834201002" e "16834201002" sono la
@@ -118,6 +143,20 @@ def piva_confermata_da_valore(valore, default=True):
     """
     if valore is None:
         return default
+    if isinstance(valore, bool):
+        return valore
+    return str(valore).strip().lower() in ("yes", "si", "sì", "true", "1")
+
+
+def mai_fornitore_da_valore(valore):
+    """Legge il flag "mai_fornitore". La chiave ASSENTE vale NO.
+
+    Al contrario di autorizzato/confermata qui il default e' il permissivo: ci
+    sono decine di voci nate prima di questo flag e sono fornitori veri. Il
+    divieto e' l'eccezione, e va scritto.
+    """
+    if valore is None:
+        return False
     if isinstance(valore, bool):
         return valore
     return str(valore).strip().lower() in ("yes", "si", "sì", "true", "1")
@@ -321,6 +360,7 @@ def unifica_memoria(memoria):
                 CHIAVE_PARTITA_IVA: normalizza_piva(dati.get(CHIAVE_PARTITA_IVA)),
                 CHIAVE_PIVA_CONFERMATA: piva_confermata_da_valore(dati.get(CHIAVE_PIVA_CONFERMATA)),
                 CHIAVE_AUTORIZZATO: autorizzato_da_valore(dati.get(CHIAVE_AUTORIZZATO)),
+                CHIAVE_MAI_FORNITORE: mai_fornitore_da_valore(dati.get(CHIAVE_MAI_FORNITORE)),
             }
             continue
 
@@ -343,6 +383,12 @@ def unifica_memoria(memoria):
             voce[CHIAVE_PIVA_CONFERMATA] = confermata_nuova
         if autorizzato_da_valore(dati.get(CHIAVE_AUTORIZZATO), default=False):
             voce[CHIAVE_AUTORIZZATO] = True
+
+        # Come gli indirizzi vietati: il divieto vince sempre nella fusione.
+        # Fondere due voci non puo' far tornare fornitore chi l'utente ha detto
+        # che non lo e' mai, altrimenti riaprirebbe l'errore che aveva chiuso.
+        if mai_fornitore_da_valore(dati.get(CHIAVE_MAI_FORNITORE)):
+            voce[CHIAVE_MAI_FORNITORE] = True
 
         # Gli indirizzi vietati si sommano (senza ridoppiarli): sono divieti,
         # tenerne uno solo riaprirebbe la porta all'errore che l'altro chiudeva.
@@ -375,27 +421,92 @@ def unifica_memoria(memoria):
 
     return unificata
 
-def carica_memoria():
+def _leggi_copia_su_file():
+    """La copia di scorta. Vale quello che valeva prima: se manca o e' illeggibile
+    si riparte da memoria vuota, perche' l'errore risalirebbe fino a /estrai-ddt
+    tramite ottieni_regole_formattate e farebbe fallire l'intera estrazione."""
     if os.path.exists(FILE_MEMORIA):
         try:
             with open(FILE_MEMORIA, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except (json.JSONDecodeError, OSError) as e:
-            # File vuoto (0 byte) o corrotto: senza questa rete l'errore risale
-            # fino a /estrai-ddt tramite ottieni_regole_formattate e fa fallire
-            # l'intera estrazione con un 500.
             print(f"⚠️ Memoria fornitori illeggibile ({e}): riparto da memoria vuota.")
             return {}
     return {}
 
+def _scrivi_copia_su_file(memoria):
+    """Rispecchia sul file l'anagrafica appena salvata nel database.
+
+    Non solleva: la scrittura vera e' gia' andata a buon fine, e far fallire un
+    salvataggio riuscito perche' non si e' potuta aggiornare la copia sarebbe
+    peggio del disallineamento che si evita.
+    """
+    try:
+        with open(FILE_MEMORIA, 'w', encoding='utf-8') as f:
+            # sort_keys: il file lo si apre anche a mano per controllare una voce,
+            # e l'ordine di inserimento (chi e' passato prima in scansione) non
+            # aiuta a trovarla. Stesso ordine della dashboard.
+            json.dump(memoria, f, indent=4, ensure_ascii=False, sort_keys=True)
+    except OSError as e:
+        print(f"⚠️ Copia di scorta dell'anagrafica non aggiornata ({e}): "
+              f"il dato salvato nel database resta valido.")
+
+def carica_memoria():
+    """L'anagrafica fornitori, dal database se c'e', altrimenti dalla copia su file.
+
+    Il ripiego sul file e' volutamente SILENZIOSO sulle conseguenze: restituire
+    un'anagrafica di ieri e' meglio che restituirne una vuota, perche' con
+    un'anagrafica vuota il modello riproporrebbe P.IVA gia' scartate e
+    ignorerebbe ogni regola mirata e ogni divieto. Nessuna scrittura passa di
+    qui, quindi il file non puo' comunque prendere il posto del database.
+    """
+    if database.configurato():
+        try:
+            return archivio_fornitori.leggi()
+        except Exception as e:
+            print(f"⚠️ Anagrafica fornitori non leggibile dal database ({e}): "
+                  f"uso la copia su file.")
+    return _leggi_copia_su_file()
+
 def salva_memoria(memoria):
-    # Unico punto di scrittura del file: normalizzando qui, sia il censimento
-    # automatico sia il PUT dalla dashboard non possono reintrodurre duplicati.
-    with open(FILE_MEMORIA, 'w', encoding='utf-8') as f:
-        # sort_keys: il file lo si apre anche a mano per controllare una voce,
-        # e l'ordine di inserimento (chi e' passato prima in scansione) non
-        # aiuta a trovarla. Stesso ordine della dashboard.
-        json.dump(unifica_memoria(memoria), f, indent=4, ensure_ascii=False, sort_keys=True)
+    # Unico punto di scrittura dell'anagrafica: normalizzando qui, sia il
+    # censimento automatico sia il PUT dalla dashboard non possono reintrodurre
+    # duplicati.
+    unificata = unifica_memoria(memoria)
+
+    if database.configurato():
+        # Se il database non risponde l'eccezione RISALE, e deve: un
+        # salvataggio che non salva niente non va raccontato come riuscito.
+        # Tutti i chiamanti che non devono fallire (il censimento dentro
+        # l'estrazione, la registrazione del cedente di una fattura) hanno gia'
+        # il loro try/except attorno; la PUT della dashboard restituisce 500.
+        archivio_fornitori.scrivi(unificata)
+
+    _scrivi_copia_su_file(unificata)
+
+def migra_da_file_a_database():
+    """Porta nel database l'anagrafica che sta sul file, una volta sola.
+
+    La chiama il lifespan di main.py all'avvio. Importa SOLO se il database e'
+    ancora vuoto: la copia su file viene riscritta a ogni salvataggio, quindi
+    un'anagrafica svuotata a mano dalla dashboard svuota anche lei e non c'e'
+    modo che una cancellazione voluta si ritrovi reimportata al riavvio.
+
+    Restituisce il numero di voci importate (0 = non c'era niente da fare).
+    """
+    if not archivio_fornitori.vuota():
+        return 0
+
+    dal_file = _leggi_copia_su_file()
+    if not dal_file:
+        return 0
+
+    unificata = unifica_memoria(dal_file)
+    archivio_fornitori.scrivi(unificata)
+    # Il file torna scritto nella forma unificata, cosi' la copia di scorta e il
+    # database partono identici invece di divergere dal primo giorno.
+    _scrivi_copia_su_file(unificata)
+    return len(unificata)
 
 def aggiorna_fornitore(fornitore, note_proposte, partita_iva=""):
     """Censisce il fornitore letto su un DDT e, se serve, gli propone la P.IVA.
@@ -416,7 +527,24 @@ def aggiorna_fornitore(fornitore, note_proposte, partita_iva=""):
     chiave = normalizza_azienda(fornitore)
     gia_noto = trova_fornitore_simile(chiave, memoria)
 
+    # Chi e' marcato "mai un fornitore" non si censisce e non si arricchisce:
+    # e' il cliente stampato in cima alla bolla. Senza questa riga basterebbe
+    # un inserimento manuale o una rianalisi per rimetterlo in circolo.
+    if gia_noto and mai_fornitore_da_valore(memoria[gia_noto].get(CHIAVE_MAI_FORNITORE)
+                                            if isinstance(memoria[gia_noto], dict) else None):
+        print(f"[MEMORIA] '{fornitore}' e' '{gia_noto}', marcato come mai fornitore: non lo censisco.")
+        return
+
     piva_letta = normalizza_piva(partita_iva) if partita_iva_valida(partita_iva) else ""
+
+    # Una P.IVA che risulta gia' di qualcun altro non e' di questo fornitore:
+    # entrare come proposta significherebbe solo chiedere all'operatore di
+    # confermare un numero sbagliato.
+    if piva_letta:
+        motivo = motivo_scarto_piva(piva_letta, fornitore, memoria)
+        if motivo:
+            print(f"[MEMORIA] P.IVA {piva_letta} non proposta per '{fornitore}': {motivo}.")
+            piva_letta = ""
 
     if gia_noto:
         # Un fornitore gia' noto ma senza P.IVA e' il caso normale delle voci
@@ -544,6 +672,175 @@ def indirizzi_vietati_per(fornitore, memoria=None):
         return []
 
     return lista_indirizzi(voce.get(CHIAVE_INDIRIZZI_VIETATI))
+
+
+def voce_mai_fornitore(nome, memoria=None):
+    """La chiave di anagrafica marcata "mai un fornitore" che corrisponde a
+    questo nome, oppure None.
+
+    Il nome si cerca per somiglianza e sugli alias, come ovunque nel modulo: il
+    gruppo d'acquisto compare scritto in dieci modi diversi ("PAC 2000 C/O CREF
+    SRL", "PAC2000A CONAD", "CREF S.R.L.") e una lista di divieti che vale solo
+    sulla forma esatta non chiude niente.
+    """
+    if not nome:
+        return None
+
+    memoria = carica_memoria() if memoria is None else memoria
+    chiave = trova_fornitore_simile(normalizza_azienda(nome), memoria)
+    if not chiave:
+        return None
+
+    voce = memoria.get(chiave)
+    if not isinstance(voce, dict):
+        return None
+
+    return chiave if mai_fornitore_da_valore(voce.get(CHIAVE_MAI_FORNITORE)) else None
+
+
+def nome_canonico(fornitore, memoria=None):
+    """Il nome con cui questo fornitore e' censito in anagrafica.
+
+    Il modello legge quello che c'e' stampato, e sullo stesso fornitore trova di
+    volta in volta la controllata estera, la forma corta o il nome del logo:
+    "BEIERSDORF CUSTOMER SUPPLY GMBH" e "BEIERSDORF SPA" sono la stessa voce, ma
+    finiscono in archivio come due fornitori diversi. L'anagrafica sa gia' quale
+    dei due e' quello buono — e' la chiave della voce — e i nomi alternativi
+    esistono proprio per dirlo.
+
+    Restituisce il nome letto tale e quale se il fornitore non e' in anagrafica:
+    un nome nuovo non si tocca, e' la prima cosa che il censimento registrera'.
+    """
+    if not fornitore:
+        return fornitore
+
+    memoria = carica_memoria() if memoria is None else memoria
+    chiave = trova_fornitore_simile(normalizza_azienda(fornitore), memoria)
+    return chiave or fornitore
+
+
+def applica_nome_canonico(dati):
+    """Riscrive `fornitore` con il nome dell'anagrafica, quando c'e'.
+
+    Non e' cosmesi. Il nome del fornitore e' meta' della chiave con cui una
+    fattura ritrova le sue bolle (`abbinatore.stesso_fornitore`), e li' gli
+    alias NON vengono consultati: si confronta il nome scritto sul D.D.T. con
+    quello del cedente dell'XML. Una bolla archiviata come "BEIERSDORF CUSTOMER
+    SUPPLY GMBH" e una fattura di "BEIERSDORF SPA" non si agganciano, e la
+    pratica resta in coda a chiedere una conferma a mano. Scrivendo il nome
+    principale gia' in estrazione, l'alias che l'utente ha inserito una volta
+    vale anche di la'.
+
+    Il nome letto resta in `fornitore_letto`: chi rivede il documento deve poter
+    capire perche' il campo non e' identico a quello che vede sul PDF.
+    """
+    if not isinstance(dati, dict):
+        return dati
+
+    letto = dati.get("fornitore")
+    if not letto:
+        return dati
+
+    canonico = nome_canonico(letto)
+    if canonico and canonico != letto:
+        print(f"\U0001f4c7 '{letto}' e' in anagrafica come '{canonico}': uso il nome principale.")
+        dati["fornitore"] = canonico
+        dati["fornitore_letto"] = letto
+
+    return dati
+
+
+def motivo_scarto_piva(partita_iva, fornitore, memoria=None):
+    """Perche' questa P.IVA non puo' essere del fornitore letto, o None.
+
+    Due regole esatte, nessuna soglia:
+
+      1. e' la P.IVA di una voce marcata "mai un fornitore" (il cliente);
+      2. e' gia' la P.IVA di un'ALTRA voce. Una partita IVA identifica una
+         azienda sola: se il numero letto risulta di qualcun altro, non e' di
+         chi stiamo leggendo. E' la regola che sarebbe bastata a evitare che
+         00163040546 finisse su quattro fornitori diversi.
+
+    Il rimedio in entrambi i casi e' lasciare il campo VUOTO. Qui non vale il
+    principio del normalizzatore ("meglio un dato sporco che nessun dato"):
+    questa non e' una formattazione da rileggere ma una CHIAVE, e una chiave
+    sbagliata non e' un campo brutto da guardare, e' un'altra azienda.
+    """
+    piva = normalizza_piva(partita_iva)
+    if not piva:
+        return None
+
+    memoria = carica_memoria() if memoria is None else memoria
+    proprietario = trova_fornitore_per_piva(piva, memoria)
+    if not proprietario:
+        return None
+
+    voce = memoria.get(proprietario)
+    if isinstance(voce, dict) and mai_fornitore_da_valore(voce.get(CHIAVE_MAI_FORNITORE)):
+        return f"e' di '{proprietario}', che non e' mai un fornitore"
+
+    # Stesso fornitore scritto in un altro modo: nessuno scarto.
+    nome = normalizza_azienda(fornitore)
+    if nome:
+        if stesso_fornitore(nome, proprietario):
+            return None
+        if isinstance(voce, dict):
+            for alias in lista_alias(voce.get(CHIAVE_ALIAS)):
+                if stesso_fornitore(nome, alias):
+                    return None
+
+    return f"risulta gia' di '{proprietario}'"
+
+
+def filtra_fornitore_vietato(dati):
+    """Svuota fornitore (e la P.IVA) quando il modello ha letto il CLIENTE al
+    posto dell'emittente.
+
+    Sul DDT il gruppo d'acquisto e il punto vendita sono stampati in cima, con
+    la stessa evidenza dell'intestazione: il modello li scambia, e nell'archivio
+    del 2026-09-10 ne erano finiti due in anagrafica come fornitori. Chiederglielo
+    nel prompt non funziona (vedi CHIAVE_INDIRIZZI_VIETATI), confrontare due
+    stringhe si'.
+
+    Come per l'indirizzo vietato si azzera deliberatamente un campo estratto: il
+    dato e' noto per essere SBAGLIATO, e senza fornitore il classificatore porta
+    il documento in CHECK invece di archiviarlo in OK a nome del cliente. Il
+    valore scartato resta come traccia, cosi' chi rivede capisce perche' il
+    campo e' vuoto invece che semplicemente non letto.
+
+    Se sul documento il fornitore vero c'e' ma il modello guarda nel posto
+    sbagliato, la strada e' una regola mirata in anagrafica ("fornitore sta
+    sotto <etichetta>"): quella lo sposta, questa lo ferma e basta.
+    """
+    if not isinstance(dati, dict):
+        return dati
+
+    fornitore = dati.get("fornitore")
+    vietato = voce_mai_fornitore(fornitore)
+
+    if vietato:
+        print(f"\U0001f6ab '{fornitore}' e' '{vietato}', mai un fornitore: "
+              f"campo svuotato, documento da verificare.")
+        dati["fornitore"] = ""
+        dati["fornitore_scartato"] = fornitore
+        # La P.IVA letta accanto a quel nome e' del cliente per definizione:
+        # tenerla vorrebbe dire attaccarla al fornitore che si scrivera' a mano.
+        if dati.get("partita_iva"):
+            dati["partita_iva_scartata"] = dati["partita_iva"]
+            dati["partita_iva"] = ""
+        return dati
+
+    # Il nome puo' essere quello giusto e la P.IVA no: sul DDT ce ne sono
+    # sempre almeno due, e quella del cliente e' spesso la piu' in vista.
+    piva = dati.get("partita_iva")
+    if piva and fornitore:
+        motivo = motivo_scarto_piva(piva, fornitore)
+        if motivo:
+            print(f"\U0001f6ab [{fornitore}] P.IVA {piva} scartata: {motivo}.")
+            dati["partita_iva_scartata"] = piva
+            dati["partita_iva"] = ""
+
+    return dati
 
 
 def filtra_indirizzo_vietato(dati):

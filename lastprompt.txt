@@ -1,7 +1,0 @@
-Esistono due tipi di fatture:
-1. "accompagnatora", dove il codice della fattura corrisponde con il numero della ddt ed il rapporto e 1->1
-2. "differita", dove i codici delle ddt si trovano in basso come in esempio.xml e il rapporto è 1->N (ddt)
-
-Quindi dobbiamo lavorare in queste due casistiche. Inoltre quello che farei sarebbe fare due rami separati per le analisi il primo per le ddt e il secondo per le fatture. Successivamente in base ai dati
-estratti, non so se sullo stesso ramo o su un ramo differente andrei a fare il confronto sui json per abbinare le ddt alle fatture in base alle casistiche sopra. Cosi il sistema risulta anche più veloce. 
-Vale sempre la regola che una fatture per essere considerata deve avere il fornitore nella lista dei fornitori e manteniamo il controllo ciclico su una fattura o ddt che rimangono per piu di un mese in attesa

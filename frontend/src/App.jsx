@@ -52,8 +52,9 @@ function App() {
 
   const [avviso, setAvviso] = useState(null);
 
-  // Elaborazioni in corso (di solito lanciate da n8n, non dalla dashboard):
-  // il backend le espone su /api/elaborazione e qui le si interroga a intervalli.
+  // Elaborazioni in corso: possono essere partite dal pianificatore notturno o
+  // da un altro browser, quindi la dashboard non ha modo di saperlo se non
+  // chiedendolo. Il backend le espone su /api/elaborazione.
   const [lavoriInCorso, setLavoriInCorso] = useState([]);
   const lavoriPrecedenti = useRef(0);
 
@@ -547,6 +548,14 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
         <ConfigSection
           apiUrl={API_URL}
           onErrore={(testo) => setAvviso({ tipo: 'danger', testo })}
+          onAvviso={setAvviso}
+          onRicarica={(lavoro) => {
+            // Un lavoro lanciato a mano da qui ha appena estratto bolle o letto
+            // fatture: gli elenchi delle altre sezioni sono vecchi, e chi torna
+            // di là non ha modo di saperlo.
+            if (lavoro === 'scansione_ddt') fetchDocuments();
+            fetchFatture();
+          }}
         />
       )}
 

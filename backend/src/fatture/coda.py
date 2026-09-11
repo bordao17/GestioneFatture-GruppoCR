@@ -62,16 +62,31 @@ from src.fatture.lettore_xml import leggi_fattura
 # numeri ORGANIZZATIVI, non tecnici, e stanno in configurazione.py: si cambiano
 # dalla dashboard, quindi si leggono a ogni chiamata e non all'import.
 #
-# Sono due perche' le attese sono due e non si assomigliano: una fattura senza
-# la sua bolla aspetta che qualcuno vada a cercarla in magazzino (settimane),
-# una pratica gia' completa aspetta un click (giorni). Sollecitarle con la
-# stessa soglia vorrebbe dire o disturbare per il primo caso o dimenticare il
-# secondo.
+# Sono TRE perche' le attese sono tre e non si assomigliano:
+#
+#   - una FATTURA senza le sue bolle aspetta che qualcuno vada a cercarle in
+#     magazzino, e quanto sia ragionevole aspettare dipende da come lavora quel
+#     fornitore;
+#   - un D.D.T. che nessuna fattura ha agganciato aspetta il giro di
+#     fatturazione (spesso di fine mese), che e' un'altra cosa e puo' meritare
+#     un'altra pazienza: la bolla c'e' gia' e non manca a nessuno, e' la
+#     fattura che non e' arrivata;
+#   - una pratica gia' completa non aspetta nessun documento, aspetta un CLICK.
+#
+# Le prime due avevano un numero solo fino al 2026-09-10, ed era lo stesso
+# numero per comodita', non perche' fossero la stessa attesa: allungare la
+# pazienza sulle bolle mancanti faceva tacere anche sulle fatture che non
+# arrivavano piu'. Adesso si regolano una per una.
 
 
-def giorni_sollecito():
-    """Soglia per chi aspetta un DOCUMENTO (fattura senza bolla, bolla senza fattura)."""
-    return valore("GIORNI_ATTESA_SOLLECITO")
+def giorni_attesa_fattura():
+    """Soglia per una FATTURA ferma: i suoi D.D.T. non sono ancora arrivati."""
+    return valore("GIORNI_ATTESA_FATTURA")
+
+
+def giorni_attesa_ddt():
+    """Soglia per un D.D.T. fermo: nessuna fattura lo ha ancora agganciato."""
+    return valore("GIORNI_ATTESA_DDT")
 
 
 def giorni_accoppiamento():

@@ -1,4 +1,50 @@
 services:
+  # Il database delle ANAGRAFICHE (dal 2026-09-11). Non ci finiscono i registri
+  # dei documenti — OK/CHECK/KO, FATTURE, ATTESA restano file JSON accanto ai
+  # PDF che descrivono, e un archivio che si legge aprendo una cartella e' una
+  # proprieta' da non buttare via. Qui ci sta cio' che e' anagrafica: elenchi
+  # di entita' con una chiave, interrogati per chiave, che crescono nel tempo.
+  # La prima e' quella dei fornitori (src/comune/archivio_fornitori.py).
+  postgres-gestione-fatture:
+    image: postgres:16-alpine
+    container_name: postgres_fatture_gruppocr
+    restart: always
+    environment:
+      - POSTGRES_DB=gestione_fatture
+      - POSTGRES_USER=gestione_fatture
+      # Il database non e' esposto fuori dalla macchina (vedi ports): la
+      # password conta per chi sta gia' sul server. Cambiarla dopo il primo
+      # avvio NON basta a cambiarla davvero — initdb la scrive dentro
+      # postgre/dati/ una volta sola, quindi va cambiata anche di la' (ALTER
+      # USER) oppure ripartendo da una cartella vuota.
+      - POSTGRES_PASSWORD=gestione_fatture
+      # Come GENERIC_TIMEZONE per il backend: i timestamp che scrive il
+      # database (creato_il, aggiornato_il) devono essere quelli dell'ufficio.
+      - TZ=Europe/Rome
+    ports:
+      # Aperto SOLO su questa macchina, per poterci puntare un client SQL
+      # (DBeaver, pgAdmin) senza entrare nel container. Togliere il "127.0.0.1:"
+      # lo espone a tutta la LAN: e' un cambio deliberato, non una svista.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Il volume sta in una cartella del progetto e non in un volume con nome,
+      # per la stessa ragione per cui DDT/ e FATTURE/ stanno alla radice: i dati
+      # si vedono dove sta il progetto e si spostano copiando una cartella.
+      # E' ignorata da git (vedi .gitignore): sono file di Postgres, non
+      # configurazione, e la lezione e' n8n_config/ con i suoi 327 MB di sqlite.
+      - ./postgre/dati:/var/lib/postgresql/data
+    healthcheck:
+      # Serve a depends_on del backend: senza, il backend parte mentre initdb
+      # sta ancora creando il cluster e la prima lettura dell'anagrafica va a
+      # vuoto (ripiegando sul JSON, quindi in silenzio).
+      test: ["CMD-SHELL", "pg_isready -U gestione_fatture -d gestione_fatture"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # Il primo avvio in assoluto crea il cluster da zero: puo' volerci un
+      # minuto, e in quella finestra un healthcheck fallito non e' un guasto.
+      start_period: 60s
+
   api-gestione-fatture:
     build:
       context: ./backend
@@ -7,7 +53,18 @@ services:
     restart: always
     ports:
       - "8000:8000"
+    depends_on:
+      postgres-gestione-fatture:
+        condition: service_healthy
     environment:
+      # Le anagrafiche. Sta QUI e non nella sezione Configurazione della
+      # dashboard per la stessa ragione dei percorsi: una stringa di connessione
+      # sbagliata scritta dalla dashboard toglierebbe di mezzo proprio
+      # l'anagrafica che serve a correggerla. Lasciarla VUOTA e' una scelta
+      # valida e documentata: il backend parte lo stesso e i fornitori tornano
+      # a vivere in backend/data/fornitori_memoria.json, com'era fino al
+      # 2026-09-10. Vedi src/comune/database.py.
+      - DATABASE_URL=postgresql://gestione_fatture:gestione_fatture@postgres-gestione-fatture:5432/gestione_fatture
       # ATTENZIONE: dal 2026-09-08 queste variabili sono il RIPIEGO, non la
       # fonte. La sezione Configurazione della dashboard scrive in
       # backend/data/configurazione.json, che vince su quanto sta qui e ha
@@ -15,6 +72,8 @@ services:
       # che vale finche' nessuno tocca la dashboard (e quello a cui si torna
       # svuotando il campo). Vedi src/comune/configurazione.py.
       - OLLAMA_HOST=http://10.1.20.25:11434
+      # Il fuso lo legge src/comune/tempo.py: i timestamp dei registri e
+      # l'orario dei lavori pianificati devono essere quelli dell'ufficio.
       - GENERIC_TIMEZONE=Europe/Rome
       # Zoom di rendering PDF→PNG: 2.5 ≈ 180 DPI. Alzare a 3.5 se il modello
       # sbaglia cifre sui documenti scansionati male (costa tempo per pagina).
@@ -32,27 +91,68 @@ services:
       # a 16384 68s, per dati identici. Il ragionamento qui non si ripaga.
       - MODELLO_VISION=qwen2.5vl:7b
       - MODELLO_NUM_CTX=8192
-      # Dopo quanti giorni una fattura ferma in coda (IN_ATTESA: i suoi DDT non
-      # sono ancora tutti arrivati) finisce nella mail di sollecito. Non è una
+      # Dopo quanti giorni finisce nella mail di sollecito una FATTURA ferma in
+      # coda (IN_ATTESA: i suoi DDT non sono ancora tutti arrivati). Non è una
       # soglia tecnica ma organizzativa — quanto si è disposti ad aspettare una
       # bolla cartacea — quindi sta qui e non nel codice.
-      - GIORNI_ATTESA_SOLLECITO=30
+      - GIORNI_ATTESA_FATTURA=30
+      # La stessa domanda dall'altro lato: un D.D.T. in archivio che nessuna
+      # fattura ha agganciato. È un numero SUO dal 2026-09-10, e non per
+      # simmetria: qui non manca niente a nessuno (la bolla c'è, è la fattura
+      # che non è arrivata) e l'attesa dipende dal giro di fatturazione del
+      # fornitore, spesso di fine mese. Con un numero solo, allungare la
+      # pazienza su un lato faceva tacere anche l'altro.
+      - GIORNI_ATTESA_DDT=30
       # Soglia gemella ma piu' corta: qui la pratica non aspetta un documento,
       # aspetta un CLICK (nessuno ha ancora chiesto l'abbinamento, oppure i DDT
       # sono stati trovati e manca la firma sull'accoppiamento). Una settimana,
       # perche' il rimedio e' aprire la dashboard, non cercare in magazzino.
       - GIORNI_ATTESA_ACCOPPIAMENTO=7
+      # --- Lavori automatici (ex nodi Schedule di n8n, dal 2026-09-09) --------
+      # Orari HH:MM, fuso GENERIC_TIMEZONE. **Il campo vuoto significa "non
+      # pianificare"** ed e' il valore di partenza: senza toccarli il sistema
+      # resta tutto a pulsanti, com'era. Si impostano dalla dashboard; qui
+      # restano vuoti perche' un orario scritto nel compose partirebbe su
+      # qualunque macchina si faccia un "docker compose up", banco di prova
+      # compreso. L'ordine consigliato e' prima i D.D.T. e poi le fatture, che
+      # li cercano. Li legge src/comune/pianificatore.py.
+      - ORARIO_SCANSIONE_DDT=
+      - ORARIO_SCANSIONE_FATTURE=
+      - ORARIO_SOLLECITO=
+      # --- Invio mail (ex nodi Send Email di n8n) ----------------------------
+      # Senza SMTP_HOST non parte nessuna mail e nulla si rompe: le notifiche
+      # sono un di piu', non un ingranaggio (src/notifiche/mailer.py).
+      # SMTP_PASSWORD e' l'unico valore che la dashboard non rimanda mai al
+      # browser: si vede mascherato e si cancella solo svuotando il campo.
+      - SMTP_HOST=
+      - SMTP_PORTA=587
+      - SMTP_SICUREZZA=starttls
+      - SMTP_UTENTE=
+      - SMTP_PASSWORD=
+      - MAIL_MITTENTE=
+      # Piu' destinatari separati da virgola o punto e virgola.
+      - MAIL_DESTINATARI=
+      # Quando mandare il riepilogo di fine scansione: pianificate | sempre | mai.
+      # "pianificate" e' il default perche' chi preme Analizza dalla dashboard
+      # sta gia' guardando l'esito, e una mail per ogni click farebbe smettere
+      # di leggere anche quelle notturne, che sono le uniche che nessuno vede.
+      - MAIL_RIEPILOGO_SCANSIONE=pianificate
+      # L'indirizzo del pulsante in fondo alle mail. Va cambiato se la
+      # dashboard non si apre da localhost (cioe' quasi sempre, in ufficio).
+      - URL_DASHBOARD=http://localhost:3000
     volumes:
       - ./backend/data:/app/data
       # Un albero per flusso: DDT (scansioni) e FATTURE (XML elettronici).
       # I percorsi nel container sono identici a quelli sull'host, così un
-      # path visto in un log di n8n si ritrova subito sul disco.
+      # path visto in un log si ritrova subito sul disco senza tradurlo.
       - ./DDT:/DDT
       - ./FATTURE:/FATTURE
       # Il prodotto finito: il file unico fattura+DDT che l'operatore conferma
       # col pulsante ACCOPPIA. E' l'unica cartella che una persona apre a mano,
       # quindi sta alla radice accanto alle altre due e non dentro FATTURE/.
       - ./ACCOPPIATE:/ACCOPPIATE
+    # Resta per poter rimettere OLLAMA_HOST su una GPU installata sulla stessa
+    # macchina (http://host.docker.internal:11434) senza toccare altro.
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -71,29 +171,15 @@ services:
     depends_on:
       - api-gestione-fatture
 
-  n8n:
-    image: docker.n8n.io/n8nio/n8n
-    container_name: n8n_automations
-    user: "root"
-    restart: always
-    ports:
-      - "5678:5678"
-    environment:
-      - N8N_HOST=localhost
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - NODE_ENV=production
-      - WEBHOOK_URL=http://localhost:5678/
-      - GENERIC_TIMEZONE=Europe/Rome
-      - N8N_USER_FOLDER=/home/node/.n8n
-      - N8N_RESTRICT_FILE_ACCESS_TO=/DDT;/FATTURE;/ACCOPPIATE
-      - N8N_DIAGNOSTICS_ENABLED=false
-      - N8N_HIDE_USAGE_PAGE=true
-      - N8N_COMMUNITY_PACKAGES_ENABLED=false
-    volumes:
-      - ./n8n_config:/home/node/.n8n
-      - ./DDT:/DDT
-      - ./FATTURE:/FATTURE
-      - ./ACCOPPIATE:/ACCOPPIATE
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+# n8n E' STATO TOLTO DA QUI il 2026-09-09, e i suoi file sono rimasti sul disco.
+# Faceva tre cose — guardare l'ora, chiamare un'API di questo backend, spedire
+# una mail — mentre tutto cio' che decideva stava gia' in Python: era un secondo
+# posto in cui sbagliare, con l'HTML delle mail chiuso dentro il suo database
+# sqlite (non leggibile, non diffabile, non versionabile).
+# Adesso: src/comune/pianificatore.py e' l'orologio, src/notifiche/ e' il postino.
+# n8n_config/ (327 MB di stato runtime: workflow, credenziali, esecuzioni) e'
+# stato cancellato il 2026-09-11, quando il ritorno indietro ha smesso di essere
+# un'ipotesi viva. Era tracciato in git, quindi si recupera da un commit
+# precedente: git checkout <commit> -- n8n_config
+# Resta n8n_snippets/ (i nodi Code versionati a mano): e' la fonte storica delle
+# tre mail, oggi in src/notifiche/, e costa 96 KB.

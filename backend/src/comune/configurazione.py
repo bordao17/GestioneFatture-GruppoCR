@@ -35,6 +35,22 @@ PERCORSO = os.getenv("FILE_CONFIGURAZIONE", "data/configurazione.json")
 TESTO = "testo"
 INTERO = "intero"
 DECIMALE = "decimale"
+# Un orario "HH:MM" (o la stringa vuota, che qui significa "non pianificare
+# niente"): e' il tipo dei tre lavori notturni. Sta a se' e non e' un TESTO
+# perche' un "22:0O" scritto male non deve arrivare al pianificatore, che lo
+# scarterebbe in silenzio a mezzanotte, quando nessuno guarda.
+ORARIO = "orario"
+# Una scelta fra poche opzioni fisse (opzioni=[...]): la sicurezza SMTP e il
+# quando-mandare-il-riepilogo. Un valore fuori elenco viene scartato in
+# salvataggio, come un numero fuori intervallo.
+SCELTA = "scelta"
+
+# Cio' che si scrive al posto di una password nelle risposte dell'API. La
+# dashboard rimanda indietro la bozza intera, quindi la maschera deve poter
+# tornare al backend senza cancellare la password: salva_configurazione() la
+# riconosce e tiene il valore gia' sul file. Svuotare il campo la cancella
+# davvero, com'e' per ogni altra impostazione.
+MASCHERA = "\u2022" * 6
 
 # Le sole chiavi ammesse. Una chiave non elencata qui viene ignorata sia in
 # lettura sia in scrittura: la dashboard non deve poter inventare impostazioni
@@ -85,16 +101,30 @@ IMPOSTAZIONI = (
                  "provato a 3.5, il modello ha sbagliato piu' campi, non meno.",
     },
     {
-        "chiave": "GIORNI_ATTESA_SOLLECITO",
-        "etichetta": "Giorni prima di sollecitare una bolla mancante",
+        "chiave": "GIORNI_ATTESA_FATTURA",
+        "etichetta": "Giorni prima di sollecitare una fattura senza le sue bolle",
         "tipo": INTERO,
         "default": 30,
         "minimo": 1,
         "massimo": 365,
         "gruppo": "Solleciti",
-        "aiuto": "Dopo quanti giorni una fattura che aspetta un D.D.T. (e un "
-                 "D.D.T. che aspetta la sua fattura) finisce nella mail del "
+        "aiuto": "Dopo quanti giorni una fattura ferma in coda perche' i suoi "
+                 "D.D.T. non sono ancora arrivati finisce nella mail del "
                  "mattino. E' un numero organizzativo, non tecnico.",
+    },
+    {
+        "chiave": "GIORNI_ATTESA_DDT",
+        "etichetta": "Giorni prima di segnalare una bolla senza fattura",
+        "tipo": INTERO,
+        "default": 30,
+        "minimo": 1,
+        "massimo": 365,
+        "gruppo": "Solleciti",
+        "aiuto": "Dopo quanti giorni un D.D.T. archiviato che nessuna fattura "
+                 "ha agganciato finisce nella stessa mail. E' separata dalla "
+                 "soglia delle fatture perche' le due attese dipendono da cose "
+                 "diverse: i termini di fatturazione del fornitore da un lato, "
+                 "il giro delle bolle in magazzino dall'altro.",
     },
     {
         "chiave": "GIORNI_ATTESA_ACCOPPIAMENTO",
@@ -108,6 +138,132 @@ IMPOSTAZIONI = (
                  "dell'operatore non aspetta un documento: aspetta un click. "
                  "La soglia e' piu' corta apposta.",
     },
+    # --- Pianificazione -----------------------------------------------------
+    # I tre lavori che prima erano nodi di n8n. Il campo vuoto = non pianificato:
+    # e' la stessa convenzione del resto della schermata (vuoto = niente), e
+    # significa che il sistema resta interamente manuale finche' non si scrive
+    # un orario qui dentro.
+    {
+        "chiave": "ORARIO_SCANSIONE_DDT",
+        "etichetta": "Ora della scansione automatica dei D.D.T.",
+        "tipo": ORARIO,
+        "default": "",
+        "gruppo": "Pianificazione",
+        "aiuto": "Ogni giorno a quest'ora il backend analizza tutto cio' che e' "
+                 "fermo in DDT/da_leggere, come il pulsante Analizza. Di notte, "
+                 "perche' la GPU e' condivisa e un batch dura minuti per pagina. "
+                 "Vuoto = nessuna scansione automatica.",
+    },
+    {
+        "chiave": "ORARIO_SCANSIONE_FATTURE",
+        "etichetta": "Ora della scansione automatica delle fatture",
+        "tipo": ORARIO,
+        "default": "",
+        "gruppo": "Pianificazione",
+        "aiuto": "Come sopra per FATTURE/da_leggere. Qui il modello non entra "
+                 "mai (e' solo lettura di XML), quindi puo' stare vicina "
+                 "all'altra: mettila dopo, cosi' le fatture trovano i D.D.T. "
+                 "appena estratti. Vuoto = nessuna scansione automatica.",
+    },
+    {
+        "chiave": "ORARIO_SOLLECITO",
+        "etichetta": "Ora della mail di sollecito",
+        "tipo": ORARIO,
+        "default": "",
+        "gruppo": "Pianificazione",
+        "aiuto": "L'unico lavoro guidato dal tempo e non da un documento: al "
+                 "trentesimo giorno di attesa nel backend non succede niente, "
+                 "e' questa mail a dirlo. Se non c'e' nulla da sollecitare non "
+                 "parte. Vuoto = nessun sollecito.",
+    },
+    # --- Notifiche ----------------------------------------------------------
+    {
+        "chiave": "SMTP_HOST",
+        "etichetta": "Server SMTP",
+        "tipo": TESTO,
+        "default": "",
+        "gruppo": "Notifiche",
+        "aiuto": "Senza questo (o senza destinatari) non parte nessuna mail e "
+                 "il resto del sistema funziona lo stesso: le notifiche sono un "
+                 "di piu', non un ingranaggio.",
+    },
+    {
+        "chiave": "SMTP_PORTA",
+        "etichetta": "Porta SMTP",
+        "tipo": INTERO,
+        "default": 587,
+        "minimo": 1,
+        "massimo": 65535,
+        "gruppo": "Notifiche",
+        "aiuto": "587 con STARTTLS, 465 con SSL, 25 in chiaro su un relay interno.",
+    },
+    {
+        "chiave": "SMTP_SICUREZZA",
+        "etichetta": "Sicurezza della connessione",
+        "tipo": SCELTA,
+        "default": "starttls",
+        "opzioni": ("starttls", "ssl", "nessuna"),
+        "gruppo": "Notifiche",
+        "aiuto": "starttls per la porta 587, ssl per la 465, nessuna solo verso "
+                 "un relay in LAN che non chiede autenticazione.",
+    },
+    {
+        "chiave": "SMTP_UTENTE",
+        "etichetta": "Utente SMTP",
+        "tipo": TESTO,
+        "default": "",
+        "gruppo": "Notifiche",
+        "aiuto": "Vuoto se il relay non chiede autenticazione: in quel caso non "
+                 "viene fatto nessun login.",
+    },
+    {
+        "chiave": "SMTP_PASSWORD",
+        "etichetta": "Password SMTP",
+        "tipo": TESTO,
+        "segreto": True,
+        "default": "",
+        "gruppo": "Notifiche",
+        "aiuto": "Non viene mai rimandata alla dashboard: il campo mostra dei "
+                 "pallini se e' impostata. Svuotarlo la cancella.",
+    },
+    {
+        "chiave": "MAIL_MITTENTE",
+        "etichetta": "Mittente",
+        "tipo": TESTO,
+        "default": "",
+        "gruppo": "Notifiche",
+        "aiuto": "L'indirizzo che compare come From. Se vuoto viene usato "
+                 "l'utente SMTP.",
+    },
+    {
+        "chiave": "MAIL_DESTINATARI",
+        "etichetta": "Destinatari",
+        "tipo": TESTO,
+        "default": "",
+        "gruppo": "Notifiche",
+        "aiuto": "Uno o piu' indirizzi separati da virgola o punto e virgola.",
+    },
+    {
+        "chiave": "MAIL_RIEPILOGO_SCANSIONE",
+        "etichetta": "Quando mandare il riepilogo di una scansione",
+        "tipo": SCELTA,
+        "default": "pianificate",
+        "opzioni": ("pianificate", "sempre", "mai"),
+        "gruppo": "Notifiche",
+        "aiuto": "'pianificate' manda la mail solo per le scansioni notturne: "
+                 "chi preme Analizza dalla dashboard sta gia' guardando "
+                 "l'esito, e una mail per ogni click smetterebbe di essere letta.",
+    },
+    {
+        "chiave": "URL_DASHBOARD",
+        "etichetta": "Indirizzo della dashboard",
+        "tipo": TESTO,
+        "default": "http://localhost:3000",
+        "gruppo": "Notifiche",
+        "aiuto": "Dove punta il pulsante in fondo alle mail. Va messo "
+                 "l'indirizzo con cui la dashboard si apre dai PC dell'ufficio, "
+                 "non localhost, altrimenti il pulsante funziona solo sul server.",
+    },
 )
 
 _PER_CHIAVE = {i["chiave"]: i for i in IMPOSTAZIONI}
@@ -117,6 +273,24 @@ _PER_CHIAVE = {i["chiave"]: i for i in IMPOSTAZIONI}
 # silenzioso. La mtime basta: a scriverlo e' solo salva_configurazione().
 _LUCCHETTO = threading.Lock()
 _CACHE = {"mtime": None, "dati": {}}
+
+
+def _orario(grezzo):
+    """'22:30' normalizzato, oppure None se non e' un orario del giorno.
+
+    Accetta anche '9:5' e '22:30:00' perche' li scrivono sia un umano di fretta
+    sia un campo <input type="time"> con i secondi.
+    """
+    pezzi = str(grezzo).strip().split(":")
+    if len(pezzi) < 2:
+        return None
+    try:
+        ore, minuti = int(pezzi[0]), int(pezzi[1])
+    except ValueError:
+        return None
+    if not (0 <= ore <= 23 and 0 <= minuti <= 59):
+        return None
+    return f"{ore:02d}:{minuti:02d}"
 
 
 def _converti(impostazione, grezzo):
@@ -135,6 +309,13 @@ def _converti(impostazione, grezzo):
     if tipo == TESTO:
         testo = str(grezzo).strip()
         return testo or None
+
+    if tipo == ORARIO:
+        return _orario(grezzo)
+
+    if tipo == SCELTA:
+        scelta = str(grezzo).strip().lower()
+        return scelta if scelta in impostazione.get("opzioni", ()) else None
 
     try:
         numero = int(grezzo) if tipo == INTERO else float(grezzo)
@@ -216,12 +397,20 @@ def origine(chiave):
 
 
 def configurazione_completa():
-    """Tutte le impostazioni con valore, origine e metadati, per la dashboard."""
-    return [
-        {**impostazione, "valore": valore(impostazione["chiave"]),
-         "origine": origine(impostazione["chiave"])}
-        for impostazione in IMPOSTAZIONI
-    ]
+    """Tutte le impostazioni con valore, origine e metadati, per la dashboard.
+
+    Il valore di un'impostazione "segreto" esce mascherato: la password SMTP
+    non ha nessun motivo di arrivare fino al browser, e la dashboard non ha
+    bisogno di conoscerla per rimandarla indietro (vedi MASCHERA).
+    """
+    voci = []
+    for impostazione in IMPOSTAZIONI:
+        chiave = impostazione["chiave"]
+        attuale = valore(chiave)
+        if impostazione.get("segreto"):
+            attuale = MASCHERA if attuale else ""
+        voci.append({**impostazione, "valore": attuale, "origine": origine(chiave)})
+    return voci
 
 
 def salva_configurazione(dati):
@@ -245,6 +434,15 @@ def salva_configurazione(dati):
 
         # Il campo svuotato non e' un errore: significa "usa il default".
         if grezzo is None or (isinstance(grezzo, str) and not grezzo.strip()):
+            continue
+
+        # La password tornata indietro mascherata e' la password che c'e' gia':
+        # la dashboard rimanda sempre la bozza intera, e senza questo ramo un
+        # salvataggio fatto per cambiare un orario cancellerebbe l'SMTP.
+        if impostazione.get("segreto") and str(grezzo) == MASCHERA:
+            gia_sul_file = _dal_file().get(chiave)
+            if gia_sul_file:
+                da_scrivere[chiave] = gia_sul_file
             continue
 
         convertito = _converti(impostazione, grezzo)

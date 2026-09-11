@@ -45,7 +45,8 @@ export default function FattureSection({
 
   useEffect(() => {
     // giorni=0 perché qui si vuole la coda intera: la soglia di
-    // GIORNI_ATTESA_SOLLECITO serve alla mail, non alla dashboard.
+    // GIORNI_ATTESA_DDT decide quando SOLLECITARE una bolla senza fattura,
+    // cioè serve alla mail; chi apre il pannello vuole vederle tutte.
     axios
       .get(`${apiUrl}/api/ddt/senza-fattura?giorni=0`)
       .then((res) => setDdtSoli(res.data.ddt || []))

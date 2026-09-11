@@ -6,10 +6,10 @@ import { Upload, PlayCircle, Loader2, Inbox } from 'lucide-react';
  * I due pulsanti della cartella in ingresso: deposita i file, poi analizzali.
  *
  * Uno solo per D.D.T. e fatture, perché il gesto è identico e cambiano solo le
- * estensioni ammesse e i due endpoint. Le cartelle sono le stesse che guarda
- * n8n (DDT/da_leggere e FATTURE/da_leggere): questi pulsanti non aprono un
- * secondo canale, fanno a mano ciò che il workflow fa da solo — utile quando
- * serve adesso, o quando n8n è fermo.
+ * estensioni ammesse e i due endpoint. Le cartelle sono le stesse su cui lavora
+ * la scansione pianificata (DDT/da_leggere e FATTURE/da_leggere): questi
+ * pulsanti non aprono un secondo canale, fanno adesso ciò che di notte
+ * succederebbe da solo.
  *
  * Caricare e analizzare restano DUE gesti: si mettono in coda dieci bolle in
  * pochi secondi e si fa partire l'analisi (minuti, sulla GPU condivisa) una

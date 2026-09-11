@@ -1,9 +1,9 @@
 import React from 'react';
 import { FileSearch } from 'lucide-react';
 
-// Le estrazioni "classiche" (PDF intero, di solito lanciate da n8n sulla
-// cartella monitorata) durano minuti: senza questa barra la dashboard sembra
-// ferma e non c'è modo di capire che il modello sta lavorando.
+// Un'estrazione dura minuti: senza questa barra la dashboard sembra ferma e non
+// c'è modo di capire che il modello sta lavorando. Vale anche per i lavori che
+// nessuno ha lanciato da qui (la scansione pianificata, un altro browser).
 function formattaDurata(secondi) {
   const totale = Math.max(0, Math.round(secondi || 0));
   const minuti = Math.floor(totale / 60);

@@ -6,7 +6,10 @@ import ollama
 
 from src.comune.memory_manager import (
     ottieni_regole_formattate,
+    applica_nome_canonico,
+    filtra_fornitore_vietato,
     filtra_indirizzo_vietato,
+    motivo_scarto_piva,
     regole_campo_per,
     carica_memoria,
     partita_iva_per,
@@ -259,6 +262,18 @@ def completa_partita_iva(dati, image_path):
     if not letta:
         return dati
 
+    # Sul DDT le partite IVA sono almeno due (emittente e destinatario) e
+    # quella del cliente e' spesso la piu' in vista: se il numero letto risulta
+    # gia' di qualcun altro in anagrafica, o e' di una voce marcata "mai un
+    # fornitore", NON e' di chi stiamo leggendo. Meglio lasciare il campo vuoto
+    # che proporre una chiave di un'altra azienda.
+    motivo = motivo_scarto_piva(letta, fornitore, memoria)
+    if motivo:
+        print(f"\U0001f6ab [{fornitore}] P.IVA letta {letta} scartata: {motivo}. "
+              f"La lascio vuota: si conferma a mano dall'anagrafica.")
+        dati["partita_iva_scartata"] = letta
+        return dati
+
     if not partita_iva_valida(letta):
         # Il carattere di controllo non torna: quasi sempre una cifra letta
         # male. Si tiene comunque nel documento (principio del normalizzatore:
@@ -361,12 +376,21 @@ def estrai_dati_da_immagine(image_path):
         #     confronto per somiglianza in memoria lavora su un nome pulito;
         #  2. applica_regole_campo, che puo' SOSTITUIRE l'indirizzo sbagliato
         #     con quello giusto;
-        #  3. filtra_indirizzo_vietato per ultimo, come rete di sicurezza: se
+        #  3. filtra_fornitore_vietato: il nome letto e' quello del cliente
+        #     (gruppo d'acquisto, insegna del punto vendita)? Va PRIMA della
+        #     P.IVA, perche' su un fornitore che non esiste non ha senso ne'
+        #     cercare una chiave in anagrafica ne' chiederne una al modello;
+        #  4. applica_nome_canonico: il fornitore riconosciuto prende il nome
+        #     con cui e' censito, cosi' l'alias inserito una volta vale anche
+        #     nell'abbinamento con le fatture, che gli alias non li legge;
+        #  5. completa_partita_iva, dopo le regole (una regola mirata puo'
+        #     riguardare proprio la P.IVA);
+        #  6. filtra_indirizzo_vietato per ultimo, come rete di sicurezza: se
         #     anche la domanda mirata e' finita sull'indirizzo vietato, il campo
         #     va comunque svuotato e il documento mandato in CHECK.
-        # In mezzo, completa_partita_iva: dopo le regole (una regola mirata puo'
-        # riguardare proprio la P.IVA) e prima del filtro, che non la tocca.
         dati = applica_regole_campo(normalizza_dati(dati), image_path)
+        dati = filtra_fornitore_vietato(dati)
+        dati = applica_nome_canonico(dati)
         dati = completa_partita_iva(dati, image_path)
         return filtra_indirizzo_vietato(dati)
     except Exception as e:

@@ -4,6 +4,7 @@
 import os
 import logging
 import shutil
+from contextlib import asynccontextmanager
 import tempfile
 import uuid
 import time
@@ -31,15 +32,20 @@ from src.ddt.notificatore import calcola_riepilogo
 from src.comune.memory_manager import (
     carica_memoria, salva_memoria, aggiorna_fornitore, registra_fornitore_fattura,
     conferma_partita_iva, partita_iva_per, verifica_fornitore_fattura,
+    migra_da_file_a_database,
 )
+from src.comune import archivio_fornitori, database
 from src.comune.normalizzatore import normalizza_partita_iva
 from src.comune import stato_elaborazione
 from src.comune.percorsi import (
     CARTELLA_ACCOPPIATE, CARTELLA_DDT, CARTELLA_DDT_INGRESSO, CARTELLA_FATTURE,
     CARTELLA_FATTURE_INGRESSO, REGISTRO_FATTURE, REGISTRO_ATTESA,
 )
-from src.comune.configurazione import configurazione_completa, salva_configurazione
-from src.comune.tempo import timestamp_locale
+from src.comune.configurazione import configurazione_completa, salva_configurazione, valore
+from src.comune.tempo import adesso, timestamp_locale
+from src.comune import pianificatore
+from src.notifiche import mailer, riepilogo_ddt, riepilogo_fatture, sollecito
+from src.notifiche.impaginazione import pagina as pagina_mail
 from src.fatture.lettore_xml import leggi_fattura
 from src.fatture.abbinatore import (
     carica_documenti, dimentica_fattura, classifica_fattura,
@@ -48,7 +54,8 @@ from src.fatture.abbinatore import (
 from src.fatture.coda import (
     abbina_tutte, anteprima_fascicolo, completate_da, fatture_da_accoppiare,
     fatture_in_attesa, conferma_accoppiamento, ddt_senza_fattura,
-    giorni_accoppiamento, giorni_in_attesa, giorni_sollecito, percorso_fascicolo,
+    giorni_accoppiamento, giorni_attesa_ddt, giorni_attesa_fattura,
+    giorni_in_attesa, percorso_fascicolo,
     proponi_accoppiamento, registra_senza_abbinare, ricontrolla_attese,
     trova_fattura, trova_fattura_registrata,
 )
@@ -64,10 +71,53 @@ class FiltroPollingBarra(logging.Filter):
 
 logging.getLogger("uvicorn.access").addFilter(FiltroPollingBarra())
 
+def _prepara_anagrafiche():
+    """Crea le tabelle delle anagrafiche e, la prima volta, ci porta dentro il JSON.
+
+    Non solleva MAI. Un database che non risponde deve poter costare
+    l'anagrafica sul database, non l'avvio del backend: senza, un container
+    Postgres che tarda a salire terrebbe giu' anche le estrazioni e la
+    dashboard, che con la copia su file funzionano lo stesso.
+    """
+    if not database.configurato():
+        print("ℹ️ DATABASE_URL non impostata: le anagrafiche restano sul file JSON.")
+        return
+
+    try:
+        archivio_fornitori.prepara()
+        importate = migra_da_file_a_database()
+        if importate:
+            print(f"📥 Anagrafica fornitori importata nel database: {importate} voci.")
+        else:
+            print("✅ Anagrafica fornitori sul database.")
+    except Exception as e:
+        print(f"⚠️ Anagrafiche su database non disponibili ({e}): "
+              f"si continua con la copia su file.")
+
+
+@asynccontextmanager
+async def ciclo_di_vita(app):
+    """All'avvio prepara le anagrafiche e mette in moto il pianificatore.
+
+    Le tre azioni le passa main.py invece di essere importate dentro il
+    pianificatore: quello sa QUANDO, non COSA. Se gli orari sono vuoti (ed e'
+    il valore di partenza) il thread gira a vuoto e non succede niente: il
+    sistema resta quello di prima, tutto a pulsanti.
+    """
+    _prepara_anagrafiche()
+    pianificatore.avvia({
+        "scansione_ddt": _lavoro_scansione_ddt,
+        "scansione_fatture": _lavoro_scansione_fatture,
+        "sollecito": _lavoro_sollecito,
+    })
+    yield
+
+
 app = FastAPI(
     title="GestioneFatture - GruppoCR API",
     description="Microservizio AI per l'estrazione dati da DDT e Fatture",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=ciclo_di_vita,
 )
 
 # Abilita CORS per il frontend React
@@ -1092,8 +1142,7 @@ async def stato_ingresso():
     }
 
 
-@app.post("/api/ddt/scansiona")
-def scansiona_ddt():
+def _scansione_ddt(origine="manuale"):
     """Analizza tutte le scansioni ferme in DDT/da_leggere.
 
     Il file elaborato viene RIMOSSO dalla cartella. Non è una pulizia
@@ -1105,9 +1154,14 @@ def scansiona_ddt():
     Un file che fallisce resta dov'è: sarà riprovabile dopo aver capito perché.
 
     Sincrona: chiama elabora_ddt(), che è bloccante.
+
+    origine dice chi l'ha chiesta ("manuale" dalla dashboard, "pianificata" dal
+    pianificatore notturno) e serve solo a decidere se mandare la mail di
+    riepilogo: chi ha appena premuto Analizza sta già guardando l'esito.
     """
+    inizio = adesso()
     nomi = _file_in_ingresso(CARTELLA_DDT_INGRESSO, ESTENSIONI_DDT)
-    print(f"📥 Scansione manuale di DDT/da_leggere: {len(nomi)} file da elaborare.")
+    print(f"📥 Scansione {origine} di DDT/da_leggere: {len(nomi)} file da elaborare.")
 
     elaborati, falliti, sbloccate = [], [], []
 
@@ -1132,16 +1186,27 @@ def scansiona_ddt():
             print(f"⚠️ '{nome}' elaborato ma non rimosso dalla cartella ({e}): rimuovilo a mano, "
                   f"altrimenti la prossima analisi lo archivierà una seconda volta.")
 
-    return {
+    esito = {
         "elaborati": elaborati,
         "falliti": falliti,
         "pagine_totali": sum(e["pagine"] for e in elaborati),
         "fatture_sbloccate": sbloccate,
     }
 
+    if _riepilogo_da_mandare(origine) and (elaborati or falliti):
+        oggetto, corpo = riepilogo_ddt.componi(calcola_riepilogo(inizio), sbloccate, falliti)
+        mailer.invia_silenzioso(oggetto, corpo, "riepilogo D.D.T.")
 
-@app.post("/api/fatture/scansiona")
-def scansiona_fatture():
+    return esito
+
+
+@app.post("/api/ddt/scansiona")
+def scansiona_ddt():
+    """Il pulsante Analizza dei D.D.T.: sincrona, perché elabora_ddt() è bloccante."""
+    return _scansione_ddt("manuale")
+
+
+def _scansione_fatture(origine="manuale"):
     """Legge e archivia tutte le fatture ferme in FATTURE/da_leggere.
 
     NON le abbina: dal 2026-09-08 leggere una fattura e cercarle i D.D.T. sono
@@ -1153,7 +1218,7 @@ def scansiona_fatture():
     originale è conservato accanto alla voce, che è la copia che conta.
     """
     nomi = _file_in_ingresso(CARTELLA_FATTURE_INGRESSO, ESTENSIONI_FATTURA)
-    print(f"📥 Scansione manuale di FATTURE/da_leggere: {len(nomi)} file da leggere.")
+    print(f"📥 Scansione {origine} di FATTURE/da_leggere: {len(nomi)} file da leggere.")
 
     lette, falliti = [], []
 
@@ -1191,13 +1256,141 @@ def scansiona_fatture():
         for f in lette if f.get("segnalazioni")
     ]
 
-    return {
+    esito = {
         "fatture": lette,
         "falliti": falliti,
         "totale": len(lette),
         "duplicate": sum(1 for f in lette if f.get("stato") == "DUPLICATA"),
         "segnalate": segnalate,
     }
+
+    if _riepilogo_da_mandare(origine) and (lette or falliti):
+        oggetto, corpo = riepilogo_fatture.componi(esito)
+        mailer.invia_silenzioso(oggetto, corpo, "riepilogo fatture")
+
+    return esito
+
+
+@app.post("/api/fatture/scansiona")
+def scansiona_fatture():
+    """Il pulsante Analizza delle fatture."""
+    return _scansione_fatture("manuale")
+
+
+# ==========================================
+# 8-quater. PIANIFICAZIONE E NOTIFICHE
+# ==========================================
+# Cio' che fino al 2026-09-09 era n8n: tre nodi Schedule, tre HTTP Request e tre
+# nodi Code che tenevano l'HTML dentro il suo database. Le decisioni pero'
+# stavano gia' tutte qui, quindi n8n era un secondo posto in cui sbagliare.
+# L'orologio e' src/comune/pianificatore.py, le mail src/notifiche/.
+
+def _riepilogo_da_mandare(origine):
+    """Se questa scansione merita una mail di riepilogo.
+
+    'pianificate' (il valore di partenza) manda la mail solo per le scansioni
+    notturne: chi preme Analizza dalla dashboard vede l'esito sullo schermo, e
+    una mail per ogni click smetterebbe di essere letta — con lei anche quelle
+    delle scansioni automatiche, che sono le uniche che nessuno sta guardando.
+    """
+    modo = valore("MAIL_RIEPILOGO_SCANSIONE")
+    if modo == "mai":
+        return False
+    if modo == "pianificate":
+        return origine == "pianificata"
+    return True
+
+
+def _lavoro_scansione_ddt():
+    esito = _scansione_ddt("pianificata")
+    return {"riassunto": f"{len(esito['elaborati'])} file elaborati, "
+                         f"{esito['pagine_totali']} pagine, {len(esito['falliti'])} falliti"}
+
+
+def _lavoro_scansione_fatture():
+    esito = _scansione_fatture("pianificata")
+    return {"riassunto": f"{esito['totale']} fatture lette, "
+                         f"{esito['duplicate']} duplicate, {len(esito['falliti'])} falliti"}
+
+
+def _lavoro_sollecito():
+    """La mail del mattino: l'unico lavoro guidato dal tempo e non da un documento.
+
+    Se non c'è niente di fermo, componi() restituisce None e non parte niente:
+    una mail "nessuna fattura in attesa" verrebbe ignorata entro tre giorni,
+    comprese le volte in cui dice qualcosa.
+    """
+    soglia_fattura = giorni_attesa_fattura()
+    soglia_ddt = giorni_attesa_ddt()
+    soglia_click = giorni_accoppiamento()
+
+    composto = sollecito.componi(
+        fatture_in_attesa(soglia_fattura),
+        fatture_da_accoppiare(soglia_click),
+        ddt_senza_fattura(soglia_ddt),
+        soglia_fattura,
+        soglia_click,
+        soglia_ddt,
+    )
+
+    if composto is None:
+        return {"riassunto": "niente da sollecitare"}
+
+    oggetto, corpo = composto
+    esito = mailer.invia_silenzioso(oggetto, corpo, "sollecito")
+    return {"riassunto": oggetto if esito["inviata"] else f"non inviata: {esito['motivo']}"}
+
+
+@app.get("/api/pianificazione")
+async def stato_pianificazione():
+    """I tre lavori automatici (orario, prossima esecuzione, ultimo esito) e lo
+    stato delle notifiche. La password SMTP non esce mai di qui."""
+    return {**pianificatore.stato(), "notifiche": mailer.descrizione()}
+
+
+@app.post("/api/pianificazione/{lavoro}/esegui")
+def esegui_lavoro(lavoro: str):
+    """Fa partire adesso un lavoro pianificato, senza aspettare la sua ora.
+
+    Stessa strada dell'esecuzione notturna, di proposito: se la si prova a mano
+    e funziona, di notte funzionerà per le stesse ragioni. Sincrona perché una
+    scansione D.D.T. è bloccante.
+    """
+    if lavoro not in {chiave for chiave, _, _ in pianificatore.LAVORI}:
+        raise HTTPException(status_code=404, detail=f"Lavoro sconosciuto: {lavoro}")
+
+    esito = pianificatore.esegui(lavoro, motivo="richiesto dalla dashboard")
+    if esito.get("errore"):
+        raise HTTPException(status_code=500, detail=esito["errore"])
+    return esito
+
+
+@app.post("/api/notifiche/prova")
+def prova_notifiche():
+    """Manda una mail di prova ai destinatari configurati.
+
+    È l'unico modo di sapere se SMTP è a posto senza aspettare la notte: qui
+    l'errore serve, quindi si usa invia() e non invia_silenzioso().
+    """
+    if not mailer.configurata():
+        raise HTTPException(
+            status_code=400,
+            detail="Notifiche non configurate: servono almeno il server SMTP e un destinatario.",
+        )
+
+    corpo = pagina_mail(
+        "Prova di invio",
+        "Se leggi questo messaggio, le notifiche funzionano.",
+        '<tr><td style="padding:0 32px 14px 32px;" class="padding-laterale">'
+        '<div style="font-size:13px; color:#374151;">Da qui in poi arriveranno il riepilogo '
+        'delle scansioni automatiche e la mail di sollecito di ciò che è fermo da troppi '
+        'giorni, agli orari impostati nella sezione Configurazione.</div></td></tr>',
+    )
+
+    try:
+        return mailer.invia("Prova di invio - GestioneFatture GruppoCR", corpo)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ==========================================
@@ -1267,11 +1460,11 @@ async def get_fatture_attese(
 ):
     """La coda: fatture i cui DDT non sono ancora tutti arrivati.
 
-    È l'endpoint che alimenta la mail di sollecito di n8n. Senza parametro
-    applica GIORNI_ATTESA_SOLLECITO (30 giorni, dalla sezione Configurazione o
-    dal docker-compose): la soglia resta così un solo numero, qui, e il nodo n8n
-    non ne conserva una copia che prima o poi divergerebbe. La dashboard passa esplicitamente ?giorni=0 per
-    avere la coda intera.
+    È l'endpoint che alimenta la mail di sollecito. Senza parametro applica
+    GIORNI_ATTESA_FATTURA (30 giorni di partenza, dalla sezione Configurazione
+    o dal docker-compose): la soglia resta un solo numero, letto qui, e chi la
+    consuma non ne conserva una copia che prima o poi divergerebbe. La
+    dashboard passa esplicitamente ?giorni=0 per avere la coda intera.
 
     Le fatture sono divise per motivo, perché non si risolvono nello stesso
     modo: "attende_ddt" si sblocca da sola quando il documento viene scansionato,
@@ -1279,7 +1472,7 @@ async def get_fatture_attese(
     male, e finché nessuno lo corregge il ricontrollo darà sempre lo stesso
     risultato.
     """
-    soglia = giorni_sollecito() if giorni is None else giorni
+    soglia = giorni_attesa_fattura() if giorni is None else giorni
     voci = fatture_in_attesa(soglia)
 
     # Terza lista, e aspetta una cosa diversa dalle altre due: qui il documento
@@ -1291,7 +1484,7 @@ async def get_fatture_attese(
 
     return {
         "soglia_giorni": soglia,
-        "soglia_predefinita": giorni_sollecito(),
+        "soglia_predefinita": giorni_attesa_fattura(),
         "soglia_accoppiamento": soglia_accoppiamento,
         "totale": len(voci),
         "da_confermare": [v for v in voci if v.get("attesa", {}).get("da_confermare")],
@@ -1312,15 +1505,19 @@ async def get_ddt_senza_fattura(
     mensile — con la differenza che da questo lato non c'è niente da
     ricontrollare: ogni fattura nuova viene confrontata con tutti i DDT
     archiviati, quindi un DDT che aspetta si aggancia da solo quando l'XML
-    arriva. Se dopo un mese non è successo, o la fattura non è mai arrivata o è
-    stata scartata dal filtro fornitori.
+    arriva. Se dopo settimane non è successo, la fattura non è mai stata
+    caricata — oppure è in coda e nessuno ne ha ancora chiesto l'abbinamento.
+
+    Ha una soglia SUA (GIORNI_ATTESA_DDT), diversa da quella delle fatture:
+    quanto si aspetta una bolla dipende da chi la deve portare, quanto si
+    aspetta una fattura dipende da come fattura quel fornitore.
     """
-    soglia = giorni_sollecito() if giorni is None else giorni
+    soglia = giorni_attesa_ddt() if giorni is None else giorni
     voci = ddt_senza_fattura(soglia)
 
     return {
         "soglia_giorni": soglia,
-        "soglia_predefinita": giorni_sollecito(),
+        "soglia_predefinita": giorni_attesa_ddt(),
         "totale": len(voci),
         "ddt": voci,
     }

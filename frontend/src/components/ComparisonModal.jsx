@@ -152,6 +152,27 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                       value={editData.fornitore || ''}
                       onChange={(e) => setEditData({...editData, fornitore: e.target.value})}
                     />
+                    {/* Senza questa riga il campo sembrerebbe semplicemente non
+                        letto, e chi rivede cercherebbe sul PDF un nome che il
+                        modello aveva trovato eccome: solo che era il cliente. */}
+                    {/* Il nome sul PDF e quello nel campo possono non
+                        coincidere: se il fornitore e riconosciuto in anagrafica
+                        vince il nome principale, perche e quello con cui le
+                        fatture lo cercano. Senza questa riga sembrerebbe una
+                        lettura sbagliata. */}
+                    {editData.fornitore_letto && (
+                      <div className="form-text text-info" style={{ fontSize: '0.75rem' }}>
+                        Sul documento c&apos;&egrave; scritto <code>{editData.fornitore_letto}</code>:
+                        riconosciuto in anagrafica, tenuto il nome principale.
+                      </div>
+                    )}
+                    {editData.fornitore_scartato && (
+                      <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
+                        Il modello aveva letto <code>{editData.fornitore_scartato}</code>, marcato in
+                        anagrafica come <strong>mai un fornitore</strong> (cliente o gruppo d&apos;acquisto):
+                        scritto qui il nome di chi emette la bolla.
+                      </div>
+                    )}
                   </div>
                   
                   {/* La P.IVA e' la chiave che lega il D.D.T. alla fattura, ed
@@ -213,7 +234,9 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                     {editData.partita_iva_scartata && (
                       <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
                         Sul documento il modello aveva letto <code>{editData.partita_iva_scartata}</code>:
-                        scartata perché l'anagrafica ne ha già una confermata.
+                        scartata perché è di un&apos;altra azienda — o l&apos;anagrafica ne ha già una
+                        confermata per questo fornitore, o quel numero risulta di qualcun altro
+                        (spesso è la P.IVA del cliente, stampata sulla bolla accanto a quella giusta).
                       </div>
                     )}
                   </div>

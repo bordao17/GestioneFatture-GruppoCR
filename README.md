@@ -15,7 +15,8 @@ Il sistema utilizza un modello di linguaggio locale (Ollama) per analizzare i do
   - `KO`: Documento non leggibile o senza dati utili
 - **Accorpamento Documenti**: Unisce automaticamente pagine multiple dello stesso documento
 - **API REST**: Interfaccia moderna basata su FastAPI per l'integrazione con altri sistemi
-- **Automazione n8n**: Include configurazione per flussi di lavoro automatizzati tramite n8n
+- **Lavori automatici**: Le scansioni e la mail di sollecito possono partire a un'ora impostata dalla dashboard (o restare tutte a pulsante)
+- **Notifiche via mail**: Riepilogo di fine scansione e sollecito di ciò che è fermo da troppi giorni, composti e spediti dal backend
 - **Privacy-First**: Elabora i documenti localmente senza inviarli a servizi cloud esterni
 
 ---
@@ -24,13 +25,14 @@ Il sistema utilizza un modello di linguaggio locale (Ollama) per analizzare i do
 
 ```
 GestioneFatture - GruppoCR/
-├── docker-compose.yml       # Orchestrazione container (API + Frontend + n8n)
+├── docker-compose.yml       # Orchestrazione container (API + Frontend + Postgres)
 ├── backend/                 # Microservizio Python (FastAPI)
 │   ├── main.py              # Server API principale
 │   ├── requirements.txt     # Dipendenze Python
 │   ├── Dockerfile           # Configurazione Docker per l'API
 │   ├── data/
-│   │   └── fornitori_memoria.json  # Memoria AI sui fornitori (regole custom)
+│   │   └── fornitori_memoria.json  # Copia di scorta dell'anagrafica fornitori
+│   │                               # (la fonte e' Postgres, vedi Note tecniche)
 │   └── src/                 # Moduli del sistema
 │       ├── pdf_processor.py    # Conversione PDF in immagini
 │       ├── llm_engine.py       # Integrazione con Ollama per estrazione dati
@@ -40,8 +42,10 @@ GestioneFatture - GruppoCR/
 │       ├── raggruppatore.py    # Confronto pagine per capire se appartengono allo stesso DDT
 │       ├── accorpatore.py      # Unione a posteriori dei documenti multi-pagina
 │       ├── normalizzatore.py   # Pulizia formati dei campi estratti (date, numeri, indirizzi)
-│       ├── memory_manager.py   # Lettura/scrittura memoria fornitori
-│       └── notificatore.py     # Calcolo riepiloghi per le notifiche n8n
+│       ├── memory_manager.py   # Regole e decisioni sull'anagrafica fornitori
+│       ├── database.py         # Connessione a Postgres (nessuna tabella qui)
+│       ├── archivio_fornitori.py # Tabelle dell'anagrafica fornitori
+│       └── notificatore.py     # Calcolo riepiloghi per le mail di notifica
 ├── frontend/                # Dashboard web React (Vite)
 │   ├── src/
 │   │   ├── App.jsx          # Componente principale / routing dashboard-fornitori
@@ -58,7 +62,8 @@ GestioneFatture - GruppoCR/
 │   ├── OK/                   # PDF dei documenti completi
 │   ├── CHECK/                # PDF dei documenti da verificare
 │   └── KO/                   # PDF dei documenti non elaborabili
-└── n8n_config/                # Dati/configurazione runtime di n8n
+├── postgre/dati/             # File di Postgres: le anagrafiche (ignorato da git)
+└── n8n_snippets/              # Nodi Code del vecchio n8n: fonte storica delle mail
 ```
 
 ---
@@ -80,14 +85,16 @@ Questo è il metodo consigliato per avviare tutti i servizi necessari:
 # Clona o posizionati nella directory del progetto
 cd /workspace
 
-# Avvia tutti i servizi (API + n8n)
+# Avvia tutti i servizi (API + Frontend)
 docker-compose up --build -d
 ```
 
 I servizi saranno disponibili alle seguenti porte:
 - **API Gestione Fatture**: http://localhost:8000
 - **Dashboard Web (Frontend)**: http://localhost:3000
-- **Interfaccia n8n**: http://localhost:5678
+- **Database anagrafiche (Postgres)**: `127.0.0.1:5432`, solo da questa macchina — per puntarci un client SQL senza entrare nel container
+
+Il primo avvio in assoluto crea il cluster Postgres in `postgre/dati/` (può volerci un minuto) e importa nel database l'anagrafica fornitori che sta nel JSON. Nel log dell'API si legge `📥 Anagrafica fornitori importata nel database: N voci.`
 
 ### Dashboard Web
 
@@ -216,35 +223,53 @@ Visita questi endpoint per esplorare tutti gli endpoint disponibili e testarli d
 | `OLLAMA_HOST` | URL del servizio Ollama | `http://host.docker.internal:11434` |
 | `GENERIC_TIMEZONE` | Fuso orario per timestamp | `Europe/Rome` |
 | `PDF_RENDER_ZOOM` | Zoom di rendering PDF→immagine (`2.5` ≈ 180 DPI). Alzalo a `3.5` se il modello sbaglia cifre su scansioni scadenti, al costo di più tempo per pagina | `2.5` |
+| `DATABASE_URL` | Connessione al database delle anagrafiche. **Vuota** = nessun database: i fornitori tornano a vivere nel JSON e tutto il resto funziona uguale | impostata dal compose sul container `postgres-gestione-fatture` |
+
+`DATABASE_URL` **non** è fra le impostazioni della dashboard, e apposta: come per i percorsi, una stringa di connessione sbagliata scritta di lì toglierebbe di mezzo proprio l'anagrafica che serve a correggerla.
+
+Queste (più il modello vision, le soglie dei solleciti, gli orari dei lavori automatici e le credenziali SMTP) sono il **ripiego**, non la fonte: la sezione **Configurazione** della dashboard le sovrascrive senza ricostruire il container, e ogni campo mostra da dove viene il valore che sta girando. L'elenco completo, con i valori di partenza commentati, è nel `docker-compose.yml`.
 
 ### Volumi Docker
 
 Il sistema utilizza le seguenti cartelle per la persistenza dei dati:
 
-- `./fatture_da_leggere`: Posiziona qui i PDF da elaborare
-- `./fatture_lette`: Contiene i risultati dell'elaborazione (suddivisi per stato)
-- `./data`: Dati interni dell'applicazione
-- `./n8n_config`: Configurazione delle automazioni n8n
+- `./DDT`: `da_leggere/` per le scansioni in arrivo, `lette/` per i registri e i PDF archiviati
+- `./FATTURE`: `da_leggere/` per gli XML in arrivo, `lette/` per i registri e gli originali
+- `./ACCOPPIATE`: il prodotto finito, i file unici fattura+DDT con un nome leggibile
+- `./backend/data`: configurazione salvata dalla dashboard e copia di scorta dell'anagrafica fornitori
+- `./postgre/dati`: i file di Postgres, cioè le anagrafiche. **Ignorata da git** (sono file di database, non configurazione) e da non cancellare a cuor leggero: è lì che vivono i fornitori
 
 ---
 
-## 🤖 Automazione con n8n
+## ⏰ Lavori automatici e notifiche
 
-Il progetto include una configurazione predefinita per n8n, un potente strumento di automazione del flusso di lavoro.
+Fino al 2026-09-09 l'orologio e l'invio delle mail erano un container n8n a parte. Oggi stanno nel backend, dove sta già tutto ciò che decide: `backend/src/comune/pianificatore.py` guarda l'ora, `backend/src/notifiche/` compone e spedisce.
 
-### Accesso a n8n
+### I tre lavori
 
-1. Apri il browser e vai su: http://localhost:5678
-2. Completa la configurazione iniziale al primo accesso
-3. Importa i workflow dalla cartella `n8n_config/`
+| Lavoro | Cosa fa | Impostazione |
+|--------|---------|--------------|
+| Scansione D.D.T. | Elabora tutto ciò che è fermo in `DDT/da_leggere/` | `ORARIO_SCANSIONE_DDT` |
+| Scansione fatture | Legge e archivia gli XML fermi in `FATTURE/da_leggere/` | `ORARIO_SCANSIONE_FATTURE` |
+| Sollecito | Manda la mail di ciò che aspetta da troppi giorni | `ORARIO_SOLLECITO` |
 
-### Workflow Disponibili
+Gli orari sono nel formato `HH:MM` e si impostano dalla sezione **Configurazione** della dashboard. **Il campo vuoto significa "non pianificare"**, ed è il valore di partenza: senza toccarli il sistema resta tutto a pulsanti. L'ordine consigliato è prima i D.D.T. e poi le fatture, che li cercano.
 
-I workflow preconfigurati permettono di:
-- Monitorare la cartella `fatture_da_leggere` per nuovi documenti
-- Chiamare automaticamente l'API di estrazione
-- Inviare notifiche per documenti in stato `CHECK` o `KO`
-- Generare report periodici
+Il pannello **Lavori automatici**, in cima alla sezione Configurazione, dice quando toccherà la prossima volta e com'è andata l'ultima, e ha un pulsante **Esegui adesso** che passa dalla stessa strada dell'esecuzione notturna.
+
+Un backend spento all'ora prevista **salta il giro**: non recupera all'avvio, per non far partire una scansione a sorpresa il mattino dopo.
+
+### Le mail
+
+Servono `SMTP_HOST` e `MAIL_DESTINATARI`; senza, i lavori girano lo stesso e semplicemente nessuno riceve niente — le notifiche sono un di più, non un ingranaggio. `SMTP_PASSWORD` è l'unico valore che la dashboard non rimanda mai al browser: si vede mascherato e si cancella solo svuotando il campo. Il pulsante **Invia mail di prova** serve a saperlo subito, invece di scoprirlo il mattino dopo.
+
+- **Riepilogo scansione D.D.T.** — conteggi OK/CHECK/KO, il motivo per cui ogni CHECK è finita lì, le pratiche diventate pronte da accoppiare e i file non elaborati.
+- **Riepilogo fatture** — cosa è entrato, con le anomalie sul cedente (P.IVA assente, diversa da quella in anagrafica, fornitore mai visto).
+- **Sollecito** — le fatture che aspettano una bolla, quelle che aspettano solo un click e le bolle che nessuna fattura ha agganciato. Se non c'è niente da sollecitare **non parte**: una mail "nessuna fattura in attesa" verrebbe ignorata entro tre giorni, comprese le volte in cui dice qualcosa.
+
+Le soglie del sollecito sono **tre e indipendenti**, tutte nella sezione Configurazione: `GIORNI_ATTESA_FATTURA` (30) per una fattura a cui mancano i D.D.T., `GIORNI_ATTESA_DDT` (30) per una bolla che nessuna fattura ha agganciato, `GIORNI_ATTESA_ACCOPPIAMENTO` (7, più corto) per una pratica completa che aspetta solo la firma. Partono uguali sulle prime due, ma sono due attese diverse: la prima dipende da chi deve portare la bolla, la seconda dal giro di fatturazione del fornitore.
+
+`MAIL_RIEPILOGO_SCANSIONE` (`pianificate` | `sempre` | `mai`) decide quando mandare il riepilogo di fine scansione. Il default è `pianificate`: chi preme *Analizza* dalla dashboard sta già guardando l'esito.
 
 ---
 
@@ -273,8 +298,18 @@ Se un DDT occupa più pagine, ogni pagina viene analizzata singolarmente e poi l
 
 Verifica che:
 1. Docker sia correttamente installato e in esecuzione
-2. La porta 8000 e 5678 non siano già occupate
+2. Le porte 8000, 3000 e 5432 non siano già occupate
 3. Ollama sia in esecuzione sulla macchina host
+
+### I fornitori non si vedono più nella dashboard
+
+Quasi sempre è il database delle anagrafiche che non risponde. Il backend **non** si ferma per questo: ripiega sulla copia su file e scrive in log `⚠️ Anagrafica fornitori non leggibile dal database (...): uso la copia su file.`, ma i salvataggi falliscono con un 500 finché il database non torna (un salvataggio che non salva niente non va raccontato come riuscito).
+
+1. `docker compose ps` — il container `postgres_fatture_gruppocr` dev'essere `healthy`
+2. `docker compose logs postgres-gestione-fatture`
+3. `docker compose up -d postgres-gestione-fatture` per rialzarlo
+
+Se serve tornare a lavorare **senza** database, svuota `DATABASE_URL` nel `docker-compose.yml` e riavvia l'API: i fornitori tornano a vivere nel JSON, com'era fino al 2026-09-10. La copia su file è aggiornata all'ultimo salvataggio riuscito.
 
 ### Errori di connessione a Ollama
 
@@ -298,13 +333,15 @@ Controlla che:
 - **Frontend Dashboard**: React 19 con Vite, Bootstrap 5, `lucide-react`, `react-pdf`
 - **Motore AI**: Ollama, modello `qwen2.5vl:7b` (vision multimodale)
 - **Elaborazione PDF**: PyMuPDF (fitz) per il rendering, Pillow per il riassemblaggio
-- **Automazione**: n8n
+- **Anagrafiche**: PostgreSQL 16 (container `postgres:16-alpine`, dati in `postgre/dati/`), driver `psycopg`. Ci vivono le anagrafiche — **non** i registri dei documenti, che restano file JSON accanto ai PDF e agli XML che descrivono
+- **Pianificazione e mail**: thread interno al backend + `smtplib` (nessun servizio esterno)
 - **Server Web Frontend**: Nginx (in produzione)
 - **Containerizzazione**: Docker e Docker Compose
 
 ### ⚠️ Problemi noti
 
-- `n8n_config/` è interamente tracciato in git (dati di runtime: cache, `database.sqlite`, log, binary data delle esecuzioni), non è escluso dal `.gitignore`. Lasciato così di proposito: il progetto va spostato su un'altra macchina e questi dati (workflow, credenziali, storico esecuzioni n8n) servono a portare l'ambiente com'è.
+- `n8n_snippets/` è tracciato in git e non escluso dal `.gitignore`: è la fonte storica delle tre mail, oggi in `backend/src/notifiche/`. Il codice in esecuzione non lo legge.
+- `n8n_config/` (327 MB di stato runtime di n8n) è stato **cancellato il 2026-09-11**. Era tracciato in git, quindi si recupera da un commit precedente con `git checkout <commit> -- n8n_config`. Attenzione: la cancellazione ha ripulito la cartella di lavoro ma **non** il repository — i blob restano nella storia e `.git` pesa comunque ~106 MB.
 
 ---
 

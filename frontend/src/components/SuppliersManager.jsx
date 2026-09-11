@@ -17,7 +17,7 @@ const CAMPI_REGOLABILI = [
 export default function SuppliersManager({ apiUrl, onSaved }) {
   const [suppliers, setSuppliers] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE
+  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState(null);
   // PUT /api/fornitori sovrascrive l'INTERO file: finche' non si salva, le
@@ -122,7 +122,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
         [name]: {
           confermato: "no", note_specifiche: "", indirizzi_vietati: [],
           regole_campo: [], nomi_alternativi: [], partita_iva: "",
-          partita_iva_confermata: true, autorizzato: true,
+          partita_iva_confermata: true, autorizzato: true, mai_fornitore: false,
         }
       }));
       // In ordine alfabetico e a 50 per pagina la voce appena creata puo'
@@ -152,6 +152,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
     if (!name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (filtro === 'PIVA') return pivaDaConfermare(data);
     if (filtro === 'REGOLE') return data.confermato === 'yes' || regoleDi(data).length > 0;
+    if (filtro === 'CLIENTI') return data.mai_fornitore === true;
     return true;
   });
 
@@ -265,6 +266,7 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
             {pulsanteFiltro('TUTTI', 'Tutti', voci.length, 'light')}
             {pulsanteFiltro('PIVA', 'P.IVA da confermare', daConfermare, 'primary')}
             {pulsanteFiltro('REGOLE', 'Con regola AI', voci.filter(([, d]) => d.confermato === 'yes' || regoleDi(d).length > 0).length, 'info')}
+            {pulsanteFiltro('CLIENTI', 'Mai fornitori', voci.filter(([, d]) => d.mai_fornitore === true).length, 'danger')}
             <button className="btn btn-outline-light btn-sm d-flex align-items-center gap-1" onClick={addNewSupplier}>
               <Plus size={16} /> Aggiungi
             </button>
@@ -278,10 +280,16 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                 <div className="row">
                   <div className="col-md-3 border-end border-secondary">
                     <div className="d-flex justify-content-between align-items-start gap-2">
-                      <h6 className="fw-bold text-light mb-1 d-flex align-items-center gap-2">
-                        {pivaDaConfermare(data)
-                          ? <KeyRound size={16} className="text-primary flex-shrink-0" />
-                          : <ShieldCheck size={16} className="text-success flex-shrink-0" />}
+                    {/* L'icona dice a colpo d'occhio di che voce si tratta:
+                        un cliente marcato "mai fornitore" non è un fornitore a
+                        cui manca qualcosa, è una voce che serve a FERMARE una
+                        lettura, e aprirla per scoprirlo sarebbe un giro inutile. */}
+                    <h6 className="fw-bold text-light mb-1 d-flex align-items-center gap-2">
+                        {data.mai_fornitore
+                          ? <Ban size={16} className="text-danger flex-shrink-0" />
+                          : pivaDaConfermare(data)
+                            ? <KeyRound size={16} className="text-primary flex-shrink-0" />
+                            : <ShieldCheck size={16} className="text-success flex-shrink-0" />}
                         {name}
                       </h6>
                       <button
@@ -320,9 +328,11 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       )}
                     </div>
                     <div className="form-text text-secondary" style={{ fontSize: '0.72rem' }}>
-                      {pivaDaConfermare(data)
-                        ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma.'
-                        : 'Si compila da sola: dalla prima fattura di questo fornitore, o dalla lettura del suo primo D.D.T.'}
+                      {data.mai_fornitore
+                        ? 'È la P.IVA del cliente: quando il modello la legge su un D.D.T. il campo viene svuotato, mai attribuito al fornitore.'
+                        : pivaDaConfermare(data)
+                          ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma.'
+                          : 'Si compila da sola: dalla prima fattura di questo fornitore, o dalla lettura del suo primo D.D.T.'}
                     </div>
 
                     {/* L'interruttore "Autorizzato" e' stato tolto il 2026-09-08:
@@ -342,6 +352,27 @@ export default function SuppliersManager({ apiUrl, onSaved }) {
                       />
                       <label className="form-check-label small text-secondary" htmlFor={`switch-${name}`}>
                         Regola attiva — lettura D.D.T.
+                      </label>
+                    </div>
+
+                    {/* Il gruppo d'acquisto e le insegne dei punti vendita sono
+                        stampati in cima alla bolla con la stessa evidenza
+                        dell'emittente, e il modello li scambia per il fornitore.
+                        Marcarli qui li ferma: sul documento il campo resta vuoto
+                        e la bolla finisce in CHECK, invece di essere archiviata
+                        in OK a nome del cliente. Vale anche per la P.IVA scritta
+                        qui sotto, che è la loro. */}
+                    <div className="form-check form-switch mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id={`cliente-${name}`}
+                        checked={data.mai_fornitore === true}
+                        onChange={(e) => updateSupplier(name, 'mai_fornitore', e.target.checked)}
+                      />
+                      <label className="form-check-label small text-danger" htmlFor={`cliente-${name}`}>
+                        Non è mai un fornitore (cliente / gruppo)
                       </label>
                     </div>
                   </div>

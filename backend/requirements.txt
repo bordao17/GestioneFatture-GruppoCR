@@ -15,3 +15,7 @@ tzdata
 # Sbustamento delle fatture elettroniche firmate (.xml.p7m): pura ASN.1, niente
 # compilazione. Regge anche le buste BER che un parser fatto in casa romperebbe.
 asn1crypto>=1.5.1
+
+# Anagrafiche su Postgres (src/comune/database.py). Il driver "binary" evita
+# di dover compilare libpq nell'immagine slim: niente gcc, niente libpq-dev.
+psycopg[binary]>=3.1

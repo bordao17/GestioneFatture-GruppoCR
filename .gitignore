@@ -50,3 +50,12 @@ backend/env/
 !backend/data/.gitkeep
 *.sqlite3
 *.db
+# =========================
+# Database delle anagrafiche (Postgres)
+# =========================
+# I file di Postgres sono stato runtime: centinaia di MB che cambiano a ogni
+# scrittura e che non si leggono fuori dal container. La lezione e' n8n_config/,
+# 327 MB di sqlite finiti in git. Il contenuto utile dell'anagrafica resta
+# leggibile e versionato in backend/data/fornitori_memoria.json, che
+# salva_memoria() riscrive a ogni salvataggio come copia di scorta.
+postgre/dati/

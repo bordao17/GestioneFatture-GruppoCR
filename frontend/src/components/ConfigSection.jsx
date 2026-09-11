@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Save, RotateCcw, Sliders, AlertTriangle, Info } from 'lucide-react';
+import PannelloLavori from './PannelloLavori';
+
+// La stessa di configurazione.py: il backend manda questa al posto della
+// password SMTP e la riconosce quando torna indietro. Un valore che non esce
+// mai dal server non puo' finire nella cache del browser.
+const MASCHERA = '••••••';
 
 /**
  * Sezione Configurazione: le impostazioni che si cambiano senza ricostruire.
@@ -15,12 +21,15 @@ import { Save, RotateCcw, Sliders, AlertTriangle, Info } from 'lucide-react';
  * modifica fatta di qui rompe qualcosa — per questo l'origine di ogni valore è
  * scritta accanto al campo.
  */
-export default function ConfigSection({ apiUrl, onErrore }) {
+export default function ConfigSection({ apiUrl, onErrore, onAvviso, onRicarica }) {
   const [impostazioni, setImpostazioni] = useState([]);
   const [bozza, setBozza] = useState({});
   const [caricamento, setCaricamento] = useState(true);
   const [salvataggio, setSalvataggio] = useState(false);
   const [esito, setEsito] = useState(null);
+  // Cresce a ogni salvataggio: toccato un orario, il pannello dei lavori deve
+  // ricalcolare la prossima esecuzione invece di mostrare quella di prima.
+  const [versione, setVersione] = useState(0);
 
   const carica = useCallback(async () => {
     setCaricamento(true);
@@ -63,6 +72,7 @@ export default function ConfigSection({ apiUrl, onErrore }) {
       const voci = res.data.impostazioni || [];
       setImpostazioni(voci);
       setBozza(Object.fromEntries(voci.map((i) => [i.chiave, String(i.valore ?? '')])));
+      setVersione((v) => v + 1);
       setEsito({
         tipo: (res.data.scartate || []).length > 0 ? 'warning' : 'success',
         testo: (res.data.scartate || []).length > 0
@@ -74,6 +84,56 @@ export default function ConfigSection({ apiUrl, onErrore }) {
     } finally {
       setSalvataggio(false);
     }
+  };
+
+  /**
+   * Il campo giusto per il tipo dell'impostazione.
+   *
+   * Non è cosmesi: un orario scritto a mano si sbaglia (`8:00`, `20.30`, `8`) e
+   * il backend lo scarterebbe in silenzio dal punto di vista di chi guarda,
+   * mentre un `<input type="time">` non può produrre una forma sbagliata. Stesso
+   * discorso per le tre sicurezze SMTP, che sono un elenco chiuso.
+   */
+  const campo = (impostazione, valore, cambiata, cambia) => {
+    const classe = `form-control bg-black text-white ${cambiata ? 'border-warning' : 'border-secondary'}`;
+
+    if (impostazione.tipo === 'scelta') {
+      return (
+        <select
+          id={impostazione.chiave}
+          className={`form-select bg-black text-white ${cambiata ? 'border-warning' : 'border-secondary'}`}
+          value={valore}
+          onChange={(e) => cambia(e.target.value)}
+        >
+          {(impostazione.opzioni || []).map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+      );
+    }
+
+    // Il segreto arriva già mascherato dal backend e torna indietro tale e
+    // quale, a dire "lascia com'è": la dashboard rimanda sempre la bozza
+    // intera, quindi senza la maschera salvare un orario cancellerebbe la
+    // password SMTP. Svuotare il campo la cancella davvero, come per gli altri.
+    const segreto = impostazione.segreto;
+    const tipo = segreto ? 'password'
+      : impostazione.tipo === 'orario' ? 'time'
+      : impostazione.tipo === 'testo' ? 'text' : 'number';
+
+    return (
+      <input
+        id={impostazione.chiave}
+        type={tipo}
+        step={impostazione.tipo === 'decimale' ? '0.1' : '1'}
+        min={impostazione.minimo}
+        max={impostazione.massimo}
+        autoComplete={segreto ? 'new-password' : 'off'}
+        className={classe}
+        value={valore}
+        placeholder={segreto ? 'nessuna password' : `predefinito: ${impostazione.default || '(vuoto)'}`}
+        onChange={(e) => cambia(e.target.value)}
+        onFocus={segreto ? (e) => { if (e.target.value === MASCHERA) cambia(''); } : undefined}
+      />
+    );
   };
 
   const badgeOrigine = (origine) => {
@@ -119,6 +179,13 @@ export default function ConfigSection({ apiUrl, onErrore }) {
         </div>
 
         <div className="card-body">
+          <PannelloLavori
+            apiUrl={apiUrl}
+            versione={versione}
+            onAvviso={onAvviso}
+            onFatto={onRicarica}
+          />
+
           <div className="alert bg-info bg-opacity-10 border border-info border-opacity-25 text-light py-2 d-flex gap-2 align-items-start">
             <Info size={18} className="text-info flex-shrink-0 mt-1" />
             <small className="mb-0">
@@ -160,21 +227,18 @@ export default function ConfigSection({ apiUrl, onErrore }) {
                     </div>
 
                     <div className="col-lg-3">
-                      <input
-                        id={impostazione.chiave}
-                        type={impostazione.tipo === 'testo' ? 'text' : 'number'}
-                        step={impostazione.tipo === 'decimale' ? '0.1' : '1'}
-                        min={impostazione.minimo}
-                        max={impostazione.massimo}
-                        className={`form-control bg-black text-white ${cambiata ? 'border-warning' : 'border-secondary'}`}
-                        value={bozza[impostazione.chiave] ?? ''}
-                        placeholder={`predefinito: ${impostazione.default}`}
-                        onChange={(e) => setBozza((prec) => ({ ...prec, [impostazione.chiave]: e.target.value }))}
-                      />
+                      {campo(impostazione, bozza[impostazione.chiave] ?? '', cambiata,
+                        (v) => setBozza((prec) => ({ ...prec, [impostazione.chiave]: v })))}
                       {impostazione.minimo !== undefined && (
                         <small className="text-secondary">
                           ammesso da {impostazione.minimo} a {impostazione.massimo}
                         </small>
+                      )}
+                      {impostazione.tipo === 'orario' && (
+                        <small className="text-secondary">vuoto = non pianificato</small>
+                      )}
+                      {impostazione.segreto && cambiata && !bozza[impostazione.chiave] && (
+                        <small className="text-warning">verr&agrave; rimossa al salvataggio</small>
                       )}
                     </div>
 
