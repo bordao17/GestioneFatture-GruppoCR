@@ -61,22 +61,6 @@
     "stato_manuale": "2026-09-11T12:37:38.321973+02:00"
   },
   {
-    "id": "1e4a97cb-03a7-4511-852c-dcadd5aab391",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:01.710322+02:00",
-    "dati": {
-      "fornitore": "VERCHA EXPRESS SRL",
-      "numero_ddt": "2025135013",
-      "data_ddt": "29-10-2025",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01041010156"
-    },
-    "rianalisi": "2026-09-11T12:05:45.221097+02:00",
-    "stato_manuale": "2026-09-11T12:37:47.327447+02:00"
-  },
-  {
     "id": "1996d4be-2111-4e9f-b529-b15b26938cf4",
     "file_origine": "20260911112653890.pdf",
     "timestamp": "2026-09-11T11:24:49.546874+02:00",
@@ -174,5 +158,22 @@
       "indirizzo_scartato": "VIA DEL RAME, 06134 PONTE FELCINO Z. IND (PG)"
     },
     "rianalisi": "2026-09-11T14:10:32.708671+02:00"
+  },
+  {
+    "id": "1e4a97cb-03a7-4511-852c-dcadd5aab391",
+    "file_origine": "20260911112653890.pdf",
+    "timestamp": "2026-09-11T11:27:01.710322+02:00",
+    "dati": {
+      "fornitore": "",
+      "numero_ddt": "2025135013",
+      "data_ddt": "29-10-2025",
+      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA",
+      "indirizzo_consegna": "VIA DEL RAME, 2, 06134 PERUGIA FONTE FELCINO (PG)",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "fornitore_scartato": "VERCHA EXPRESS SRL"
+    },
+    "rianalisi": "2026-09-11T14:48:02.932881+02:00",
+    "stato_manuale": "2026-09-11T12:37:47.327447+02:00"
   }
 ]

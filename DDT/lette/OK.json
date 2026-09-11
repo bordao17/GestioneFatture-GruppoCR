@@ -291,11 +291,12 @@
       "fornitore": "S&G SNC",
       "numero_ddt": "506/2026",
       "data_ddt": "15-05-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE (RI) ITALY",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE (RI), ITALY",
       "leggibilita_bassa": false,
       "partita_iva": "01327080550"
-    }
+    },
+    "rianalisi": "2026-09-11T14:39:37.173709+02:00"
   },
   {
     "id": "7e627fdb-574b-4010-97a4-4c3f64fe205a",
@@ -305,11 +306,12 @@
       "fornitore": "NATRULY ITALIA SRL",
       "numero_ddt": "IT25DN000818",
       "data_ddt": "28-10-2025",
-      "ragione_sociale_consegna": "PAC2000A SOCIETÀ COOPERATIVA",
-      "indirizzo_consegna": "SPAZIO CONAD RIETI CITTADUCALE VIA DELLE SCIENZE 18 / 20, 02010 RIETI CITTADUCALE",
+      "ragione_sociale_consegna": "SPAZIO CONAD RIETI CITTADUCALE",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18 / 20, 02101 RIETI CITTADUCALE",
       "leggibilita_bassa": false,
       "partita_iva": "16222991008"
-    }
+    },
+    "rianalisi": "2026-09-11T14:38:25.579167+02:00"
   },
   {
     "id": "93f222d2-4c54-4c50-8127-5ac8f1f41c1b",

@@ -448,7 +448,7 @@
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "03633121003",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "ITALTRANS SPA": {
@@ -538,6 +538,17 @@
                 "etichetta": "la voce Destinazione"
             }
         ]
+    },
+    "LINDT & SPRUNGLI SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "Il nome del fornitore è riconoscibile in alto a destra dal logo Lindt, non ti confondere con la ditta di trasporto VERCHA EXPRESS SRL",
+        "partita_iva": "00197480122",
+        "partita_iva_confermata": true,
+        "regole_campo": []
     },
     "LORIS SRL": {
         "autorizzato": true,
@@ -729,14 +740,19 @@
     },
     "NATRULY ITALIA SRL": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "16222991008",
         "partita_iva_confermata": false,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Delivery address"
+            }
+        ]
     },
     "NEW POINT SPA - SOCIETÀ UNIPERSONALE": {
         "autorizzato": true,
@@ -1063,14 +1079,19 @@
     },
     "S&G SNC": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01327080550",
         "partita_iva_confermata": false,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione"
+            }
+        ]
     },
     "SA.BA DI SABATINI EUGENIO FISH": {
         "autorizzato": true,
@@ -1292,19 +1313,14 @@
     },
     "VERCHA EXPRESS SRL": {
         "autorizzato": true,
-        "confermato": "yes",
+        "confermato": "no",
         "indirizzi_vietati": [],
-        "mai_fornitore": false,
+        "mai_fornitore": true,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "01041010156",
+        "partita_iva": "",
         "partita_iva_confermata": false,
-        "regole_campo": [
-            {
-                "campo": "indirizzo_consegna",
-                "etichetta": "accanto la voce Destinatario:"
-            }
-        ]
+        "regole_campo": []
     },
     "VILLA GUELFA SRL": {
         "autorizzato": true,
