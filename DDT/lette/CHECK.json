@@ -1,115 +1,152 @@
 [
   {
-    "id": "75f958e0-589f-4d19-98f5-2b3bd0ffea07",
-    "file_origine": "20260911112653890.pdf",
-    "numero_pagine": 2,
-    "timestamp": "2026-09-11T11:23:40.196031+02:00",
+    "id": "9676d427-21db-42e9-913a-5a84acc0e5c7",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:09:37.303181+02:00",
+    "firme_pagine": [
+      "2684aa509aa87a6871e770a697f9a5de61796130de53d20da51172d8503a6fb0"
+    ],
     "dati": {
-      "fornitore": "VITAKRAFT ITALIA SPA",
-      "numero_ddt": "377074",
-      "data_ddt": "07-08-2026",
+      "fornitore": "LOGISTICA GRILLO 1939 SRL",
+      "numero_ddt": "3577/1",
+      "data_ddt": "31-08-2026",
       "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "",
+      "indirizzo_consegna": "VIA CRESPINA, 37, 00146 ROMA (RM)",
       "leggibilita_bassa": false,
-      "partita_iva": "02267570543"
-    }
+      "partita_iva": "00146"
+    },
+    "stato_manuale": "2026-09-14T09:11:40.336823+02:00"
   },
   {
-    "id": "388a9243-84b1-4ba1-9f45-65e5e7cf3caa",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:12.843135+02:00",
+    "id": "7760914e-f1b8-46c6-bfd2-6505232cd57d",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:52.637004+02:00",
+    "firme_pagine": [
+      "df953f8a7066a0b58cf60d72b7e9fbff42e36abc79ea649a1ee63ddb832927d3"
+    ],
     "dati": {
-      "fornitore": "PROZIS.COM, S.A.",
-      "numero_ddt": "PRS/293176",
-      "data_ddt": "08-10-2025",
-      "ragione_sociale_consegna": "SPAZIO CONAD CITTADUCATE (RI)",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 - CITTADUCATE (RI) ITALIA",
+      "fornitore": "CENTRO MARCHE DISTRIBUZIONE",
+      "numero_ddt": "1653",
+      "data_ddt": "04-08-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA' DUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "01591680283",
+      "fornitore_letto": "CENTRO MARCHE DISTRIBUZIONE & C. SNC"
+    },
+    "rianalisi": "2026-09-14T09:24:34.399687+02:00",
+    "stato_manuale": "2026-09-14T09:24:35.974438+02:00"
+  },
+  {
+    "id": "efadae94-872f-420d-888e-f679eb2352f3",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:31.576490+02:00",
+    "firme_pagine": [
+      "8094f6ff73d0aa80f5cdf1800e745cffebb53ce8b76f83208cce79cc2604c792"
+    ],
+    "dati": {
+      "fornitore": "GM GRANDI MARCHE - SOCIETÀ A SOCIO UNICO",
+      "numero_ddt": "31342",
+      "data_ddt": "27-10-2025",
+      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOPERATIVA",
+      "indirizzo_consegna": "VIA DEL RAME SNC, 06134 FONTE FELCINO (PG)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00366810281"
+    },
+    "stato_manuale": "2026-09-14T09:27:24.714173+02:00"
+  },
+  {
+    "id": "79312c70-c563-4f68-b1f7-09f38e093302",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:03.546230+02:00",
+    "firme_pagine": [
+      "c3a93a8aa1945850a9dfb4043269c433876df103175cd285ad9afd8364d65f6d"
+    ],
+    "dati": {
+      "fornitore": "GAMMA PRODUCTIONS SRL",
+      "numero_ddt": "1202/B",
+      "data_ddt": "25-10-2025",
+      "ragione_sociale_consegna": "P.V. SPAZIO CONAD",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "03251490540",
+      "fornitore_scartato": "GRUPPO C.R. SPA"
+    },
+    "rianalisi": "2026-09-14T09:33:03.614367+02:00"
+  },
+  {
+    "id": "b57ed03d-35ad-466f-97b4-09c8cc2d5776",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:50.013343+02:00",
+    "firme_pagine": [
+      "e3f7b23ef526c21bec973b0087cacb45e2bae8b7842faafe61abe7e45651b13c"
+    ],
+    "dati": {
+      "fornitore": "FROMI GMBH",
+      "numero_ddt": "3470057",
+      "data_ddt": "23-01-2026",
+      "ragione_sociale_consegna": "CONAD CITTADUCALE",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "054000005",
+      "fornitore_letto": "FROMFI GMBH"
+    },
+    "stato_manuale": "2026-09-14T09:34:48.035501+02:00"
+  },
+  {
+    "id": "ad00e09c-0fd3-4d89-aa31-be1d8477cff8",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:23.596655+02:00",
+    "firme_pagine": [
+      "208403ac017c1aa65128b0d7f192f0149962cbdf2268db3a7c117c8878a3d620"
+    ],
+    "dati": {
+      "fornitore": "CAPITELLI F.LLI SRL",
+      "numero_ddt": "2025 - IT 005997",
+      "data_ddt": "27-10-2025",
+      "ragione_sociale_consegna": "PAC2000 CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 - CITTA' DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00272710336"
+    },
+    "rianalisi": "2026-09-14T09:37:36.341825+02:00",
+    "stato_manuale": "2026-09-14T09:37:56.938981+02:00"
+  },
+  {
+    "id": "921d1fa9-af83-40aa-854c-abade6687338",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:38.744171+02:00",
+    "firme_pagine": [
+      "c634ab8fd1aa56c1042546d64d4939b148a05140a967f942a67433b62bcc6344"
+    ],
+    "dati": {
+      "fornitore": "BIG SRL",
+      "numero_ddt": "200190",
+      "data_ddt": "02-01-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04492200961"
+    },
+    "stato_manuale": "2026-09-14T10:12:46.342954+02:00"
+  },
+  {
+    "id": "21fcfd04-b237-4d76-b80f-71cf3c328cc4",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:01:47.627015+02:00",
+    "firme_pagine": [
+      "a0e121ca7c1b2954341b1114145954b8f528190564e4e3734243721722729bfa"
+    ],
+    "dati": {
+      "fornitore": "LNPF ITALIA (*)",
+      "numero_ddt": "019193/L",
+      "data_ddt": "09-06-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
       "partita_iva": "",
       "partita_iva_scartata": "00163040546"
     },
-    "stato_manuale": "2026-09-11T12:37:38.321973+02:00"
-  },
-  {
-    "id": "1996d4be-2111-4e9f-b529-b15b26938cf4",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:49.546874+02:00",
-    "dati": {
-      "fornitore": "PASTIFICIO RANA SPA",
-      "numero_ddt": "3103",
-      "data_ddt": "31-08-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015, CITTADUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "01397480235",
-      "fornitore_letto": "PASTIFICIO RANA"
-    },
-    "rianalisi": "2026-09-11T12:47:11.462349+02:00",
-    "stato_manuale": "2026-09-11T12:48:48.132001+02:00"
-  },
-  {
-    "id": "84275a9b-e455-4f51-9dfb-065e2b8bedb8",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:44.023763+02:00",
-    "dati": {
-      "fornitore": "SAIS SRL",
-      "numero_ddt": "1649507",
-      "data_ddt": "17-02-2026",
-      "ragione_sociale_consegna": "IPERMERCATO RIETI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE N.20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "13205901005"
-    },
-    "stato_manuale": "2026-09-11T12:50:44.444036+02:00"
-  },
-  {
-    "id": "f126b4c8-612b-43a9-8580-4505be3bb38e",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:21.360743+02:00",
-    "dati": {
-      "fornitore": "SAL. PI UNO SRL",
-      "numero_ddt": "6.233/00",
-      "data_ddt": "11-08-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "",
-      "leggibilita_bassa": false,
-      "partita_iva": "00810470674",
-      "fornitore_letto": "SALPI SRL INDUSTRIA SALUMI",
-      "indirizzo_scartato": "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)"
-    },
-    "rianalisi": "2026-09-11T13:02:27.925581+02:00"
-  },
-  {
-    "id": "d5cecec9-bc9a-4731-bcf9-2c64120a76f2",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:23.726275+02:00",
-    "dati": {
-      "fornitore": "HARIBO ITALIA SRL",
-      "numero_ddt": "615099",
-      "data_ddt": "13-08-2026",
-      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOPERATIVA",
-      "indirizzo_consegna": "",
-      "leggibilita_bassa": false,
-      "partita_iva": "06132770154",
-      "indirizzo_scartato": "VIA DEL RAME, 06134 PONTE FELCINO Z. IND (PG)"
-    },
-    "rianalisi": "2026-09-11T14:10:32.708671+02:00"
-  },
-  {
-    "id": "1e4a97cb-03a7-4511-852c-dcadd5aab391",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:01.710322+02:00",
-    "dati": {
-      "fornitore": "",
-      "numero_ddt": "2025135013",
-      "data_ddt": "29-10-2025",
-      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA",
-      "indirizzo_consegna": "VIA DEL RAME, 2, 06134 PERUGIA FONTE FELCINO (PG)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "fornitore_scartato": "VERCHA EXPRESS SRL"
-    },
-    "rianalisi": "2026-09-11T14:48:02.932881+02:00",
-    "stato_manuale": "2026-09-11T12:37:47.327447+02:00"
+    "stato_manuale": "2026-09-14T11:23:43.981263+02:00"
   }
 ]

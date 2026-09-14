@@ -15,7 +15,7 @@ export const STATI_DDT = {
     etichetta: 'Da verificare',
     badge: 'bg-warning text-dark',
     colore: 'warning',
-    spiegazione: 'Manca qualche campo, oppure la scansione è poco leggibile: va riguardato a mano.',
+    spiegazione: 'Manca qualche campo, la scansione è poco leggibile, oppure il fornitore è marcato critico: va riguardato a mano.',
   },
   KO: {
     etichetta: 'Errore',

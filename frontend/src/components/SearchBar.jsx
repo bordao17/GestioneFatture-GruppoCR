@@ -42,7 +42,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, searchField, setS
               />
               {attiva && (
                 <button
-                  className="btn btn-outline-secondary text-white"
+                  className="btn btn-outline-secondary"
                   onClick={() => setSearchTerm('')}
                   title="Azzera la ricerca"
                 >

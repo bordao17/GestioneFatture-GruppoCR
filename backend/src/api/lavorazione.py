@@ -21,7 +21,7 @@ import uuid
 
 from fastapi import HTTPException
 
-from src.api.supporto import ricontrolla_fatture_in_attesa
+from src.api.supporto import esigi_motore_pronto, ricontrolla_fatture_in_attesa
 from src.comune import stato_elaborazione
 from src.comune.memory_manager import (
     aggiorna_fornitore, registra_fornitore_fattura, verifica_fornitore_fattura,
@@ -54,6 +54,13 @@ def elabora_ddt(file_path, nome_file):
     rendendo irraggiungibile qualsiasi altra chiamata — compresa
     /api/elaborazione, cioè proprio la barra di avanzamento.
     """
+    # PRIMA di tutto il resto: se il motore AI non risponde non si comincia
+    # nemmeno. Solleva 503 e a quel punto non e' stato toccato niente — nessuna
+    # pagina renderizzata, nessun PDF archiviato, e soprattutto il file resta
+    # dov'e'. E' la differenza fra un documento da riprovare e uno letto a
+    # meta', che e' il caso che non lascia traccia di se'.
+    esigi_motore_pronto()
+
     t_totale_inizio = time.time()
     print(f"🚀 Apertura file: {nome_file}")
 

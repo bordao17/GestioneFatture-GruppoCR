@@ -72,6 +72,13 @@ def unisci_dati_pagina(dati_gruppo, dati_nuova_pagina, campi_da_unire=CAMPI_DA_U
     if dati_nuova_pagina.get("leggibilita_bassa"):
         dati_gruppo["leggibilita_bassa"] = True
 
+    # Come la leggibilità: basta una pagina. Il fornitore lo si legge in
+    # testata, quindi su un documento di tre pagine la marcatura arriva spesso
+    # da una sola — e senza questa riga l'accorpamento riporterebbe in OK
+    # proprio il documento che deve finire in CHECK.
+    if dati_nuova_pagina.get("fornitore_critico"):
+        dati_gruppo["fornitore_critico"] = True
+
     return dati_gruppo
 
 

@@ -17,6 +17,7 @@ from typing import List
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
 from src.api.lavorazione import elabora_ddt, elabora_fattura
+from src.api.supporto import esigi_motore_pronto
 from src.comune.configurazione import valore
 from src.comune.percorsi import CARTELLA_DDT_INGRESSO, CARTELLA_FATTURE_INGRESSO
 from src.comune.tempo import adesso
@@ -137,6 +138,18 @@ def _scansione_ddt(origine="manuale"):
     inizio = adesso()
     nomi = _file_in_ingresso(CARTELLA_DDT_INGRESSO, ESTENSIONI_DDT)
     print(f"📥 Scansione {origine} di DDT/da_leggere: {len(nomi)} file da elaborare.")
+
+    # Il motore si controlla una volta per batch, e solo se c'e' davvero
+    # qualcosa da analizzare: su una cartella vuota non c'e' niente da fermare.
+    # elabora_ddt() ha lo stesso controllo, ma la' finirebbe N volte identico
+    # nell'elenco dei falliti, e "10 file non elaborati" non dice PERCHE'. Qui
+    # invece la scansione non parte affatto e il motivo e' uno solo: la
+    # dashboard lo mostra al posto dell'esito, e il pianificatore lo registra
+    # come esito del lavoro notturno — che e' l'unico modo di sapere il mattino
+    # dopo che la scansione delle 2:00 non e' partita, invece di trovare
+    # semplicemente la cartella ancora piena.
+    if nomi:
+        esigi_motore_pronto()
 
     elaborati, falliti, sbloccate, duplicati = [], [], [], []
 

@@ -44,6 +44,13 @@ def _motivo_check(dati):
     if dati.get("leggibilita_bassa"):
         return "Campi completi, ma scansione di bassa qualita"
 
+    # Dopo i campi mancanti e la leggibilita', perche' quelle due dicono cosa
+    # c'e' da fare; questa dice solo che il documento va riletto comunque. Se
+    # non si dicesse, un CHECK con tutti i campi pieni e la scansione buona
+    # sembrerebbe finito li' per errore.
+    if dati.get("fornitore_critico"):
+        return "Fornitore critico: sempre da ricontrollare"
+
     return "Da verificare"
 
 

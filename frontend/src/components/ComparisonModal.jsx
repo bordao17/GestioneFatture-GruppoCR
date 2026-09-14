@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Download, Sparkles, Receipt, KeyRound, Check, Lock, BookUser } from 'lucide-react';
+import { Download, Sparkles, Receipt, KeyRound, Check, Lock, BookUser, AlertTriangle, Globe } from 'lucide-react';
 import { STATI_DDT, ORDINE_STATI, infoStato } from './etichetteDdt';
 import SelettoreFornitore from './SelettoreFornitore';
 
@@ -33,6 +33,11 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
   // decisa e qui il campo si blocca: si conferma UNA volta, con il PDF a
   // fianco, poi si corregge solo dall'anagrafica.
   const pivaConfermata = selectedDoc.partita_iva_confermata === true;
+
+  // Un fornitore estero non ha una P.IVA italiana: il campo resta bloccato ma
+  // il lucchetto "Confermata" racconterebbe la cosa sbagliata, e il pulsante
+  // Conferma inviterebbe a completare una chiave che non esiste.
+  const fornitoreEstero = selectedDoc.fornitore_estero === true;
 
   // Funzione che scarica il file bypassando le restrizioni
   const handleDownloadPDF = async () => {
@@ -195,6 +200,20 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                         o vettore): scritto qui il nome di chi emette la bolla.
                       </div>
                     )}
+                    {/* È l'unica ragione di CHECK che non si vede guardando i
+                        campi: senza questa riga un documento con tutto pieno e
+                        la scansione buona sembrerebbe finito lì per errore. */}
+                    {editData.fornitore_critico && (
+                      <div className="form-text text-warning d-flex align-items-start gap-1" style={{ fontSize: '0.75rem' }}>
+                        <AlertTriangle size={13} className="flex-shrink-0 mt-1" />
+                        <span>
+                          Marcato in anagrafica come <strong>fornitore critico</strong>: le sue bolle vanno
+                          sempre in CHECK, anche con tutti i campi letti. Controlla i dati sul PDF qui a
+                          fianco — è per questo che il documento è qui.
+                        </span>
+                      </div>
+                    )}
+
                     {!editData.fornitore && (
                       <div className="form-text text-warning" style={{ fontSize: '0.75rem' }}>
                         Senza fornitore la bolla resta in CHECK e nessuna fattura può agganciarla.
@@ -214,7 +233,28 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                       rilegge piu'. */}
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-body-secondary">Partita IVA fornitore</label>
-                    {pivaConfermata ? (
+                    {fornitoreEstero ? (
+                      <>
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className="form-control text-body-secondary font-monospace"
+                            value={selectedDoc.identificativo_estero || editData.partita_iva || ''}
+                            placeholder="Nessun identificativo in anagrafica"
+                            readOnly
+                            disabled
+                          />
+                          <span className="input-group-text bg-info bg-opacity-25 border-info text-info d-flex align-items-center gap-1">
+                            <Globe size={14} /> Estero
+                          </span>
+                        </div>
+                        <div className="form-text text-body-secondary" style={{ fontSize: '0.75rem' }}>
+                          <strong>{editData.fornitore || 'Questo fornitore'}</strong> è marcato come estero:
+                          non ha una partita IVA italiana e non c&apos;è niente da confermare. L&apos;identificativo
+                          fiscale estero, se serve, si scrive dalla sezione <strong>Fornitori</strong>.
+                        </div>
+                      </>
+                    ) : pivaConfermata ? (
                       <>
                         <div className="input-group">
                           <input

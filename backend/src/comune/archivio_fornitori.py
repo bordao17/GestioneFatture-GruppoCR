@@ -15,9 +15,10 @@ esattamente la struttura che stava nel JSON:
                         "indirizzi_vietati": [...], "regole_campo": [...],
                         "nomi_alternativi": [...], "partita_iva": "...",
                         "partita_iva_confermata": True, "autorizzato": True,
-                        "mai_fornitore": False}}
+                        "mai_fornitore": False, "fornitore_estero": False,
+                        "identificativo_estero": "", "fornitore_critico": False}}
 
-Nove chiavi, sempre tutte presenti: e' cio' che unifica_memoria() produce, e
+Dodici chiavi, sempre tutte presenti: e' cio' che unifica_memoria() produce, e
 salva_memoria() la applica a ogni scrittura. Per questo il giro
 dizionario -> tabelle -> dizionario non perde niente e nessun altro modulo si
 accorge del cambio.
@@ -32,11 +33,12 @@ database.
 
 from src.comune.database import connessione
 
-# Le nove chiavi della voce, nell'ordine in cui unifica_memoria() le scrive.
+# Le dodici chiavi della voce, nell'ordine in cui unifica_memoria() le scrive.
 CHIAVI_VOCE = (
     "confermato", "note_specifiche", "indirizzi_vietati", "regole_campo",
     "nomi_alternativi", "partita_iva", "partita_iva_confermata",
-    "autorizzato", "mai_fornitore",
+    "autorizzato", "mai_fornitore", "fornitore_estero",
+    "identificativo_estero", "fornitore_critico",
 )
 
 # Lo schema. Ogni istruzione e' IF NOT EXISTS: prepara() gira a ogni avvio, e
@@ -55,6 +57,13 @@ SCHEMA = (
         autorizzato             BOOLEAN NOT NULL DEFAULT TRUE,
         -- Il divieto e' l'eccezione e va scritto: default permissivo.
         mai_fornitore           BOOLEAN NOT NULL DEFAULT FALSE,
+        -- Fornitore estero: non ha una P.IVA italiana e non l'avra' mai.
+        -- L'identificativo fiscale estero e' FACOLTATIVO, da qui il default ''.
+        fornitore_estero        BOOLEAN NOT NULL DEFAULT FALSE,
+        identificativo_estero   TEXT    NOT NULL DEFAULT '',
+        -- Fornitore critico: le sue bolle vanno sempre in CHECK. Come sopra,
+        -- l'eccezione si scrive e il default e' il permissivo.
+        fornitore_critico       BOOLEAN NOT NULL DEFAULT FALSE,
         creato_il               TIMESTAMPTZ NOT NULL DEFAULT now(),
         aggiornato_il           TIMESTAMPTZ NOT NULL DEFAULT now()
     )
@@ -65,6 +74,17 @@ SCHEMA = (
     # legittimamente duplicarsi finche' nessuno le ha guardate.
     "CREATE INDEX IF NOT EXISTS fornitori_partita_iva_idx "
     "ON fornitori (partita_iva) WHERE partita_iva <> ''",
+    # Le colonne aggiunte dopo il 2026-09-11 vanno anche in ALTER: prepara()
+    # esegue lo SCHEMA a ogni avvio, ma su un database gia' creato il
+    # "CREATE TABLE IF NOT EXISTS" non fa niente e da solo non le porterebbe
+    # mai. Sono idempotenti, quindi restano qui accanto al CREATE invece che in
+    # uno script di migrazione da ricordarsi di lanciare a mano.
+    "ALTER TABLE fornitori ADD COLUMN IF NOT EXISTS "
+    "fornitore_estero BOOLEAN NOT NULL DEFAULT FALSE",
+    "ALTER TABLE fornitori ADD COLUMN IF NOT EXISTS "
+    "identificativo_estero TEXT NOT NULL DEFAULT ''",
+    "ALTER TABLE fornitori ADD COLUMN IF NOT EXISTS "
+    "fornitore_critico BOOLEAN NOT NULL DEFAULT FALSE",
     # posizione: l'ordine degli elenchi e' quello in cui l'utente li ha scritti
     # e va restituito uguale, altrimenti la textarea della dashboard si
     # rimescola sotto gli occhi di chi la sta compilando.
@@ -116,7 +136,8 @@ def leggi():
     with connessione() as conn:
         for riga in conn.execute(
             "SELECT chiave, confermato, note_specifiche, partita_iva, "
-            "       partita_iva_confermata, autorizzato, mai_fornitore "
+            "       partita_iva_confermata, autorizzato, mai_fornitore, "
+            "       fornitore_estero, identificativo_estero, fornitore_critico "
             "FROM fornitori"
         ):
             memoria[riga["chiave"]] = {
@@ -129,6 +150,9 @@ def leggi():
                 "partita_iva_confermata": riga["partita_iva_confermata"],
                 "autorizzato": riga["autorizzato"],
                 "mai_fornitore": riga["mai_fornitore"],
+                "fornitore_estero": riga["fornitore_estero"],
+                "identificativo_estero": riga["identificativo_estero"],
+                "fornitore_critico": riga["fornitore_critico"],
             }
 
         for riga in conn.execute(
@@ -184,8 +208,10 @@ def scrivi(memoria):
                 """
                 INSERT INTO fornitori (chiave, confermato, note_specifiche,
                                        partita_iva, partita_iva_confermata,
-                                       autorizzato, mai_fornitore)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                       autorizzato, mai_fornitore,
+                                       fornitore_estero, identificativo_estero,
+                                       fornitore_critico)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (chiave) DO UPDATE SET
                     confermato = EXCLUDED.confermato,
                     note_specifiche = EXCLUDED.note_specifiche,
@@ -193,6 +219,9 @@ def scrivi(memoria):
                     partita_iva_confermata = EXCLUDED.partita_iva_confermata,
                     autorizzato = EXCLUDED.autorizzato,
                     mai_fornitore = EXCLUDED.mai_fornitore,
+                    fornitore_estero = EXCLUDED.fornitore_estero,
+                    identificativo_estero = EXCLUDED.identificativo_estero,
+                    fornitore_critico = EXCLUDED.fornitore_critico,
                     aggiornato_il = now()
                 """,
                 (
@@ -203,6 +232,9 @@ def scrivi(memoria):
                     bool(voce.get("partita_iva_confermata", True)),
                     bool(voce.get("autorizzato", True)),
                     bool(voce.get("mai_fornitore", False)),
+                    bool(voce.get("fornitore_estero", False)),
+                    voce.get("identificativo_estero", "") or "",
+                    bool(voce.get("fornitore_critico", False)),
                 ),
             )
 

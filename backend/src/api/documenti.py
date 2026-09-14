@@ -22,10 +22,13 @@ from fastapi.responses import FileResponse
 
 from src.api.lavorazione import elabora_ddt
 from src.api.supporto import (
-    annota_stato_piva, ricontrolla_fatture_in_attesa, sposta_documento, trova_documento,
+    annota_stato_piva, esigi_motore_pronto, ricontrolla_fatture_in_attesa,
+    sposta_documento, trova_documento,
 )
 from src.comune import stato_elaborazione
-from src.comune.memory_manager import aggiorna_fornitore, conferma_partita_iva
+from src.comune.memory_manager import (
+    aggiorna_fornitore, annota_fornitore_critico, conferma_partita_iva,
+)
 from src.comune.normalizzatore import normalizza_partita_iva
 from src.comune.pdf_writer import salva_pdf_multipagina
 from src.comune.percorsi import CARTELLA_DDT
@@ -108,6 +111,12 @@ def crea_documento_manuale(
 
     if not any(dati[campo] for campo in CAMPI_OBBLIGATORI):
         raise HTTPException(status_code=400, detail="Compila almeno un campo del documento.")
+
+    # Questa è l'unica strada che archivia un D.D.T. senza passare da
+    # llm_engine, quindi il flag del fornitore critico va scritto qui a mano:
+    # altrimenti un inserimento manuale sarebbe il solo modo di far entrare in
+    # OK la bolla di un fornitore che l'utente ha marcato apposta.
+    dati = annota_fornitore_critico(dati)
 
     # Stessa regola degli altri documenti: se manca qualcosa finisce in CHECK,
     # così un inserimento incompleto resta visibile tra quelli da verificare.
@@ -355,6 +364,12 @@ def rianalizza_documento(doc_id: str):
     path_pdf = percorso_pdf_documento(stato_origine, doc_id)
     if not path_pdf:
         raise HTTPException(status_code=404, detail=f"PDF non trovato per ID: {doc_id}")
+
+    # Come nell'estrazione: si controlla prima di accendere la barra di
+    # avanzamento. Qui i dati vecchi non andrebbero comunque persi (la scrittura
+    # avviene in fondo), ma un 503 che dice "Ollama non risponde" e' un'altra
+    # cosa rispetto a un 500 "Rianalisi fallita" con dentro una traccia di rete.
+    esigi_motore_pronto()
 
     print(f"🔁 Rianalisi documento id={doc_id} (stato attuale: {stato_origine})")
     t_totale_inizio = time.time()

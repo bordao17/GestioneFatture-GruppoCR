@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Paginazione, { usePaginazione } from './Paginazione';
-import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check, Loader2, Pencil, X, Truck } from 'lucide-react';
+import { Save, Info, Search, Plus, Ban, ShieldCheck, BrainCircuit, Trash2, AlertCircle, Crosshair, Tags, KeyRound, Check, Loader2, Pencil, X, Truck, Globe, AlertTriangle } from 'lucide-react';
 
 // I campi che una regola mirata può indirizzare. Devono restare allineati a
 // CAMPI_REGOLABILI in backend/src/comune/memory_manager.py: una regola su un
@@ -44,7 +44,7 @@ const sembraVettore = (name) => {
 export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica = 0 }) {
   const [suppliers, setSuppliers] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI | VETTORI
+  const [filtro, setFiltro] = useState('TUTTI'); // TUTTI | PIVA | REGOLE | CLIENTI | ESTERI | CRITICI | VETTORI
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState(null);
   // PUT /api/fornitori sovrascrive l'INTERO file: finche' non si salva, le
@@ -61,18 +61,22 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
     fetchSuppliers();
   }, []);
 
-  // L'anagrafica e' cambiata altrove: dal modale di revisione di un D.D.T., che
-  // resta aperto anche passando a questa sezione. Va riletta, perche' la PUT di
-  // "Salva Anagrafica" sovrascrive TUTTO e salvare una bozza vecchia
-  // riporterebbe a "da confermare" una P.IVA appena confermata. Con modifiche
-  // in corso non si rilegge — si perderebbero — ma si dice che c'e' da rileggere.
+  // Va riletta l'anagrafica. Due i motivi, e da qui non si distinguono: e'
+  // cambiata altrove (il modale di un D.D.T. resta aperto anche passando a
+  // questa sezione, e confermarci una P.IVA la tocca), oppure e' stato premuto
+  // "Sincronizza", che e' la richiesta esplicita di rileggere tutto.
+  // Rileggere serve perche' la PUT di "Salva Anagrafica" sovrascrive TUTTO:
+  // salvare una bozza vecchia riporterebbe a "da confermare" una P.IVA appena
+  // confermata. Con modifiche in corso NON si rilegge — si perderebbero — ma
+  // si dice che c'e' da rileggere, invece di lasciar credere di essere aggiornati.
   useEffect(() => {
     if (!versioneAnagrafica) return;
     if (modificato) {
       setSaveMessage({
         type: 'warning',
-        text: "L'anagrafica e' cambiata da un'altra parte (una P.IVA confermata dal D.D.T.). "
-            + 'Salvando ora le tue modifiche la sovrascrivi: ricarica la pagina se non sei sicuro.',
+        text: 'Ci sono modifiche non salvate, quindi l\'anagrafica NON e\' stata riletta: '
+            + 'ricaricarla ora le cancellerebbe. Salvale, oppure ricarica la pagina per '
+            + 'buttarle e rileggere la versione sul server.',
       });
       return;
     }
@@ -270,6 +274,7 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
           confermato: "no", note_specifiche: "", indirizzi_vietati: [],
           regole_campo: [], nomi_alternativi: [], partita_iva: "",
           partita_iva_confermata: true, autorizzato: true, mai_fornitore: false,
+          fornitore_estero: false, identificativo_estero: "", fornitore_critico: false,
         }
       }));
       // In ordine alfabetico e a 50 per pagina la voce appena creata puo'
@@ -283,7 +288,11 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
   // esatto); quelle LETTE dal modello su una scansione scrivono false
   // esplicitamente, e sono le uniche che chiedono un occhio umano.
   const isPivaConfermata = (data) => data.partita_iva_confermata !== false;
-  const pivaDaConfermare = (data) => !!data.partita_iva && !isPivaConfermata(data);
+  // Un fornitore estero non ha una P.IVA italiana e non l'avra' mai: tenerlo
+  // nella coda delle conferme lascerebbe un badge nel menu che non cala mai, e
+  // un numero che non cala mai smette di essere letto.
+  const pivaDaConfermare = (data) =>
+    !!data.partita_iva && !isPivaConfermata(data) && data.fornitore_estero !== true;
 
   // Ordine alfabetico e non quello di inserimento: qui si cerca un fornitore
   // per nome, e l'ordine in cui le scansioni lo hanno incontrato non aiuta.
@@ -295,12 +304,16 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
   );
   const daConfermare = voci.filter(([, data]) => pivaDaConfermare(data)).length;
   const vettoriDaGuardare = voci.filter(([name, data]) => sembraVettore(name) && data.mai_fornitore !== true).length;
+  const esteri = voci.filter(([, data]) => data.fornitore_estero === true).length;
+  const critici = voci.filter(([, data]) => data.fornitore_critico === true).length;
 
   const filteredSuppliers = voci.filter(([name, data]) => {
     if (!name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (filtro === 'PIVA') return pivaDaConfermare(data);
     if (filtro === 'REGOLE') return data.confermato === 'yes' || regoleDi(data).length > 0;
     if (filtro === 'CLIENTI') return data.mai_fornitore === true;
+    if (filtro === 'ESTERI') return data.fornitore_estero === true;
+    if (filtro === 'CRITICI') return data.fornitore_critico === true;
     // Solo quelli ANCORA da marcare: un elenco che non cala mai smette di
     // essere letto, ed e' la stessa regola dei badge sulle voci di menu.
     if (filtro === 'VETTORI') return sembraVettore(name) && data.mai_fornitore !== true;
@@ -433,6 +446,8 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
             {pulsanteFiltro('PIVA', 'P.IVA da confermare', daConfermare, 'primary')}
             {pulsanteFiltro('REGOLE', 'Con regola AI', voci.filter(([, d]) => d.confermato === 'yes' || regoleDi(d).length > 0).length, 'info')}
             {pulsanteFiltro('CLIENTI', 'Mai fornitori', voci.filter(([, d]) => d.mai_fornitore === true).length, 'danger')}
+        {pulsanteFiltro('ESTERI', 'Esteri', esteri, 'info')}
+            {pulsanteFiltro('CRITICI', 'Critici', critici, 'warning')}
             {pulsanteFiltro('VETTORI', 'Sembrano vettori', vettoriDaGuardare, 'warning')}
             <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" onClick={addNewSupplier}>
               <Plus size={16} /> Aggiungi
@@ -508,6 +523,22 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                             ? <KeyRound size={16} className="text-primary flex-shrink-0" />
                             : <ShieldCheck size={16} className="text-success flex-shrink-0" />}
                         {name}
+                        {data.fornitore_estero === true && (
+                          <span
+                            className="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 d-flex align-items-center gap-1"
+                            title="Fornitore estero: nessuna P.IVA italiana da cercare ne' da confermare."
+                          >
+                            <Globe size={12} /> estero
+                          </span>
+                        )}
+                        {data.fornitore_critico === true && (
+                          <span
+                            className="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 d-flex align-items-center gap-1"
+                            title="Fornitore critico: le sue bolle finiscono sempre in CHECK, anche con tutti i campi letti."
+                          >
+                            <AlertTriangle size={12} /> critico
+                          </span>
+                        )}
                         {sembraVettore(name) && !data.mai_fornitore && (
                           <span
                             className="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 d-flex align-items-center gap-1"
@@ -548,8 +579,9 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                       <input
                         type="text"
                         className={`form-control form-control-sm font-monospace ${pivaDaConfermare(data) ? 'border-primary' : ''}`}
-                        placeholder="Non ancora nota"
+                        placeholder={data.fornitore_estero === true ? 'Non ne ha una' : 'Non ancora nota'}
                         value={data.partita_iva || ''}
+                        disabled={data.fornitore_estero === true}
                         onChange={(e) => updateSupplier(name, 'partita_iva', e.target.value.replace(/\D/g, ''))}
                       />
                       {pivaDaConfermare(data) && (
@@ -560,18 +592,46 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                           title="Confermo che questa è la partita IVA del fornitore (si salva subito)"
                         >
                           {pivaInCorso === name
-                            ? <Loader2 size={14} className="fa-spin" />
+                            ? <Loader2 size={14} className="gira" />
                             : <Check size={14} />} Conferma
                         </button>
                       )}
                     </div>
                     <div className="form-text text-body-secondary" style={{ fontSize: '0.72rem' }}>
-                      {data.mai_fornitore
-                        ? 'È la P.IVA del cliente: quando il modello la legge su un D.D.T. il campo viene svuotato, mai attribuito al fornitore.'
-                        : pivaDaConfermare(data)
-                          ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma. La conferma si salva da sola, senza "Salva Anagrafica".'
-                          : 'Si compila da sola: dalla prima fattura di questo fornitore, o dalla lettura del suo primo D.D.T.'}
+                      {data.fornitore_estero === true
+                        ? 'Fornitore estero: il campo italiano resta vuoto e il modello non prova più a leggerlo sulle bolle.'
+                        : data.mai_fornitore
+                          ? 'È la P.IVA del cliente: quando il modello la legge su un D.D.T. il campo viene svuotato, mai attribuito al fornitore.'
+                          : pivaDaConfermare(data)
+                            ? 'Letta dal modello su un D.D.T.: correggila se sbagliata, poi conferma. La conferma si salva da sola, senza "Salva Anagrafica".'
+                            : 'Si compila da sola: dalla prima fattura di questo fornitore, o dalla lettura del suo primo D.D.T.'}
                     </div>
+
+                    {/* Il campo estero compare solo quando serve: su
+                        un'anagrafica quasi tutta italiana un secondo campo vuoto
+                        sotto ogni voce sarebbe soltanto rumore. Ed è
+                        FACOLTATIVO — un fornitore estero si può marcare e
+                        basta, l'identificativo si scrive se lo si ha. */}
+                    {data.fornitore_estero === true && (
+                      <>
+                        <label className="form-label small text-info mb-1 mt-3">
+                          Identificativo fiscale estero{' '}
+                          <span className="text-body-secondary">(facoltativo)</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm font-monospace"
+                          placeholder="es. DE811128135"
+                          value={data.identificativo_estero || ''}
+                          onChange={(e) => updateSupplier(name, 'identificativo_estero', e.target.value.toUpperCase())}
+                        />
+                        <div className="form-text text-body-secondary" style={{ fontSize: '0.72rem' }}>
+                          Il VAT number del paese d'origine. Se lo scrivi, è con questo che le sue fatture
+                          elettroniche riconoscono il cedente: il prefisso paese si può mettere o togliere,
+                          il confronto guarda solo le cifre.
+                        </div>
+                      </>
+                    )}
 
                     {/* L'interruttore "Autorizzato" e' stato tolto il 2026-09-08:
                         da quando le fatture si caricano a mano non filtra piu'
@@ -611,6 +671,44 @@ export default function SuppliersManager({ apiUrl, onSaved, versioneAnagrafica =
                       />
                       <label className="form-check-label small text-danger" htmlFor={`cliente-${name}`}>
                         Non è mai un fornitore (cliente, gruppo d'acquisto, vettore)
+                      </label>
+                    </div>
+
+                    {/* Senza questo interruttore il sistema continua a cercare
+                        una P.IVA italiana che non esiste: la domanda mirata al
+                        modello riparte su ogni pagina di ogni bolla (la voce non
+                        si riempie mai) e ogni sua fattura esce con la
+                        segnalazione "P.IVA del cedente assente". */}
+                    <div className="form-check form-switch mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id={`estero-${name}`}
+                        checked={data.fornitore_estero === true}
+                        onChange={(e) => updateSupplier(name, 'fornitore_estero', e.target.checked)}
+                      />
+                      <label className="form-check-label small text-info" htmlFor={`estero-${name}`}>
+                        Fornitore estero — non ha una partita IVA italiana
+                      </label>
+                    </div>
+
+                    {/* Una bolla con tutti e quattro i campi pieni finisce in OK
+                        e nessuno la riapre: il classificatore sa contare i campi
+                        letti, non giudicare il documento. Se sappiamo già che
+                        questo fornitore li stampa sbagliati, è l'unico modo di
+                        tenere le sue bolle sotto gli occhi di qualcuno. */}
+                    <div className="form-check form-switch mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id={`critico-${name}`}
+                        checked={data.fornitore_critico === true}
+                        onChange={(e) => updateSupplier(name, 'fornitore_critico', e.target.checked)}
+                      />
+                      <label className="form-check-label small text-warning" htmlFor={`critico-${name}`}>
+                        Fornitore critico — le sue bolle vanno sempre in CHECK
                       </label>
                     </div>
                   </div>

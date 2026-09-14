@@ -51,6 +51,7 @@ export default function DdtSection({
         descrizione="Cartella in ingresso DDT/da_leggere: qui finiscono le scansioni in attesa di essere lette dal modello."
         onFatto={onScansione}
         onErrore={onErrore}
+        controllaMotore
       />
 
       <ProcessingBar lavori={lavoriInCorso} />

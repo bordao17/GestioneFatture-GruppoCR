@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit2, Trash2, Receipt } from 'lucide-react';
+import { Edit2, Trash2, Receipt, AlertTriangle } from 'lucide-react';
 import { infoStato } from './etichetteDdt';
 
 export default function DocumentTable({ documents, onEdit, onDelete, selectedIds = [], onToggleSelect, onApriFattura }) {
@@ -67,9 +67,22 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                         {doc.status}{doc.stato_manuale && '*'}
                       </span>
                     </td>
-                    <td className="text-white fw-medium">{doc.dati?.fornitore || campoMancante}</td>
-                    <td className="font-monospace text-white fw-bold">{doc.dati?.numero_ddt || campoMancante}</td>
-                    <td className="font-monospace text-white">{doc.dati?.data_ddt || campoMancante}</td>
+                    <td className="text-body fw-medium">
+                      {doc.dati?.fornitore || campoMancante}
+                      {/* Senza questo badge un CHECK con tutti e quattro i campi
+                          pieni sembrerebbe finito lì per errore: è l'unico stato
+                          che non si spiega guardando le colonne accanto. */}
+                      {doc.dati?.fornitore_critico && (
+                        <span
+                          className="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 d-inline-flex align-items-center gap-1 ms-2"
+                          title="Fornitore critico: le sue bolle vanno sempre in CHECK, anche con tutti i campi letti."
+                        >
+                          <AlertTriangle size={12} /> critico
+                        </span>
+                      )}
+                    </td>
+                    <td className="font-monospace text-body fw-bold">{doc.dati?.numero_ddt || campoMancante}</td>
+                    <td className="font-monospace text-body">{doc.dati?.data_ddt || campoMancante}</td>
                     <td>
                       {doc.fattura?.numero_fattura ? (
                         <button

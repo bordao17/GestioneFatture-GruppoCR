@@ -1,1132 +1,1165 @@
 [
   {
-    "id": "abb53bee-c430-4255-b42e-5fe6f94ac441",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:19:39.684422+02:00",
+    "id": "58a17a37-0ea8-44a1-9e14-d501b61c123e",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:01:26.924460+02:00",
+    "firme_pagine": [
+      "57b18834fda6e1dfa3c9d35269220354b565e8a2da4297f39715bbadaa5746fc"
+    ],
     "dati": {
-      "fornitore": "MANZI GIOVANNI SRL",
-      "numero_ddt": "B27/51637",
-      "data_ddt": "05-09-2026",
-      "ragione_sociale_consegna": "DEST.NE CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015, CITTADUCALE (RI)",
+      "fornitore": "I.D.B. INDUSTRIA DOLCIARIA BELPASSO SPA",
+      "numero_ddt": "5843",
+      "data_ddt": "01-12-2025",
+      "ragione_sociale_consegna": "IPERMERCATO CITTADUCALE",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE RI (IT)",
       "leggibilita_bassa": false,
-      "partita_iva": "02423440599"
+      "partita_iva": "02483770877"
     },
-    "rianalisi": "2026-09-11T15:18:28.887823+02:00"
+    "rianalisi": "2026-09-14T11:26:20.241275+02:00"
   },
   {
-    "id": "38b437fe-769a-40a7-933e-855f6fce2908",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:19:45.100766+02:00",
+    "id": "510ff840-b93d-42bf-ab2c-560e50879fbb",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:01:33.826209+02:00",
+    "firme_pagine": [
+      "0ef8901e05ce93aaa6158656cd8d802fe2091890fd98c5625eebfd4c7142fc40"
+    ],
     "dati": {
-      "fornitore": "PAI SPA",
-      "numero_ddt": "241FZBB50048",
-      "data_ddt": "30-04-2026",
+      "fornitore": "G & B SRL",
+      "numero_ddt": "3481",
+      "data_ddt": "03-09-2026",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA VIA DELLE SCIENZE 18/20, 02016 CITTADUCALE (RI)",
+      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02010 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "12190280151"
+      "partita_iva": "14065791007"
     }
   },
   {
-    "id": "ef8a21a8-8d1a-46c8-af1f-b3daa4e9449e",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:19:51.001180+02:00",
+    "id": "8cb18fcd-3668-413b-9752-5a5ce411c506",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:01:40.634017+02:00",
+    "firme_pagine": [
+      "2f3fc3c09e6cbe18daa0f3aa20cb9f65afb14a91b4a1cca9dd73cfb5f74b813e"
+    ],
     "dati": {
-      "fornitore": "GRANDEIMPERO",
-      "numero_ddt": "48445 / 005",
-      "data_ddt": "05-06-2026",
-      "ragione_sociale_consegna": "CONAD - CITTA DUCALE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18, 02015 CITTÀ DUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "17857411009"
-    }
-  },
-  {
-    "id": "eb981a6f-9286-446a-af77-db59b5aff061",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:19:56.558293+02:00",
-    "dati": {
-      "fornitore": "O SOLE 'E NAPULE DI CALABRIA ALFONSO SRL",
-      "numero_ddt": "5450",
-      "data_ddt": "05-08-2026",
-      "ragione_sociale_consegna": "CREF SRL - PAC 2000",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18/20 2100 CITTA' DUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "02691611210"
-    }
-  },
-  {
-    "id": "10a34b36-10c4-4feb-ac93-52cd71e16294",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:02.085090+02:00",
-    "dati": {
-      "fornitore": "OLGA ITALIA SRL",
-      "numero_ddt": "TR008312",
-      "data_ddt": "07-08-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD - CITTA DUCALE (RI)",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18-20, 02015 CITTA DUCALE - RI (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00745180349"
-    }
-  },
-  {
-    "id": "75d4b9a0-81b4-4073-9d9e-d188d86ef7ef",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:07.580749+02:00",
-    "dati": {
-      "fornitore": "PABULO SRL",
-      "numero_ddt": "37790",
-      "data_ddt": "07-08-2026",
-      "ragione_sociale_consegna": "CONAD CITTADUCALE",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "13421601009"
-    }
-  },
-  {
-    "id": "719c579b-05d7-414a-b21d-e2bea859fa57",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:13.074865+02:00",
-    "dati": {
-      "fornitore": "MARI LIBRI SRL",
-      "numero_ddt": "26SV002481",
-      "data_ddt": "31-03-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02528610427"
-    },
-    "rianalisi": "2026-09-11T15:13:23.221515+02:00"
-  },
-  {
-    "id": "75dcfc75-5cb7-4847-bb16-bc474c968ebe",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:19.099535+02:00",
-    "dati": {
-      "fornitore": "PICA ITALIA SPA",
-      "numero_ddt": "4094",
-      "data_ddt": "27-07-2026",
-      "ragione_sociale_consegna": "151981 CREF SRL - SPAZIO RIETI",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00163040546"
-    }
-  },
-  {
-    "id": "9c6d3c70-f29f-40f4-802f-c9885e0b24f9",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:24.799977+02:00",
-    "dati": {
-      "fornitore": "SO.DI.FER.SRL",
-      "numero_ddt": "23326",
-      "data_ddt": "07-08-2026",
-      "ragione_sociale_consegna": "CREF SRL (RIETI) - 151981 CONAD",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02250740400"
-    },
-    "rianalisi": "2026-09-11T15:09:06.508215+02:00"
-  },
-  {
-    "id": "96bba681-8aa1-45fc-b68f-31f81cce1019",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:30.812715+02:00",
-    "dati": {
-      "fornitore": "WITOR'S SPA",
-      "numero_ddt": "25018168",
-      "data_ddt": "10-12-2025",
-      "ragione_sociale_consegna": "CREF SRL - CITTÀ DUCALE (RI)",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTÀ DUCALE RI, ITALY",
-      "leggibilita_bassa": false,
-      "partita_iva": "12300660151"
-    },
-    "rianalisi": "2026-09-11T15:07:53.773661+02:00"
-  },
-  {
-    "id": "9107cdf9-b4f5-4c18-9000-64c50f1de0f1",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:36.304739+02:00",
-    "dati": {
-      "fornitore": "TENDER SRL",
-      "numero_ddt": "BO-2026-977",
-      "data_ddt": "15-06-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD CITTA' DUCALE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA' DELLE STELLE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02526330218"
-    }
-  },
-  {
-    "id": "57470445-ba9a-4fb0-9d8a-0f3f644cbc49",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:42.303796+02:00",
-    "dati": {
-      "fornitore": "OROPAN SRL",
-      "numero_ddt": "3135",
-      "data_ddt": "12-06-2026",
-      "ragione_sociale_consegna": "CREF SRL - CITTADUCALE",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE N.18/20, 02015 CITTADUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00163040546"
-    }
-  },
-  {
-    "id": "039af964-e764-4a88-940f-9a32ab0a499b",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:47.733936+02:00",
-    "dati": {
-      "fornitore": "PARTENOPE DISTRIBUZIONE SRL",
-      "numero_ddt": "4834",
-      "data_ddt": "08-06-2026",
-      "ragione_sociale_consegna": "CREF SRL -CITTADUCALE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "09281311218"
-    },
-    "rianalisi": "2026-09-11T15:02:50.917257+02:00"
-  },
-  {
-    "id": "54f7c20b-65e9-4179-bdb7-53780f767897",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:53.863229+02:00",
-    "dati": {
-      "fornitore": "NT FOOD SRL UNIPERSONALE",
-      "numero_ddt": "26015205",
-      "data_ddt": "08-06-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD CREF SRL CITT'A DUCALE RIETI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01354500462"
-    },
-    "rianalisi": "2026-09-11T15:01:59.473457+02:00"
-  },
-  {
-    "id": "9f4921c1-f837-4676-a48f-e9560c8714c3",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:20:59.455083+02:00",
-    "dati": {
-      "fornitore": "URBANI TARTUFI SRL CON SOCIO UNICO",
-      "numero_ddt": "DT2600771",
-      "data_ddt": "28-05-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DEL RAME, 06077 PONTE FELCINO PG ITA",
-      "leggibilita_bassa": false,
-      "partita_iva": "02554550547"
-    }
-  },
-  {
-    "id": "a2d16e00-e00d-4c03-b63a-64f862b41e8e",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:05.507984+02:00",
-    "dati": {
-      "fornitore": "YAKULT",
-      "numero_ddt": "6456",
-      "data_ddt": "25-05-2026",
-      "ragione_sociale_consegna": "PAC 2000 CITTADUCALE",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02010 GROTTI DI CITTADUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "0745180349"
-    }
-  },
-  {
-    "id": "236f535b-4ae3-49d6-a7a9-51e7c2879f91",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:10.848739+02:00",
-    "dati": {
-      "fornitore": "IGAM SPA",
-      "numero_ddt": "DT25012852",
-      "data_ddt": "19-12-2025",
+      "fornitore": "GABBIANO SPA",
+      "numero_ddt": "SGE/033493",
+      "data_ddt": "09-03-2026",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI) (IT)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE, RI ITALY",
       "leggibilita_bassa": false,
-      "partita_iva": "07225770721"
+      "partita_iva": "01495800201"
     },
-    "rianalisi": "2026-09-11T14:57:47.128247+02:00"
+    "rianalisi": "2026-09-14T11:25:15.849249+02:00"
   },
   {
-    "id": "a262f62f-4ba5-4af1-b256-4c79e7cfcfe2",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:17.100993+02:00",
+    "id": "5549504a-7f90-4bc8-b8d7-e0fb20fe7bfd",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:01:54.765856+02:00",
+    "firme_pagine": [
+      "ad0f5fb58880f6d062c436ef5b9bd5b5ae83aab1d2ccc1c63abcce1a43ff1be3"
+    ],
     "dati": {
-      "fornitore": "IMACO SERVICE SRL",
-      "numero_ddt": "BC2/18231",
-      "data_ddt": "27-08-2026",
-      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOPERATIVA CREF SRL (151981) (VIA DELLE SCIENZE 18)",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18, 02015 CITTADUCALE (RM)",
-      "leggibilita_bassa": false,
-      "partita_iva": "0163040546"
-    }
-  },
-  {
-    "id": "27223936-8fd8-46ca-bf40-9079d1a6cca3",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:22.756039+02:00",
-    "dati": {
-      "fornitore": "ITALPEPE",
-      "numero_ddt": "8.639",
-      "data_ddt": "26-08-2026",
-      "ragione_sociale_consegna": "006339 CREF SRL CITTA' DUCALE 151981",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02015 CITTA' DUCALE(RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "03633121003"
-    }
-  },
-  {
-    "id": "235f3395-ff96-48a8-bafc-d388ef1c227a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:28.370398+02:00",
-    "dati": {
-      "fornitore": "HEALTION SRL - SOCIETÀ BENEFIT",
-      "numero_ddt": "31576",
-      "data_ddt": "15-05-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18/20, 02015 CITTA DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01691980484"
-    }
-  },
-  {
-    "id": "6fcf836c-68f2-439c-8068-70eeecf00f5d",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:33.906940+02:00",
-    "dati": {
-      "fornitore": "S&G SNC",
-      "numero_ddt": "506/2026",
-      "data_ddt": "15-05-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE (RI), ITALY",
-      "leggibilita_bassa": false,
-      "partita_iva": "01327080550"
-    },
-    "rianalisi": "2026-09-11T14:39:37.173709+02:00"
-  },
-  {
-    "id": "7e627fdb-574b-4010-97a4-4c3f64fe205a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:39.628647+02:00",
-    "dati": {
-      "fornitore": "NATRULY ITALIA SRL",
-      "numero_ddt": "IT25DN000818",
-      "data_ddt": "28-10-2025",
-      "ragione_sociale_consegna": "SPAZIO CONAD RIETI CITTADUCALE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18 / 20, 02101 RIETI CITTADUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "16222991008"
-    },
-    "rianalisi": "2026-09-11T14:38:25.579167+02:00"
-  },
-  {
-    "id": "93f222d2-4c54-4c50-8127-5ac8f1f41c1b",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:45.407457+02:00",
-    "dati": {
-      "fornitore": "IL ROVERE SPA",
-      "numero_ddt": "3191",
-      "data_ddt": "29-10-2025",
-      "ragione_sociale_consegna": "PAC 2000 A (151981 CITTA DUCALE) SOCIETA' COOPERATIVA",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 - CITTADUCALE (RI) - ITALIA",
-      "leggibilita_bassa": false,
-      "partita_iva": "07100830012"
-    },
-    "rianalisi": "2026-09-11T14:35:30.821224+02:00"
-  },
-  {
-    "id": "6559b9a1-1548-455e-8eee-57f018a0ce66",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:51.488654+02:00",
-    "dati": {
-      "fornitore": "PICA ITALIA SPA",
-      "numero_ddt": "396",
-      "data_ddt": "14-01-2026",
-      "ragione_sociale_consegna": "151981 CREF SRL - SPAZIO RIETI",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00163040546"
-    }
-  },
-  {
-    "id": "3be35d6a-2722-4ff9-8ad9-c1d3d06ef2de",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:21:56.946560+02:00",
-    "dati": {
-      "fornitore": "PARDGROUP SPA",
-      "numero_ddt": "18055",
-      "data_ddt": "17-10-2025",
-      "ragione_sociale_consegna": "CONAD RIETI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 20, 02015 RIETI (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "03369761204"
-    }
-  },
-  {
-    "id": "8e8eeab0-26b5-425d-bd2a-3f8c2575f782",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:02.736595+02:00",
-    "dati": {
-      "fornitore": "SODICO SRL",
-      "numero_ddt": "643/00",
-      "data_ddt": "10-02-2026",
-      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA - SPAZIO CONAD RIETI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20 0201 CITTA DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01285160428"
-    },
-    "rianalisi": "2026-09-11T14:33:23.459802+02:00"
-  },
-  {
-    "id": "804f2dfa-8bc7-4d5b-89af-faf51291df6d",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:08.487760+02:00",
-    "dati": {
-      "fornitore": "OFFICINE TESSILI SRL",
-      "numero_ddt": "11977",
-      "data_ddt": "10-10-2025",
-      "ragione_sociale_consegna": "CREF SRL (SPAZIO CONAD) COD.151981",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTÀ DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "04427780756"
-    }
-  },
-  {
-    "id": "67100e97-5fd0-492d-862e-4bc780dec894",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:14.704845+02:00",
-    "dati": {
-      "fornitore": "LABEYRIE ITALIA SRL SEDE UNICO",
-      "numero_ddt": "5081",
-      "data_ddt": "06-12-2025",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00745180349"
-    }
-  },
-  {
-    "id": "d2599fdd-d7ad-456f-b24f-669605e87b09",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:20.254774+02:00",
-    "dati": {
-      "fornitore": "LORIS SRL",
-      "numero_ddt": "6045",
-      "data_ddt": "20-10-2025",
-      "ragione_sociale_consegna": "CR PUNTO SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 20, 02015 CITTADUCALE - RIETI (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "05131720483"
-    }
-  },
-  {
-    "id": "5b1fc447-1efe-47e2-a4b0-9a2f83742364",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:26.628657+02:00",
-    "dati": {
-      "fornitore": "NEW POINT SPA - SOCIETÀ UNIPERSONALE",
-      "numero_ddt": "512 / 1",
-      "data_ddt": "05-03-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "05689650488"
-    },
-    "rianalisi": "2026-09-11T14:28:12.096042+02:00"
-  },
-  {
-    "id": "95497ba0-8266-4082-86f5-cc6c8af06259",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:32.252647+02:00",
-    "dati": {
-      "fornitore": "ME.PI.MA.SÜDTIROL SRL/G.M.B.H.",
-      "numero_ddt": "262",
-      "data_ddt": "25-02-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD CITTADUCALE",
-      "indirizzo_consegna": "VIA DELLA SCIENZE, 1820, 02010 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02562960217",
-      "fornitore_letto": "ME.PI.MA. SÜDTIROL SRL/G.M.B.H."
-    },
-    "rianalisi": "2026-09-11T14:27:16.650620+02:00"
-  },
-  {
-    "id": "82f12993-3558-4d1b-a9e0-7b92d56827e6",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:37.904577+02:00",
-    "dati": {
-      "fornitore": "SIRMAN SPA A SOCIO UNICO",
-      "numero_ddt": "2025133697",
-      "data_ddt": "21-10-2025",
-      "ragione_sociale_consegna": "SUPERMERCATO CONAD",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00270140288"
-    }
-  },
-  {
-    "id": "7d449ab3-65d8-4fb4-b99f-e743da0d72df",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:43.509064+02:00",
-    "dati": {
-      "fornitore": "RHÜTTEN SRL",
-      "numero_ddt": "4766/XAB",
-      "data_ddt": "13-10-2025",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01136310438"
-    }
-  },
-  {
-    "id": "cf02dd7f-9107-44b4-b5f6-1f2758d6fd64",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:49.640039+02:00",
-    "dati": {
-      "fornitore": "SALUMIFICIO UMBRO SRL",
-      "numero_ddt": "1036",
-      "data_ddt": "28-10-2025",
-      "ragione_sociale_consegna": "0014 CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18-20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02383340540"
-    },
-    "rianalisi": "2026-09-11T14:24:57.708476+02:00"
-  },
-  {
-    "id": "860873c8-7dc3-4cd4-a4c6-e3cd95c556df",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:22:55.295747+02:00",
-    "dati": {
-      "fornitore": "VILLA GUELFA SRL",
-      "numero_ddt": "296/L",
-      "data_ddt": "04-11-2025",
-      "ragione_sociale_consegna": "SPAZIO CONAD - CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02537910040"
-    },
-    "rianalisi": "2026-09-11T14:22:39.123310+02:00"
-  },
-  {
-    "id": "894082a8-e4c5-4082-8748-36a34d631203",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:00.890772+02:00",
-    "dati": {
-      "fornitore": "OSCAR'78 SRL",
-      "numero_ddt": "4121",
-      "data_ddt": "24-04-2026",
-      "ragione_sociale_consegna": "PAZIO CONAD CITTADUCALE RI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01183571007"
-    }
-  },
-  {
-    "id": "68905866-16b7-4d48-ac6e-a9ed780043de",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:06.989088+02:00",
-    "dati": {
-      "fornitore": "RITTER SPORT ITALIA SRL",
-      "numero_ddt": "8881",
-      "data_ddt": "17-12-2025",
-      "ragione_sociale_consegna": "CISALFA SPORT SPA",
-      "indirizzo_consegna": "V.LE DELLE SCIENZE, 18/20 UNITA' 6, 02015 CITTA DUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02639770219"
-    },
-    "rianalisi": "2026-09-11T14:20:15.938027+02:00"
-  },
-  {
-    "id": "a4af94e8-911d-41cf-a617-e5b4580095ed",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:12.609467+02:00",
-    "dati": {
-      "fornitore": "SAMA SPA",
-      "numero_ddt": "2601258",
-      "data_ddt": "26-02-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "11840620154"
-    }
-  },
-  {
-    "id": "90851447-5e8b-401b-8bf4-0c3d843c33c7",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:18.174351+02:00",
-    "dati": {
-      "fornitore": "LUBEX SPA",
-      "numero_ddt": "LU/403811",
-      "data_ddt": "04-02-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCENZE 20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00785630963"
-    },
-    "rianalisi": "2026-09-11T14:17:36.306179+02:00"
-  },
-  {
-    "id": "5eb398c5-2438-406b-a3c7-687d87ccb589",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:29.351569+02:00",
-    "dati": {
-      "fornitore": "ITALTRANS SPA",
-      "numero_ddt": "3640",
-      "data_ddt": "13-08-2026",
-      "ragione_sociale_consegna": "CREF SRL (IPER)",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01569060161"
-    }
-  },
-  {
-    "id": "cf183f69-b77a-4b17-9803-911fcbd782a6",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:35.040838+02:00",
-    "dati": {
-      "fornitore": "VITAKRAFT ITALIA SPA",
-      "numero_ddt": "865327",
-      "data_ddt": "03-08-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD / CITTADUCALE (RI)",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "02267570543"
-    }
-  },
-  {
-    "id": "33ab5a19-b0c9-4559-9815-6ee1e9eec4c6",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:03.341103+02:00",
-    "dati": {
-      "fornitore": "WIREPHARMA SRL",
-      "numero_ddt": "25ITS2100763",
-      "data_ddt": "27-10-2025",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "0549999512"
-    },
-    "rianalisi": "2026-09-11T13:07:38.033834+02:00"
-  },
-  {
-    "id": "9409012f-5bf0-46ec-b29d-13faa811cb56",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:09.067965+02:00",
-    "dati": {
-      "fornitore": "MENNUTIGROUP DISTRIBUZIONE SRL A SOCIO UNICO",
-      "numero_ddt": "2086/B",
-      "data_ddt": "01-10-2025",
-      "ragione_sociale_consegna": "CONAD - CRMARKETSPA (PETSTORE)",
-      "indirizzo_consegna": "VIA CASILINA 1585/A, 00100 ROMA (RM)",
-      "leggibilita_bassa": false,
-      "partita_iva": "06586000488"
-    }
-  },
-  {
-    "id": "e919dd47-24f2-449b-a7bf-bb83f63b890b",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:15.320230+02:00",
-    "dati": {
-      "fornitore": "FAERCH ITALY SRL",
-      "numero_ddt": "4900042",
-      "data_ddt": "08-01-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18, 02015, CITTA DUCALE, IT ITALIA",
-      "leggibilita_bassa": false,
-      "partita_iva": "11493260969"
-    },
-    "rianalisi": "2026-09-11T13:04:50.356122+02:00"
-  },
-  {
-    "id": "36e385bd-17dd-42c3-a92e-dc6ea46a3ff2",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:26.975493+02:00",
-    "dati": {
-      "fornitore": "SAPORÀ SRL",
-      "numero_ddt": "1641/00",
+      "fornitore": "GHIOTTO SRL",
+      "numero_ddt": "4698/RM",
       "data_ddt": "02-09-2026",
-      "ragione_sociale_consegna": "2 CREF SRL",
+      "ragione_sociale_consegna": "51012 CREF SRL CITTADUCALE",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCAL (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00898011002"
+    },
+    "rianalisi": "2026-09-14T11:23:22.636370+02:00"
+  },
+  {
+    "id": "f12089b3-9bbf-46f9-907b-5612604e6bfe",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:01.713513+02:00",
+    "firme_pagine": [
+      "a70d5061b97813ec7efbea257c3aa1728f725b42d568c53a2122aafb53f12d7f"
+    ],
+    "dati": {
+      "fornitore": "GRANAROLO SPA",
+      "numero_ddt": "3060027646",
+      "data_ddt": "10-06-2026",
+      "ragione_sociale_consegna": "IPER SPAZIO CONAD-CITTADUCALE",
       "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "14792991003"
-    },
-    "rianalisi": "2026-09-11T12:59:49.310786+02:00"
+      "partita_iva": "04119190371"
+    }
   },
   {
-    "id": "dff8553c-3bea-429d-bee6-09e813c8de94",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:32.491999+02:00",
+    "id": "04682ee2-5b5c-4a20-b3ca-2f53a3006e78",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:08.793572+02:00",
+    "firme_pagine": [
+      "28c1fa18d19679408ab40fb37b5818246b58b7f0444b0e172c6ff9519bc77b3a"
+    ],
     "dati": {
-      "fornitore": "TURCONI DISTRIBUZIONE SRL",
-      "numero_ddt": "15827",
-      "data_ddt": "02-07-2026",
-      "ragione_sociale_consegna": "PAC 2000 A SOC. COOP. CREF SRL - SCIENZE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02015 CITTADUCALE (RI)",
+      "fornitore": "CASEIFICI GRANTERRE SPA",
+      "numero_ddt": "DI26018857B",
+      "data_ddt": "27-03-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD CITTADUCALE",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA DUCALE RI ITALIA",
       "leggibilita_bassa": false,
-      "partita_iva": "02572110928"
-    },
-    "rianalisi": "2026-09-11T12:58:42.487891+02:00"
+      "partita_iva": "01299680353"
+    }
   },
   {
-    "id": "e8088ae6-984d-4475-a59b-ebe61d13efaf",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:00.624990+02:00",
+    "id": "c15d4b9d-9251-4d85-a40e-c9c666fb2104",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:23.444673+02:00",
+    "firme_pagine": [
+      "e1606efa73beead655d379cd0b5934cdbcdcf47c6f9c6b73c9f7d79ad5c6d499"
+    ],
     "dati": {
-      "fornitore": "PASTIFICIO RANA SPA",
-      "numero_ddt": "26756990",
-      "data_ddt": "28-08-2026",
-      "ragione_sociale_consegna": "C.I.R. SAS MECARELLI CLAUDIO & C.",
-      "indirizzo_consegna": "S.DI SABBLONE 33, 05100 TERNI (TR)",
+      "fornitore": "FATTORE UMBRO SRL",
+      "numero_ddt": "24850/00",
+      "data_ddt": "01-09-2026",
+      "ragione_sociale_consegna": "151981 CONAD SPAZIO CONAD CREF SRL CITTA",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI), ITALIA",
       "leggibilita_bassa": false,
-      "partita_iva": "01397480235"
+      "partita_iva": "01669700559"
     },
-    "rianalisi": "2026-09-11T12:46:34.426028+02:00"
+    "rianalisi": "2026-09-14T11:18:48.992482+02:00"
   },
   {
-    "id": "628a64f2-039e-4f9a-ab18-d54eeb33e254",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:06.715291+02:00",
+    "id": "cefe8134-54c9-4348-9964-619f14c1149f",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:30.556782+02:00",
+    "firme_pagine": [
+      "218e2761e0aadc39730e6edc700e9683a25b5a71badbc73c479276d0a4a212ce"
+    ],
     "dati": {
-      "fornitore": "PROBIOS SRL - SOCIETÀ BENEFIT",
-      "numero_ddt": "15514",
-      "data_ddt": "06-03-2026",
-      "ragione_sociale_consegna": "CREF SRL-COD.151981-CONAD",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA DUCALE (RI)",
+      "fornitore": "FERRERO COMMERCIALE ITALIA SRL",
+      "numero_ddt": "1152957714",
+      "data_ddt": "20-10-2025",
+      "ragione_sociale_consegna": "SPETT.LE CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE RI P.IVA14065791007 530 IPERMERCATO C.F.14065791007",
       "leggibilita_bassa": false,
-      "partita_iva": "01691980484"
+      "partita_iva": "03629090048"
     },
-    "rianalisi": "2026-09-11T12:39:16.220902+02:00"
+    "rianalisi": "2026-09-14T11:16:40.795139+02:00"
   },
   {
-    "id": "8d7ac562-9e34-4d9b-86fd-3965ec85bcec",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:18.386401+02:00",
+    "id": "8c515f92-b324-4087-b848-2f96fe3bf3cd",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:37.754142+02:00",
+    "firme_pagine": [
+      "b8fc329c4f4bbfc81bf3fbd339957d9ef89d854b5e9eee17b31712de9e083ff6"
+    ],
     "dati": {
-      "fornitore": "HEALTION SRL - SOCIETÀ BENEFIT",
-      "numero_ddt": "22314",
-      "data_ddt": "03-04-2026",
+      "fornitore": "FIORENTINI ALIMENTARI SPA",
+      "numero_ddt": "25037039",
+      "data_ddt": "02-12-2025",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA DUCALE (RI)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "01691980484"
+      "partita_iva": "06812450010",
+      "fornitore_letto": "FIORENTINI"
     },
-    "rianalisi": "2026-09-11T11:28:28.147605+02:00"
+    "rianalisi": "2026-09-14T11:14:57.114603+02:00"
   },
   {
-    "id": "d7d2d20f-9f1b-480b-8ff0-b890964c72b3",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:30.243579+02:00",
+    "id": "516cd4bd-5d98-4eb8-809d-811d947f4dc2",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:44.811952+02:00",
+    "firme_pagine": [
+      "e732d33f49b12755456470251c61f2995baade45059554a85712f02a55856987"
+    ],
+    "dati": {
+      "fornitore": "FIORUCCI SPA",
+      "numero_ddt": "12384553",
+      "data_ddt": "23-03-2026",
+      "ragione_sociale_consegna": "CREF SRL SPAZIO CONAD",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE N.18/20 CITT'ADUCALE, 02015 CITT'ADUCALE RI (IT)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04731980969",
+      "fornitore_letto": "FIORUCCI SRL"
+    },
+    "rianalisi": "2026-09-14T11:13:29.930065+02:00"
+  },
+  {
+    "id": "75501af9-5aed-47d6-8e31-76c8fdbe33e8",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:52.154934+02:00",
+    "firme_pagine": [
+      "3004db0c33d166dc0ee443913b592e1bf241bc8bee24e57d9cf250d645eb9088"
+    ],
+    "dati": {
+      "fornitore": "FIMARDOLCI SRL",
+      "numero_ddt": "260000109/26-DDT",
+      "data_ddt": "13-01-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE N. 18/20, 02015 CITTADUCALE RI ITALY",
+      "leggibilita_bassa": false,
+      "partita_iva": "01648980595"
+    },
+    "rianalisi": "2026-09-14T11:02:42.220890+02:00"
+  },
+  {
+    "id": "5c580181-9981-42bd-8ec1-1bc203d79b26",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:59.353293+02:00",
+    "firme_pagine": [
+      "2e76b5849eda540001f41c030c9f56ec755c1127c0e04c83f916b3eee08f5d8d"
+    ],
+    "dati": {
+      "fornitore": "GIUSEPPE CITTERIO SPA",
+      "numero_ddt": "190666",
+      "data_ddt": "01-12-2025",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DEL RAME-ZONA INDUSTRIALE, 06077 PONTE FELCINO PG (IT)",
+      "leggibilita_bassa": false,
+      "partita_iva": "05931440159"
+    }
+  },
+  {
+    "id": "20e9be32-c24f-4ced-bfc3-9317369003b7",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:04.902902+02:00",
+    "firme_pagine": [
+      "16e818e6b3cb5f3e15e6c6496f4d185c8d6d4c96f62c857539b7233a7cb906a2"
+    ],
+    "dati": {
+      "fornitore": "FRATELLI DI GIOIA SNC",
+      "numero_ddt": "263/B",
+      "data_ddt": "14-10-2025",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04436420725",
+      "fornitore_letto": "CONFEZIONI FRATELLI DI GIOIA SNC"
+    }
+  },
+  {
+    "id": "440873b7-b165-4236-8c4d-3004bd115c6a",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:12.024893+02:00",
+    "firme_pagine": [
+      "c34fc35d840713181095ce6b74e7bbadb870245df464d80cb17eefe3e52baaa7"
+    ],
+    "dati": {
+      "fornitore": "CONTECOM SRL",
+      "numero_ddt": "R1/003197",
+      "data_ddt": "23-07-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, N.18/20, 02015 CITTA' DUCALE RI - ITALIA",
+      "leggibilita_bassa": false,
+      "partita_iva": "13088671028"
+    }
+  },
+  {
+    "id": "26bf1661-f564-42eb-813e-5d0090069243",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:19.288224+02:00",
+    "firme_pagine": [
+      "51b478c256a2c5dd0215e0a7f93aaafe32c0e5ef4090fa48251a97f369659437"
+    ],
+    "dati": {
+      "fornitore": "COSWELL SPA",
+      "numero_ddt": "126019664",
+      "data_ddt": "21-05-2026",
+      "ragione_sociale_consegna": "CREF SRL SPAZIO CONAD",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA' DUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "00708541206"
+    }
+  },
+  {
+    "id": "de76929e-2840-4d44-a3bf-4cb47ddd1656",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:26.797028+02:00",
+    "firme_pagine": [
+      "851bebb7a17a94a904ed6763e5fed1e12561db8d453b60e366cf1ec53956a9a5"
+    ],
+    "dati": {
+      "fornitore": "CTC SRL",
+      "numero_ddt": "959",
+      "data_ddt": "25-05-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "09702841009"
+    }
+  },
+  {
+    "id": "acac14f5-fe80-4b48-8947-d6c61c4b99af",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:34.144777+02:00",
+    "firme_pagine": [
+      "c81e5f336b905b311a6597c77fa9a25a5b20a1fdffc397f264a344bda0ae4abe"
+    ],
+    "dati": {
+      "fornitore": "DAVE'S SRL",
+      "numero_ddt": "2911",
+      "data_ddt": "29-10-2025",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "partita_iva_scartata": "03056180809"
+    },
+    "rianalisi": "2026-09-14T10:54:43.872785+02:00"
+  },
+  {
+    "id": "e16fae84-3f22-4ed3-9080-96fd4152cbc0",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:41.570430+02:00",
+    "firme_pagine": [
+      "1ca2c4822f70c5047491be8cacc54d68d49af9b6e57b3bccff018cc95ee3f79d"
+    ],
+    "dati": {
+      "fornitore": "DANONE NUTRICIA SPA SOCIETÀ BENEFIT",
+      "numero_ddt": "DA504870",
+      "data_ddt": "21-04-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA - A",
+      "indirizzo_consegna": "VIA DEL RAME, 06077 PONTE FELCINO (PG) (IT)",
+      "leggibilita_bassa": false,
+      "partita_iva": "11667890153"
+    }
+  },
+  {
+    "id": "d2ed0b44-7cba-4f5a-83a5-2291ec1a896f",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:49.009012+02:00",
+    "firme_pagine": [
+      "17981749318d8c20241e6a291258673917985010dacb105fe1672fc69e1f7722"
+    ],
+    "dati": {
+      "fornitore": "DR.SCHÄR AG/SPA",
+      "numero_ddt": "1027787",
+      "data_ddt": "19-08-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOCIET COOP. CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 GROTTI DI CITTADUCAL (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00605750215"
+    }
+  },
+  {
+    "id": "d6f79387-9cad-45be-bc6b-9ec00d0ebea2",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:03:56.429564+02:00",
+    "firme_pagine": [
+      "783cdf5c89dec8826d1cffe0cb2b40013b8fafde66b8db7dcad4357091364a37"
+    ],
+    "dati": {
+      "fornitore": "ELAH-IDUFOUR SPA",
+      "numero_ddt": "DCTWMS-26-03178",
+      "data_ddt": "27-01-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "03193610106",
+      "fornitore_letto": "ELAHI-DUFOUR SPA"
+    },
+    "rianalisi": "2026-09-14T10:51:58.333876+02:00"
+  },
+  {
+    "id": "7cf47599-2abc-4d44-bd84-e50949abfa6c",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:18.478559+02:00",
+    "firme_pagine": [
+      "19231f5ebb7a57671f0135e4e9efb0dd36b0f0557707cfdcd3bc98b3dac5f4e7"
+    ],
+    "dati": {
+      "fornitore": "EUROFRESH SRL",
+      "numero_ddt": "15435",
+      "data_ddt": "18-08-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "01793820604"
+    }
+  },
+  {
+    "id": "7809e6bb-ad0f-499c-ae2c-3612912de936",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:25.950932+02:00",
+    "firme_pagine": [
+      "51819424318f83b644b76c103f8924475435e8babeb628d9e4d353f4e9f39a74"
+    ],
+    "dati": {
+      "fornitore": "PANIFICIO ITALIA SRL",
+      "numero_ddt": "68936",
+      "data_ddt": "16-08-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOC. COOP. A R.L.",
+      "indirizzo_consegna": "VIA DEL RAME SNC, 06077 PERUGIA (PG)",
+      "leggibilita_bassa": false,
+      "partita_iva": "11486281006"
+    }
+  },
+  {
+    "id": "6599cf2c-f6b3-454a-82ad-21e75e92c75c",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:31.433319+02:00",
+    "firme_pagine": [
+      "3c0bb48345498db975a3f721fbc41057c1809a322dd4a82a4b164d2632553bea"
+    ],
     "dati": {
       "fornitore": "F.LLI PETRUCCI SRL",
-      "numero_ddt": "7840",
-      "data_ddt": "18-08-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD CITTADUCALE",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18/20, 02015 CITTADUCALE RI (IT)",
+      "numero_ddt": "1456",
+      "data_ddt": "29-01-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DEL RAME, 2 PONTE FELCINO",
       "leggibilita_bassa": false,
-      "partita_iva": "00913720579"
-    },
-    "rianalisi": "2026-09-11T12:31:38.580311+02:00"
+      "partita_iva": "00913720579",
+      "fornitore_letto": "PETRUCCI"
+    }
   },
   {
-    "id": "0dea2cd6-8380-4246-9296-17adf1b95ee8",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:36.104811+02:00",
+    "id": "8448b324-901a-445c-88c3-d7707ae66896",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:44.669538+02:00",
+    "firme_pagine": [
+      "46437ea5927f682ed10b3dc0e78171f62c6880a7f2e774af02aa20736ce10581"
+    ],
     "dati": {
-      "fornitore": "CEREALDOLCI SRL",
-      "numero_ddt": "12961/DT",
-      "data_ddt": "04-08-2026",
+      "fornitore": "BISCOTTI P. GENTILINI SPA S.B.",
+      "numero_ddt": "326002213",
+      "data_ddt": "19-02-2026",
+      "ragione_sociale_consegna": "151981 SPAZIO CONAD CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00889091005"
+    }
+  },
+  {
+    "id": "3bd47310-2432-438a-a220-3a6741495691",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:51.202125+02:00",
+    "firme_pagine": [
+      "04ac4163683bd6f4bd91b48b415018554a53b314dc515b2bc948fabfeffd211b"
+    ],
+    "dati": {
+      "fornitore": "DIVA SRL",
+      "numero_ddt": "200",
+      "data_ddt": "17-03-2026",
+      "ragione_sociale_consegna": "CREF SRL-CITTA' DUCALE",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00755880523"
+    }
+  },
+  {
+    "id": "62b1dc10-5c10-49ce-802e-db61ae8db134",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:58.608254+02:00",
+    "firme_pagine": [
+      "11c83e8b187283ba422904bcf2411b77aff3943f556e82195c1999c6ae73ebf6"
+    ],
+    "dati": {
+      "fornitore": "GRUBER LOGISTICS SPA",
+      "numero_ddt": "AD26003318",
+      "data_ddt": "02-02-2026",
+      "ragione_sociale_consegna": "CONAD",
+      "indirizzo_consegna": "VIA DELLA SCIENZA 18/20, 02015 CITTA DUCALE (RIETI) (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00520690215"
+    }
+  },
+  {
+    "id": "7fd8cde6-1189-408c-bd8d-2992b048f7c7",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:07.130485+02:00",
+    "firme_pagine": [
+      "7bafe4063f080d7f5cb28f28588557754943eaebcb8b07bc6e1318a55dcaa791"
+    ],
+    "dati": {
+      "fornitore": "AIA - AGRICOLA ITALIANA ALIMENTARE SPA - UNIPERSONALE",
+      "numero_ddt": "125480/M5",
+      "data_ddt": "03-06-2026",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18, 02015 CITTADUCALE (RI) ITALIA",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE RI (IT)",
       "leggibilita_bassa": false,
-      "partita_iva": "13813611004"
+      "partita_iva": "00233470236"
     },
-    "rianalisi": "2026-09-11T12:26:15.513441+02:00"
+    "rianalisi": "2026-09-14T09:50:04.665464+02:00"
   },
   {
-    "id": "4bc6cd20-51ee-4a2a-b192-260270468105",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:41.674235+02:00",
+    "id": "32202288-6223-488c-a2a8-f992a1740e55",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:15.658377+02:00",
+    "firme_pagine": [
+      "122ed1703aa5a4a3bcce559246f7e88595f2e26d57dd40c6466f683765630d19"
+    ],
     "dati": {
-      "fornitore": "ABC ITALIA SRL",
-      "numero_ddt": "166899",
-      "data_ddt": "13-10-2025",
+      "fornitore": "ALCE NERO SPA",
+      "numero_ddt": "006852-RI-26",
+      "data_ddt": "31-08-2026",
+      "ragione_sociale_consegna": "CREF SRL - IPERCONAD VIALE SCIENZE CITTADUCALE (RI)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20 C/O TERMINILLO CENTER, 02015 - CITTADUCALE (RI) ITA",
+      "leggibilita_bassa": false,
+      "partita_iva": "",
+      "partita_iva_scartata": "00163040546"
+    },
+    "rianalisi": "2026-09-14T09:47:35.439071+02:00"
+  },
+  {
+    "id": "9d2180ad-e31d-4886-b6ab-eb7b615e1864",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:23.273049+02:00",
+    "firme_pagine": [
+      "dbcec7c906c10959ecb8992d954b0cd2fe3b723e168d4ad2f3d64d59398a2875"
+    ],
+    "dati": {
+      "fornitore": "ANTAAR & S.SRL",
+      "numero_ddt": "1000107",
+      "data_ddt": "19-01-2026",
       "ragione_sociale_consegna": "CREF SRL",
       "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "11534680019"
-    },
-    "rianalisi": "2026-09-11T12:25:10.808410+02:00"
-  },
-  {
-    "id": "e525d8b9-4512-46b6-bf80-ff62e979f99d",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:47.307399+02:00",
-    "dati": {
-      "fornitore": "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.",
-      "numero_ddt": "5191",
-      "data_ddt": "07-07-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00776230575"
+      "partita_iva": "01273320182"
     }
   },
   {
-    "id": "4afc2738-7729-4b9f-89db-996054ec4738",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:58.028812+02:00",
+    "id": "3faaf21b-c5ce-449e-bd51-b1bd59f5a0d3",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:31.342303+02:00",
+    "firme_pagine": [
+      "c4f63ace0ab82f517569c5d9959187d6e8b4677ab40846b56a093322e702b1dc"
+    ],
     "dati": {
-      "fornitore": "MARIANANTONI SILVIO SRLS",
-      "numero_ddt": "4125/A/2026",
-      "data_ddt": "04-09-2026",
+      "fornitore": "A.R. TARTUFI SRL",
+      "numero_ddt": "1181",
+      "data_ddt": "08-10-2025",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20 RI, 00123 ROMA",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE N. 18/20, 02015 CITTADUCALE",
       "leggibilita_bassa": false,
-      "partita_iva": "01192700571",
-      "fornitore_letto": "PANIFICIO MARIANANTONI SILVIO SRLS"
+      "partita_iva": "01560440552"
     },
-    "rianalisi": "2026-09-11T12:24:03.632439+02:00"
+    "rianalisi": "2026-09-14T09:45:33.734631+02:00"
   },
   {
-    "id": "7ff1b179-ce3b-4115-a6a7-5f26899b23a9",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:03.605544+02:00",
+    "id": "bb6c28f1-4224-4e80-a607-dca0c5f2f979",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:46.594882+02:00",
+    "firme_pagine": [
+      "644af176199b7bef61662b52d80082ac696b7a3ec33ff2271490bcdbf0730195"
+    ],
     "dati": {
-      "fornitore": "PASTA RICCA DI FESTUCCIA MONIA",
-      "numero_ddt": "1980/A",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 10/20, 02015 CITTA DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01256290576"
-    }
-  },
-  {
-    "id": "8b261389-f182-475b-a2a9-447707b6157a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:09.296939+02:00",
-    "dati": {
-      "fornitore": "PERFETTI VAN MELLE SPA",
-      "numero_ddt": "2664106847",
-      "data_ddt": "27-08-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA DUCALE (RI) SPAZIO CONAD",
-      "leggibilita_bassa": false,
-      "partita_iva": "04219660158"
-    }
-  },
-  {
-    "id": "19ced1c9-3fd6-4a91-8c30-2a76dd14d5ec",
-    "file_origine": "20260911112653890.pdf",
-    "numero_pagine": 2,
-    "timestamp": "2026-09-11T11:26:14.775383+02:00",
-    "dati": {
-      "fornitore": "PERLETTI SPA",
-      "numero_ddt": "17754",
-      "data_ddt": "15-12-2025",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA E. GRECO, SNC, 02010 RIETI (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01974600163"
-    }
-  },
-  {
-    "id": "2717c9e2-4878-446d-b493-ab29de224b93",
-    "file_origine": "20260911112653890.pdf",
-    "numero_pagine": 2,
-    "timestamp": "2026-09-11T11:26:26.532081+02:00",
-    "dati": {
-      "fornitore": "O&N SPA",
-      "numero_ddt": "2526004326",
-      "data_ddt": "16-07-2026",
-      "ragione_sociale_consegna": "AREA1 151981 SPAZIO CONAD -CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, CITTA' DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00987980384"
-    },
-    "rianalisi": "2026-09-11T12:20:39.181871+02:00"
-  },
-  {
-    "id": "6bb396c1-ae2b-4eca-9a87-689f0df38d93",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:38.074409+02:00",
-    "dati": {
-      "fornitore": "NUOVO SRL",
-      "numero_ddt": "54241",
-      "data_ddt": "16-07-2026",
-      "ragione_sociale_consegna": "CREF SRL - RIETI",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "01676310400"
-    },
-    "rianalisi": "2026-09-11T12:18:27.595768+02:00"
-  },
-  {
-    "id": "2fc9434e-41dc-495c-b865-12f7a73c01fc",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:43.888783+02:00",
-    "dati": {
-      "fornitore": "NUTRITION & SANTÈ ITALIA SPA",
-      "numero_ddt": "26025584",
+      "fornitore": "AZIENDA AGRICOLA BR",
+      "numero_ddt": "11447",
       "data_ddt": "06-08-2026",
+      "ragione_sociale_consegna": "AZIENDA AGRICOLA B.R.",
+      "indirizzo_consegna": "VIA DEL MONUMENTO SNC, 02043 CONTIGLIANO (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "01087480578",
+      "fornitore_letto": "AVICOLA VALLE SANTA"
+    },
+    "rianalisi": "2026-09-14T09:42:50.252130+02:00"
+  },
+  {
+    "id": "3096bad7-5a10-4baa-a0ee-94a571b43e4a",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:54.486386+02:00",
+    "firme_pagine": [
+      "b83958c6c7722ec38f6a5a20094ef686f97df4abbd73dc3bb524f8f44a849256"
+    ],
+    "dati": {
+      "fornitore": "ROBERTO AZZOCCHI SRL",
+      "numero_ddt": "8637",
+      "data_ddt": "06-08-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "151981 CREF CITTA DUCALE VIA DELLE SCIENZE 18/20 2015 CITTADUCALE (RI) (ITA)",
+      "leggibilita_bassa": false,
+      "partita_iva": "07913191008"
+    }
+  },
+  {
+    "id": "b01f6ac5-d878-4228-843f-9a16f298b433",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:01.931274+02:00",
+    "firme_pagine": [
+      "39e793612b01b0f8454d6791515be4a185b4fb9e564536aa373b65638c7cbac9"
+    ],
+    "dati": {
+      "fornitore": "BALOCCO SPA",
+      "numero_ddt": "174238",
+      "data_ddt": "15-10-2025",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DELLA CORONA BOREALE, 240, 00054 FIUMICINO (RM)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00312060049"
+    }
+  },
+  {
+    "id": "5bf5fc9b-e015-44b7-982a-991583ec3c29",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:09.712740+02:00",
+    "firme_pagine": [
+      "894e8f009ab291a53388261573d699f442fe226f20dd30c5f716db29442fa062"
+    ],
+    "dati": {
+      "fornitore": "FRATELLI BERETTA SPA",
+      "numero_ddt": "125179606",
+      "data_ddt": "28-10-2025",
+      "ragione_sociale_consegna": "SPAZIO CONAD - CREF 151981 LS",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI) ITALIA",
+      "leggibilita_bassa": false,
+      "partita_iva": "00208950139"
+    }
+  },
+  {
+    "id": "5352783e-4848-4fd6-8eb3-854132a96d16",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:15.812382+02:00",
+    "firme_pagine": [
+      "7a035468fc7395819637d96f28d2dbae9725e4d98f5845c0fd9a4034dc979390"
+    ],
+    "dati": {
+      "fornitore": "SALUMIFICIO CIRIACI SRL",
+      "numero_ddt": "6415",
+      "data_ddt": "18-05-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "01402430449"
+    },
+    "rianalisi": "2026-09-14T09:39:08.595118+02:00"
+  },
+  {
+    "id": "3aa2071a-7cad-4fb8-b89b-5244c07173e5",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:29.504174+02:00",
+    "firme_pagine": [
+      "cc0bf87cd296aa84e359644bfea27c62058e8f7e3a1a1917a50e1acff5658fe4"
+    ],
+    "dati": {
+      "fornitore": "ANDRIANI SPA",
+      "numero_ddt": "2271",
+      "data_ddt": "26-03-2026",
+      "ragione_sociale_consegna": "PAC 2000A SOCIETA' COOPERATIVA",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "06880780728"
+    }
+  },
+  {
+    "id": "bc3bcacc-1ef2-4b3f-bc88-a7adedc8d29c",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:36.463140+02:00",
+    "firme_pagine": [
+      "cb9a87103759c6e0adf4cfa3cfa5e9f71e70c51d99cd13fcc567fa7140a13603"
+    ],
+    "dati": {
+      "fornitore": "BALCONI SPA INDUSTRIA DOLCIARIA",
+      "numero_ddt": "926004935",
+      "data_ddt": "02-03-2026",
       "ragione_sociale_consegna": "CREF SRL",
       "indirizzo_consegna": "VIALE DELLE SCIENZE 18-20, 02015 CITTA' DUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "02787970124"
-    },
-    "rianalisi": "2026-09-11T12:17:09.958289+02:00"
-  },
-  {
-    "id": "4d21dc00-f900-4bbe-b780-6ac986e094b9",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:50.007253+02:00",
-    "dati": {
-      "fornitore": "LATTERIA NÖM SRL",
-      "numero_ddt": "26/36630",
-      "data_ddt": "31-08-2026",
-      "ragione_sociale_consegna": "CONAD PIANETA COSPEA CITTADUCA",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, IT, 02015 CITTA DUCALE",
-      "leggibilita_bassa": false,
-      "partita_iva": "06402780966"
-    },
-    "rianalisi": "2026-09-11T12:16:02.836405+02:00"
-  },
-  {
-    "id": "36ffd3de-62e3-4514-baf9-110be7b07f5a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:26:56.206387+02:00",
-    "dati": {
-      "fornitore": "LEVONI SPA",
-      "numero_ddt": "2000565493",
-      "data_ddt": "13-07-2026",
-      "ragione_sociale_consegna": "SPAZIO CONAD.",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 - CITTADUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00137840203",
-      "fornitore_letto": "LEVONI SPA SOCIETÀ BENEFIT A SOCIO UNICO"
-    },
-    "rianalisi": "2026-09-11T12:11:03.366938+02:00"
-  },
-  {
-    "id": "ca1737aa-2594-43af-ba5c-eecca9b5aaa0",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:07.841861+02:00",
-    "dati": {
-      "fornitore": "SA.BA DI SABATINI EUGENIO FISH",
-      "numero_ddt": "02352/0",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "fornitore_letto": "S.A.B.A DI SABATINI EUGENIO FISH VENDITA SURGELATI",
-      "partita_iva_scartata": "14065791007"
-    },
-    "rianalisi": "2026-09-11T12:07:23.588546+02:00"
-  },
-  {
-    "id": "75e2a93d-80d1-4e11-8a73-e452669aeaeb",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:13.275270+02:00",
-    "dati": {
-      "fornitore": "SPERANDIO SRL",
-      "numero_ddt": "2270",
-      "data_ddt": "02-09-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "03524801002"
-    },
-    "rianalisi": "2026-09-11T11:57:58.800719+02:00"
-  },
-  {
-    "id": "93239106-8b2e-4b96-9bef-4603491d1b28",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:19.123730+02:00",
-    "dati": {
-      "fornitore": "MEC IMPORT GROUP SRL",
-      "numero_ddt": "2213/2026",
-      "data_ddt": "27-05-2026",
-      "ragione_sociale_consegna": "CREF SRL (CITTADUCALE)",
-      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02015 CITTADUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "16010101000"
-    },
-    "rianalisi": "2026-09-11T11:56:12.221705+02:00"
-  },
-  {
-    "id": "e061cba5-80b3-42c4-ac07-fe35d4c4c313",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:29.804860+02:00",
-    "dati": {
-      "fornitore": "MADAMA OLIVA",
-      "numero_ddt": "1/6910",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "",
-      "indirizzo_consegna": "VIA GIACOMO ANDREASSI 30, 00123 ROMA",
-      "leggibilita_bassa": false,
-      "partita_iva": "10702821009"
+      "partita_iva": "07461160967"
     }
   },
   {
-    "id": "c4c0f695-dd3c-4ee3-889f-71c590cf5e52",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:35.353784+02:00",
+    "id": "7d00d5df-b205-4277-b1e1-b39599b32e35",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:43.747533+02:00",
+    "firme_pagine": [
+      "c9422377d02b8bc70b073b9e71b4d1209fb2332d71b18c60334a7e20e7f44e50"
+    ],
     "dati": {
-      "fornitore": "LATTE MONTAGNA ALTO ADIGE SOC. AGR. COOP.",
-      "numero_ddt": "MI767394",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI) (IT)",
+      "fornitore": "ATREPAN SRL",
+      "numero_ddt": "102/00",
+      "data_ddt": "20-01-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 20, 02015 CITTADUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "01661820215"
-    },
-    "rianalisi": "2026-09-11T12:03:19.942402+02:00"
-  },
-  {
-    "id": "27a8a641-493b-4dd0-9b8a-0c209fb21787",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:41.072514+02:00",
-    "dati": {
-      "fornitore": "MOLINO SANTA SUSANNA DI ALDO BOSI & C. SNC",
-      "numero_ddt": "121",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015, CITTADUCALE (RI)",
-      "leggibilita_bassa": false,
-      "partita_iva": "00838090579"
-    },
-    "rianalisi": "2026-09-11T11:46:25.509122+02:00"
-  },
-  {
-    "id": "fc1cd498-8611-4258-a26b-da636ad22f22",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:47.572560+02:00",
-    "dati": {
-      "fornitore": "MOLKEREI ALOIS MÜLLER GMBH & CO. KG",
-      "numero_ddt": "1078121",
-      "data_ddt": "21-11-2025",
-      "ragione_sociale_consegna": "SPAZIO CONAD CITTA' DUCALE",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20 RI, 02015 CITTADUCALE (RI) (IT)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "partita_iva_scartata": "00745180349"
+      "partita_iva": "01640950232"
     }
   },
   {
-    "id": "32da8c7f-988f-4fc8-948c-df4f48883024",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:53.239954+02:00",
+    "id": "7a76f487-db94-4dc2-b579-b649cf421d06",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:06:55.829082+02:00",
+    "firme_pagine": [
+      "e6084904738ca282edbf87f0235ecdaa27fb55e22ee0b1ee519e887fe274ba32"
+    ],
     "dati": {
-      "fornitore": "MAINA PANETTONI SPA",
-      "numero_ddt": "20/0/200797",
+      "fornitore": "FRATELLI DI GIOIA SNC",
+      "numero_ddt": "302/B",
       "data_ddt": "11-12-2025",
+      "ragione_sociale_consegna": "CREF SRL PV 151981 RIETI",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04436420725"
+    }
+  },
+  {
+    "id": "365b9c65-519b-4e97-abdd-0bd78d3d30c5",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:09.369670+02:00",
+    "firme_pagine": [
+      "b5a4ab28f6bfc468046b40634fbe5da54757054b2eb26a1927a907e2b7644347"
+    ],
+    "dati": {
+      "fornitore": "C.B.F. BALDUCCI GROUP SPA SOCIETÀ BENEFIT",
+      "numero_ddt": "11241",
+      "data_ddt": "27-10-2025",
+      "ragione_sociale_consegna": "CREF SRL - SUPERM. CONAD",
+      "indirizzo_consegna": "VIA DELLE SCIENZE, 18, 02015 CITTA DUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "00909040438"
+    }
+  },
+  {
+    "id": "228474a8-1eb9-46dc-8073-73312477ddde",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:16.039331+02:00",
+    "firme_pagine": [
+      "5616027c6ec2d3dbe00cc0aa624d6213644be9700d45ca752c69eddc03c72a41"
+    ],
+    "dati": {
+      "fornitore": "KIMBO SPA",
+      "numero_ddt": "5010132560",
+      "data_ddt": "12-11-2025",
+      "ragione_sociale_consegna": "PAC 2000 C/O CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "01238591216"
+    }
+  },
+  {
+    "id": "6d3d41a6-397e-48eb-92e2-3710a65e1c4b",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:23.512805+02:00",
+    "firme_pagine": [
+      "42eaa06a375b87a0a4661d35f3d3c6d3d52175ab6119625abf53cbae5175b80d"
+    ],
+    "dati": {
+      "fornitore": "DIGITRONICA SRL",
+      "numero_ddt": "06/00144",
+      "data_ddt": "15-10-2025",
+      "ragione_sociale_consegna": "SUPERMERCATO CONAD",
+      "indirizzo_consegna": "VIA GIACOMO ANDREASSI, 30, 00123 ROMA RM ITALY",
+      "leggibilita_bassa": false,
+      "partita_iva": "01617621006"
+    }
+  },
+  {
+    "id": "52db7791-2d6d-412c-bd38-8466a9e250b5",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:38.669459+02:00",
+    "firme_pagine": [
+      "97e9ac27be48b1c9be16733dc9f3aa30618a1cb132b508d5905e950628c92db2"
+    ],
+    "dati": {
+      "fornitore": "DOLFIN SPA",
+      "numero_ddt": "RM26001855",
+      "data_ddt": "05-06-2026",
+      "ragione_sociale_consegna": "ASS.-CREF SRL",
+      "indirizzo_consegna": "V.LE DELLE SCIENZE, 18/20, 02015 CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "02917440873"
+    }
+  },
+  {
+    "id": "a8fd92ee-35cc-499d-a129-0d51e3fb8f18",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:07:45.147823+02:00",
+    "firme_pagine": [
+      "b6a252d0460efdafd1af14a35a0b9852eefe61993b246538a791fa1f8d5b84da"
+    ],
+    "dati": {
+      "fornitore": "APICOLTURA CASENTINESE SRL",
+      "numero_ddt": "2602208",
+      "data_ddt": "04-06-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD RIETI",
+      "indirizzo_consegna": "VIA DEL RAME-ZONA NDL,LE, 06077 PONTE FELCINO PG ITALY",
+      "leggibilita_bassa": false,
+      "partita_iva": "01032580514"
+    },
+    "rianalisi": "2026-09-14T09:25:33.355390+02:00"
+  },
+  {
+    "id": "9014cb82-9702-4354-a0b4-8b42339fcbc3",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:00.282060+02:00",
+    "firme_pagine": [
+      "5f2d6209b94a6a1d4dd7c983eda72122477cbe34249eda23eb5e8b152c9d1c0a"
+    ],
+    "dati": {
+      "fornitore": "CASA DEL CAFFE' VERGNANO SPA",
+      "numero_ddt": "26165",
+      "data_ddt": "24-07-2026",
+      "ragione_sociale_consegna": "IPERCONAD PAC 2000 CREF",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015, CITTA' DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00169040011"
+    },
+    "rianalisi": "2026-09-14T09:23:48.402795+02:00"
+  },
+  {
+    "id": "bd936f60-590b-4a89-a858-827599128c86",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:08.188129+02:00",
+    "firme_pagine": [
+      "0804856aa93ce7024d1ef5f996bd9c8d61d01456193240e01b8886679671c4f6"
+    ],
+    "dati": {
+      "fornitore": "BOTTARI SPA",
+      "numero_ddt": "1794/00",
+      "data_ddt": "22-07-2026",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA' DUCALE (RI)",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 20, 02015 CITTADUCALE (RI) ITA",
       "leggibilita_bassa": false,
-      "partita_iva": "00758040042",
-      "fornitore_letto": "MAINA PANETTONI SPA - A SOCIO UNICO - VIA BRA (TAGLIATA), 109 - 12045 FOSSANO (CN) - ITALIA"
+      "partita_iva": "01651150201"
     },
-    "rianalisi": "2026-09-11T11:33:49.271344+02:00"
+    "rianalisi": "2026-09-14T09:22:41.808816+02:00"
   },
   {
-    "id": "0b2fed86-e968-4a91-a7bd-6c320ebae5f2",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:24.695530+02:00",
+    "id": "370df11c-c76e-478f-a745-1181849f2474",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:14.345687+02:00",
+    "firme_pagine": [
+      "d5fea3957df64adc3ac4bec089195d2efe6b5f5e4a13b0d6b7a737457932a312"
+    ],
     "dati": {
-      "fornitore": "PONTE REALE SPA",
-      "numero_ddt": "260108878",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "CREF SRL PUNTO VENDITA DI CITTA DUCALE",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTA DUCALE (RM)",
-      "leggibilita_bassa": false,
-      "partita_iva": "",
-      "fornitore_scartato": "CREF SRL"
-    },
-    "rianalisi": "2026-09-11T12:34:38.191978+02:00",
-    "stato_manuale": "2026-09-11T12:35:14.040646+02:00"
-  },
-  {
-    "id": "90588954-cd39-4c03-9bd5-fcc377c33fee",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:23:57.089799+02:00",
-    "dati": {
-      "fornitore": "UBENA ALIMENTARI SRL",
-      "numero_ddt": "E5155767MP00576050",
-      "data_ddt": "12-01-2026",
-      "ragione_sociale_consegna": "UB CS PAPRIKA DOLCE",
-      "indirizzo_consegna": "VIA DEL RAME, PONTE FELCINO, 06077, ITALY",
-      "leggibilita_bassa": false,
-      "partita_iva": "08601330965",
-      "fornitore_letto": "UBENA"
-    },
-    "rianalisi": "2026-09-11T14:02:06.836801+02:00",
-    "numero_pagine": 2,
-    "firme_pagine": [],
-    "unione": "manuale"
-  },
-  {
-    "id": "a0096599-c857-425f-b608-57b73b34fb5a",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:55.091979+02:00",
-    "dati": {
-      "fornitore": "PASTIFICIO RANA SPA",
-      "numero_ddt": "351",
-      "data_ddt": "30-01-2026",
+      "fornitore": "BEIERSDORF SPA",
+      "numero_ddt": "28095",
+      "data_ddt": "23-07-2026",
       "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18-20, 02015 CITTADUCALE",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "01397480235",
-      "fornitore_letto": "PASTIFICIO RANA"
-    },
-    "rianalisi": "2026-09-11T15:21:18.205208+02:00",
-    "stato_manuale": "2026-09-11T12:48:53.241469+02:00"
+      "partita_iva": "00133919993",
+      "fornitore_letto": "BEIERSDORF"
+    }
   },
   {
-    "id": "e333b69e-507f-4865-b72f-208db5ccc358",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:27:24.362270+02:00",
+    "id": "e794ad2a-e164-41a0-b5b2-1517eb52b07c",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:22.201249+02:00",
+    "firme_pagine": [
+      "a19f8bd718f71a31e4c388de1e976942ca84bf445010939509d68c8d7b863021"
+    ],
     "dati": {
-      "fornitore": "DE SANTIS EMILIO",
-      "numero_ddt": "5601/1",
+      "fornitore": "AGEDIS SRL",
+      "numero_ddt": "B/07/6611",
+      "data_ddt": "27-07-2026",
+      "ragione_sociale_consegna": "CREF SRL (CITTADUCALE)",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 05100 CITTADUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "00970070595"
+    },
+    "rianalisi": "2026-09-14T09:21:14.259424+02:00"
+  },
+  {
+    "id": "300b8cc1-d734-4561-837e-0c3c860f296b",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:29.982977+02:00",
+    "firme_pagine": [
+      "af89845f965a0bfca597f773b48a26c5150d2b63e0273f61c45d87b07beb63b0"
+    ],
+    "dati": {
+      "fornitore": "GAMEVISION SRL",
+      "numero_ddt": "17.238/26",
+      "data_ddt": "25-06-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD PAC 2000 - EX RIETI",
+      "indirizzo_consegna": "VIA DELLE SCIENZE, 20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "04195000288"
+    },
+    "rianalisi": "2026-09-14T09:19:42.069796+02:00"
+  },
+  {
+    "id": "4aba38ff-b3e6-431e-a10a-2524b5eef098",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:36.342741+02:00",
+    "firme_pagine": [
+      "08bae376d1bd19d398ddd34bcf828b0f3911254e2873aaed7a9dace0ed3b1335"
+    ],
+    "dati": {
+      "fornitore": "GERMINAL SPA SB",
+      "numero_ddt": "3134",
+      "data_ddt": "11-06-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD RIETI - CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20 02015CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00802860262"
+    },
+    "rianalisi": "2026-09-14T09:19:18.568456+02:00"
+  },
+  {
+    "id": "981b371f-a9e5-4ff9-a8da-1206808553a3",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:44.014940+02:00",
+    "firme_pagine": [
+      "a30ce68ffd4f7e3d7aa9e2149995dbd4c3aa9c45ff83288424c8159b0aae5cde"
+    ],
+    "dati": {
+      "fornitore": "FOOTWEAR CEBO INTERNATIONAL SRL",
+      "numero_ddt": "DT/1050",
+      "data_ddt": "04-06-2026",
+      "ragione_sociale_consegna": "CREF SRL RIETI 151981",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "02159770201"
+    },
+    "rianalisi": "2026-09-14T09:18:15.739856+02:00"
+  },
+  {
+    "id": "af63b1f0-de8e-42a5-9754-4190db7f4bf2",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:51.699800+02:00",
+    "firme_pagine": [
+      "8e6a2eeb909af80132ead980ddc71ee6a5cf5da30bfe61a45ffae36a1e83d01e"
+    ],
+    "dati": {
+      "fornitore": "CIVA GROUP DISTRIBUZIONE SRL",
+      "numero_ddt": "16916",
+      "data_ddt": "19-08-2026",
+      "ragione_sociale_consegna": "PAC 2000 A SOCIETA' COOPERATIVA",
+      "indirizzo_consegna": "VIA DEL RAME, 2, 06077 PONTE FELCINO",
+      "leggibilita_bassa": false,
+      "partita_iva": "02092200340"
+    }
+  },
+  {
+    "id": "a4e34059-389c-4f93-8d9a-b770d207b4c2",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:08:59.448322+02:00",
+    "firme_pagine": [
+      "caa46cff087d460e877ceeb816af8da1981fe60c47ce339bbcc827b02bb4f800"
+    ],
+    "dati": {
+      "fornitore": "GASTRONOMY SRL",
+      "numero_ddt": "7902",
+      "data_ddt": "18-08-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 - CITTA DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "14989041000"
+    },
+    "rianalisi": "2026-09-14T09:16:05.125046+02:00"
+  },
+  {
+    "id": "ff42e906-f0c4-4810-aeea-440c9fa2a0a8",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:09:06.215969+02:00",
+    "firme_pagine": [
+      "d72059dbf94944c88bd89ea3a3624306f50893eff82a4089e1d37b5a527d571d"
+    ],
+    "dati": {
+      "fornitore": "IGAM SPA",
+      "numero_ddt": "DT26006419",
       "data_ddt": "04-08-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "ragione_sociale_consegna": "CREF SRL(IPER) - 151981",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 20, 02015 CITTADUCALE (RI) (IT)",
       "leggibilita_bassa": false,
-      "partita_iva": "10183300580"
-    },
-    "rianalisi": "2026-09-11T15:24:26.955244+02:00"
+      "partita_iva": "07225770721"
+    }
   },
   {
-    "id": "7257c0fa-570c-4f94-a5b5-6f93da6039f0",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:25:52.506532+02:00",
+    "id": "b88ed600-4a54-4149-81fd-5e148efecd12",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:09:13.996864+02:00",
+    "firme_pagine": [
+      "46a0338e256304a49f4d26f477c43f3595ebc4976df3458b2d28cf8d2c891f7c"
+    ],
     "dati": {
-      "fornitore": "SAN CARLO GRUPPO ALIMENTARE SPA",
-      "numero_ddt": "241FZBB50908",
-      "data_ddt": "04-07-2026",
-      "ragione_sociale_consegna": "CREF SRL",
-      "indirizzo_consegna": "V. VIA DELLE SCIENZE 18/20, 02015 CITTADUCALE (RI)",
+      "fornitore": "FOODNESS SPA",
+      "numero_ddt": "B1/0002506",
+      "data_ddt": "24-08-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD - CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE RI, ITALIA",
       "leggibilita_bassa": false,
-      "partita_iva": "04172800155"
+      "partita_iva": "01930570203"
     },
-    "rianalisi": "2026-09-11T15:26:52.718432+02:00"
+    "rianalisi": "2026-09-14T09:14:39.301157+02:00"
   },
   {
-    "id": "0eed15e0-b335-4312-838c-ffcf6ff4dab4",
-    "file_origine": "20260911112653890.pdf",
-    "timestamp": "2026-09-11T11:24:38.507453+02:00",
+    "id": "c0ef29d2-5bd1-44ec-b427-0a1806a2f6f9",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:09:21.630364+02:00",
+    "firme_pagine": [
+      "b295be3bb02d8af15092b2588945fd202bd5c811e8a8a532722057b552136a22"
+    ],
     "dati": {
-      "fornitore": "SAGEM SRL",
-      "numero_ddt": "64870",
-      "data_ddt": "01-09-2026",
-      "ragione_sociale_consegna": "PAC 2000A SOC.COOP.",
-      "indirizzo_consegna": "VIA DEL RAME, 06134, PONTE FELCINO, PG (IT)",
+      "fornitore": "ENERVIT SPA",
+      "numero_ddt": "80967072",
+      "data_ddt": "27-08-2026",
+      "ragione_sociale_consegna": "151981 - CREEF/SPAZIO CONAD",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18-20, 02015 RIETI (RI)",
       "leggibilita_bassa": false,
-      "partita_iva": "03342820275"
+      "partita_iva": "02375690134",
+      "fornitore_letto": "ENERVIT"
     },
-    "rianalisi": "2026-09-11T15:34:10.409997+02:00"
+    "rianalisi": "2026-09-14T09:13:37.646847+02:00"
+  },
+  {
+    "id": "01292056-7f44-498b-9eeb-85f5e02775b3",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:09:29.493401+02:00",
+    "firme_pagine": [
+      "935ff5ab57b0e6ad93aa2dc115233a8ccca454a641f51504634b896976454fb0"
+    ],
+    "dati": {
+      "fornitore": "CAFFÈ BORBONE SRL",
+      "numero_ddt": "1000102678",
+      "data_ddt": "26-08-2026",
+      "ragione_sociale_consegna": "SPAZIO CONAD CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18/20, 02015 CITTA' DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "07097160639"
+    },
+    "rianalisi": "2026-09-14T10:45:45.546913+02:00"
+  },
+  {
+    "id": "4a6f430e-0c71-49b1-9f4c-0bad4a90d688",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:10.954627+02:00",
+    "firme_pagine": [
+      "5470120fe6f01837e140dd9f045093ee97b292ce8676b1b2d469d64325426674"
+    ],
+    "dati": {
+      "fornitore": "EUROFOOD SPA",
+      "numero_ddt": "17035",
+      "data_ddt": "27-03-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015, CITTÀ, DUCALE (PT)",
+      "leggibilita_bassa": false,
+      "partita_iva": "09362510159"
+    },
+    "rianalisi": "2026-09-14T10:46:29.203245+02:00"
+  },
+  {
+    "id": "dd8533f2-3f21-47e4-8106-fb1f016b41d6",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:04:03.744098+02:00",
+    "firme_pagine": [
+      "8a4a1506b6b34759235b82dbcb873ec7efc980d140901e7924d2611a24edc4b8"
+    ],
+    "dati": {
+      "fornitore": "EQUILIBRA SRL",
+      "numero_ddt": "IT00126021555",
+      "data_ddt": "17-04-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTÀ DUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "06570290012"
+    },
+    "rianalisi": "2026-09-14T10:46:50.402276+02:00"
+  },
+  {
+    "id": "c6ee23d7-6790-416b-9cae-d934498efec3",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T11:26:50.835634+02:00",
+    "firme_pagine": [
+      "6f9f5fe7bd836725dedad6739826408da8c6b675e2b7c47238efc03078eec8fe"
+    ],
+    "dati": {
+      "fornitore": "EUROVO SRL",
+      "numero_ddt": "613/663738",
+      "data_ddt": "10-08-2026",
+      "ragione_sociale_consegna": "PAC 2000 A -PUNTI VENDITA LAZIO #",
+      "indirizzo_consegna": "VIA DEL RAME, 2 PONTE FELCINO CREF SRL PAC2000 VIALE DELLE SCIENZE, 18/20 CITTADUCALE EUROVO-DEP.ARICCIA-ROMA VIA DELLE GROTTE,2 06/2282711 ARICCIA (RM)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00727070393"
+    }
+  },
+  {
+    "id": "a9439df3-b113-4eb0-ba5f-2654d1bddd7b",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T11:26:58.407349+02:00",
+    "firme_pagine": [
+      "1a5a016a879938daaf1a6a280521586f897ebd7aa9df02b8bdaf5197bb748734"
+    ],
+    "dati": {
+      "fornitore": "CENTRALE LATTE DI RIETI SRL",
+      "numero_ddt": "007337/129",
+      "data_ddt": "29-08-2026",
+      "ragione_sociale_consegna": "",
+      "indirizzo_consegna": "VIA DELLE SCIENZE, 02100 RIETI (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "03199890967"
+    }
+  },
+  {
+    "id": "892f2cad-d30a-4286-9167-e03c7bd27487",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T11:27:06.037835+02:00",
+    "firme_pagine": [
+      "a95443a5e56cb6a310deea28996cc2a9e937f6802d629398efb208bdba0ba0cf"
+    ],
+    "dati": {
+      "fornitore": "CENTRALE DEL LATTE DI ROMA SPA",
+      "numero_ddt": "788/003547",
+      "data_ddt": "30-06-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, CITTA' DUCALE (RI), 02015",
+      "leggibilita_bassa": false,
+      "partita_iva": "05191251007"
+    }
+  },
+  {
+    "id": "f7828453-e1be-40e3-9334-05e078103b2b",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T11:27:13.821507+02:00",
+    "firme_pagine": [
+      "09f0ff1dde53b3fac0fcbc3faf6f81becc72691cca780e081465b109898165ea"
+    ],
+    "dati": {
+      "fornitore": "GRUPPO GRIFO AGROALIMENTARE S.A.C.",
+      "numero_ddt": "217035",
+      "data_ddt": "12-08-2026",
+      "ragione_sociale_consegna": "PAC 2000A IPER RIETI -CREF SRL",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE, 18/20, 02015 CITTA DUCALE",
+      "leggibilita_bassa": false,
+      "partita_iva": "00162070544"
+    }
+  },
+  {
+    "id": "5acecb72-2a57-49f0-a8be-af584b755d49",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T11:27:27.028146+02:00",
+    "firme_pagine": [
+      "0a21e00917779989baa3f050f7f33c4329dfb488e00d40904ab3b055878c67f7"
+    ],
+    "dati": {
+      "fornitore": "GILLI SRL",
+      "numero_ddt": "17712",
+      "data_ddt": "20-07-2026",
+      "ragione_sociale_consegna": "CREF SRL (IPER)",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00163040546"
+    }
+  },
+  {
+    "id": "fe06c251-9a13-478f-87ee-0f40e93dbeaa",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:05:39.131418+02:00",
+    "firme_pagine": [
+      "02bc040f8744f517387ed8d04e8777f0c67556736e0a8f2db4f96a63ee570595"
+    ],
+    "dati": {
+      "fornitore": "AZ DISTRIBUTION SRL",
+      "numero_ddt": "D12918",
+      "data_ddt": "03-12-2025",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE 18/20, 02015 CITTADUCATE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "07044570724"
+    },
+    "stato_manuale": "2026-09-14T09:43:32.848351+02:00",
+    "rianalisi": "2026-09-14T11:56:21.927795+02:00"
+  },
+  {
+    "id": "0a683d2b-a1ef-4712-8f80-7fb8d2a70d71",
+    "file_origine": "20260914092713859.pdf",
+    "timestamp": "2026-09-14T09:02:16.286289+02:00",
+    "firme_pagine": [
+      "7684d0fca2ff55fc897fb9fab6b300a331ed971fffe676da4d1addc401915a2e"
+    ],
+    "dati": {
+      "fornitore": "GRIFOGEL SRL",
+      "numero_ddt": "3.826",
+      "data_ddt": "01-07-2026",
+      "ragione_sociale_consegna": "CR CITTADUCALE",
+      "indirizzo_consegna": "VIALE DELLE SCIENZE 18-20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "01459260541"
+    },
+    "rianalisi": "2026-09-14T12:02:02.951733+02:00"
   }
 ]

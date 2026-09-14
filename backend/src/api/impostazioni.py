@@ -12,10 +12,30 @@ from fastapi import APIRouter, HTTPException
 
 from src.comune import pianificatore
 from src.comune.configurazione import configurazione_completa, salva_configurazione
+from src.ddt.llm_engine import verifica_motore
 from src.notifiche import mailer
 from src.notifiche.impaginazione import pagina as pagina_mail
 
 router = APIRouter()
+
+
+@router.get("/api/motore")
+async def stato_motore():
+    """Se il motore AI risponde e ha il modello configurato.
+
+    La versione in sola lettura del controllo che blocca le analisi
+    (esigi_motore_pronto): qui serve a DIRLO prima, invece di lasciarlo
+    scoprire premendo Analizza. Sta accanto a /api/pianificazione e alla mail
+    di prova per la stessa ragione per cui ci sta quella: sono i tre modi di
+    sapere che una dipendenza esterna e' a posto senza aspettare che un lavoro
+    notturno fallisca.
+
+    Non fallisce mai: un motore spento e' una risposta 200 con pronto=false,
+    non un errore di questa chiamata. Chi la interroga vuole sapere com'e'
+    messo il motore, e distinguere "spento" da "non ho potuto controllare"
+    e' esattamente il punto.
+    """
+    return verifica_motore()
 
 
 @router.get("/api/pianificazione")

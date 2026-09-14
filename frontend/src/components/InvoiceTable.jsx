@@ -65,13 +65,13 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
                     )}
                   </td>
 
-                  <td className="font-monospace text-white fw-bold">
+                  <td className="font-monospace text-body fw-bold">
                     {dati.numero_fattura || campoMancante}
                   </td>
 
-                  <td className="font-monospace text-white text-nowrap">{dati.data_fattura || '—'}</td>
+                  <td className="font-monospace text-body text-nowrap">{dati.data_fattura || '—'}</td>
 
-                  <td className="text-white fw-medium">
+                  <td className="text-body fw-medium">
                     {dati.fornitore || campoMancante}
                     {dati.partita_iva && (
                       <div className="text-body-secondary font-monospace" style={{ fontSize: '0.75rem' }}>
@@ -114,7 +114,7 @@ export default function InvoiceTable({ fatture, onApri, onElimina, onAccoppia, i
                     )}
                   </td>
 
-                  <td className="text-end font-monospace text-white text-nowrap">
+                  <td className="text-end font-monospace text-body text-nowrap">
                     {formattaImporto(dati.importo_totale) || '—'}
                   </td>
 

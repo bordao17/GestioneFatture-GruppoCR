@@ -1,13 +1,39 @@
 {
+    "A.R. TARTUFI SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01560440552",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "fornitore",
+                "etichetta": "il logo Valnerina TARTUFI in alto a sinistra"
+            },
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
     "ABC ITALIA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "11534680019",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -15,26 +41,111 @@
             }
         ]
     },
+    "AGEDIS SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00970070595",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO DELLA MERCE"
+            }
+        ]
+    },
+    "AIA - AGRICOLA ITALIANA ALIMENTARE SPA - UNIPERSONALE": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00233470236",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            },
+            {
+                "campo": "numero_ddt",
+                "etichetta": "N. DOCUMENTO"
+            },
+            {
+                "campo": "data_ddt",
+                "etichetta": "DATA DOCUMENTO"
+            }
+        ]
+    },
+    "ALCE NERO SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04345510376",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione Merce"
+            }
+        ]
+    },
     "ANDRIANI SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "06880780728",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "ANTAAR & S.SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01273320182",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "ANTICHE FONTI DI COTTORELLA RINA AGROQ": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00042030577",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -45,7 +156,12 @@
     "APICOLTURA CASENTINESE SRL": {
         "autorizzato": true,
         "confermato": "yes",
-        "indirizzi_vietati": [],
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [
+            "VIA DEL RAME-ZONA IND.LE PAC 2000, 06077 PONTE FELCINO PG ITALY"
+        ],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
@@ -58,9 +174,66 @@
             }
         ]
     },
+    "ATREPAN SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01640950232",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "AZ DISTRIBUTION SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "07044570724",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "in fondo alla pagina a destra"
+            }
+        ]
+    },
+    "AZIENDA AGRICOLA BR": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "AVICOLA VALLE SANTA"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "01087480578",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
     "BALCONI SPA INDUSTRIA DOLCIARIA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -74,9 +247,31 @@
             }
         ]
     },
+    "BALOCCO SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00312060049",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce CONSEGNA"
+            }
+        ]
+    },
     "BEIERSDORF SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -93,20 +288,59 @@
             }
         ]
     },
-    "BISCOTTI P. GENTILINI SPA S.B.": {
+    "BIG SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "00163040546",
-        "partita_iva_confermata": false,
+        "partita_iva": "04492200961",
+        "partita_iva_confermata": true,
         "regole_campo": []
+    },
+    "BISCOTTI P. GENTILINI SPA S.B.": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00889091005",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "BOTTARI SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01651150201",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce CLIENTE"
+            }
+        ]
     },
     "C.B.F. BALDUCCI GROUP SPA SOCIETÀ BENEFIT": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -118,6 +352,9 @@
     "C.I.R. SAS DI MECARELLI CLAUDIO & C": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -131,15 +368,126 @@
             }
         ]
     },
+    "CAFFÈ BORBONE SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "07097160639",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "CAPITELLI F.LLI SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "Il  numero ddt viene formattato cosi 2025 - IT 005997: prendi solo il numero intero finale",
+        "partita_iva": "00272710336",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "CASA DEL CAFFE' VERGNANO SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00169040011",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Merce da Consegna A:"
+            }
+        ]
+    },
+    "CASEIFICI GRANTERRE SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01299680353",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "CENTRALE DEL LATTE DI ROMA SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "05191251007",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "CENTRALE LATTE DI RIETI SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione merce"
+            }
+        ]
+    },
+    "CENTRO MARCHE DISTRIBUZIONE": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01591680283",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
     "CEREALDOLCI SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "13813611004",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -147,9 +495,50 @@
             }
         ]
     },
+    "CIVA GROUP DISTRIBUZIONE SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "02092200340",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
+    "CONTECOM SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "13088671006",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINAZIONE MERCE"
+            }
+        ]
+    },
     "COOKERY SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -158,20 +547,40 @@
         "partita_iva_confermata": false,
         "regole_campo": []
     },
+    "COSWELL SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00708541206",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
     "COTTORELLA SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00042030577",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "CREF SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": true,
         "nomi_alternativi": [],
@@ -180,9 +589,64 @@
         "partita_iva_confermata": false,
         "regole_campo": []
     },
+    "CTC SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "09702841009",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "DANONE NUTRICIA SPA SOCIETÀ BENEFIT": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Luogo di consegna:"
+            }
+        ]
+    },
+    "DAVE'S SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "03056180809",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI CONSEGNA"
+            }
+        ]
+    },
     "DE SANTIS EMILIO": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -196,31 +660,57 @@
             }
         ]
     },
+    "DIGITRONICA SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [
+            "VIA GIACOMO ANDREASSI, 30, 00123 ROMA RM ITALY"
+        ],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01617621006",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
     "DIVA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00755880523",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
                 "etichetta": "la voce DESTINAZIONE DELLA MERCE"
+            },
+            {
+                "campo": "numero_ddt",
+                "etichetta": "la voce N. DOC."
             }
         ]
     },
     "DOLFIN SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02917440873",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -232,31 +722,170 @@
             }
         ]
     },
-    "DROGHERIA E ALIMENTARI SPA": {
+    "DR.SCHÄR AG/SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "04002830489",
-        "partita_iva_confermata": false,
+        "partita_iva": "00605750215",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "DROGHERIA E ALIMENTARI SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01620680973",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "DYNIT SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "04265590374",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "ELAH-IDUFOUR SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "03193610106",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Indirizzo spedizione"
+            }
+        ]
+    },
+    "ENERVIT SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "ENERVIT"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "02375690134",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
+    "EQUILIBRA SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "06570290012",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
+    "EUROFOOD SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "09362510159",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce MERCE DA CONSEGNARE A"
+            },
+            {
+                "campo": "numero_ddt",
+                "etichetta": "NUMERO E DATA BOLLA"
+            },
+            {
+                "campo": "data_ddt",
+                "etichetta": "NUMERO E DATA BOLLA"
+            }
+        ]
+    },
+    "EUROFRESH SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01793820604",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "EUROVO SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [
+            "VIA DEL RAME, 2 PONTE FELCINO"
+        ],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00727070393",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "F.LLI PETRUCCI SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -270,6 +899,9 @@
     "FAERCH ITALY SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -286,28 +918,188 @@
     "FARCHIONI OLII SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "15634031007",
-        "partita_iva_confermata": false,
+        "partita_iva": "00522110543",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "FATTORE UMBRO SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01669700559",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinatario della merce"
+            }
+        ]
+    },
+    "FERRERO COMMERCIALE ITALIA SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "FERRERO"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "03629090048",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce CESSIONARIO/DESTINATARIO"
+            }
+        ]
+    },
+    "FIMARDOLCI SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01648980595",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Luogo di destinazione"
+            }
+        ]
+    },
+    "FIORENTINI ALIMENTARI SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "FIORENTINI"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "06812450010",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "FIORUCCI SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04731980969",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINAZIONE DELLA MERCE"
+            }
+        ]
+    },
+    "FOODNESS SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01930570203",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DIVERSA DESTINAZIONE MERCE"
+            }
+        ]
+    },
+    "FOOTWEAR CEBO INTERNATIONAL SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "02159770201",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO DOCUMENTO"
+            }
+        ]
+    },
+    "FRATELLI BERETTA SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00208950139",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "FRATELLI DI GIOIA SNC": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "04436420725",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione"
+            }
+        ]
     },
     "FROMI GMBH": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -319,6 +1111,9 @@
     "G & B SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -338,9 +1133,88 @@
             }
         ]
     },
+    "GABBIANO SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01495800201",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
+    "GAMEVISION SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04195000288",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione diversa"
+            }
+        ]
+    },
+    "GAMMA PRODUCTIONS SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "03251490540",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "fornitore",
+                "etichetta": "in alto a sinistra sotto il logo GAMMA PRODUCTIONS"
+            }
+        ]
+    },
+    "GASTRONOMY SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "14989041000",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Destinazione diversa"
+            }
+        ]
+    },
     "GERMINAL SPA SB": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -354,20 +1228,94 @@
             }
         ]
     },
+    "GHIOTTO SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00898011002",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce LUOGO DI DESTINAZIONE"
+            }
+        ]
+    },
     "GILLI SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00163040546",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "GIUSEPPE CITTERIO SALUMIFICIO SPA": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "GIUSEPPE CITTERIO SPA"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "05931440159",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO MERCE"
+            }
+        ]
+    },
+    "GM GRANDI MARCHE - SOCIETÀ A SOCIO UNICO": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00366810281",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "GRANAROLO SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04119190371",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "GRANDEIMPERO": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -376,9 +1324,75 @@
         "partita_iva_confermata": true,
         "regole_campo": []
     },
+    "GRIFOGEL SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [
+            "VIA DEL RAME ZONA IND.LE, 06077 PONTE FELCINO PERUGIA (PG)"
+        ],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01459260541",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "Luogo di destinazione:"
+            }
+        ]
+    },
+    "GRUBER LOGISTICS SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00520690215",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "GRUPPO C.R. SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": true,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "03251490540",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
+    "GRUPPO GRIFO AGROALIMENTARE S.A.C.": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "00162070544",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
     "GUERRA SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -390,6 +1404,9 @@
     "HARIBO ITALIA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [
             "VIA DEL RAME, 06134 PONTE FELCINO Z. IND PG, 00163040546"
         ],
@@ -397,25 +1414,42 @@
         "nomi_alternativi": [
             "HARIBO"
         ],
-        "note_specifiche": "",
+        "note_specifiche": "Per l'indirizzo di consegna e ragione sociale usa il secondo riquadro in alto a destra, sotto il riquadro INTESTATARIO",
         "partita_iva": "06132770154",
         "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
-                "etichetta": "la voce CONSEGNA, nel secondo riquadro in alto a destra"
+                "etichetta": "la voce CONSEGNA A: , nel secondo riquadro in alto a destra"
             }
         ]
+    },
+    "HEALTION SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
     },
     "HEALTION SRL - SOCIETÀ BENEFIT": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01691980484",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -425,18 +1459,29 @@
     },
     "I.D.B. INDUSTRIA DOLCIARIA BELPASSO SPA": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02483770877",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINAZIONE"
+            }
+        ]
     },
     "IGAM SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -453,12 +1498,15 @@
     "IL ROVERE SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "07100830012",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -469,6 +1517,9 @@
     "IMACO SERVICE SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -480,19 +1531,25 @@
     "ITALPEPE": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "03633121003",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "ITALTRANS SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
-        "mai_fornitore": true,
+        "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01569060161",
@@ -502,22 +1559,28 @@
     "KIMBO SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "questo fornitore ha il proprio nome in basso a sinistra scritto in piccolo, altrimenti cè un grande logo KIMBO in alto a sinistra",
         "partita_iva": "01238591216",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
-                "etichetta": "sotto la voce LUOGO DI DESTINAZIONE"
+                "etichetta": "sotto la voce LUOGO DI DESTINAZIONE oppure Luogo di scarico"
             }
         ]
     },
     "LABEYRIE ITALIA SRL SEDE UNICO": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -526,15 +1589,34 @@
         "partita_iva_confermata": true,
         "regole_campo": []
     },
+    "LACTALIS NESTLE PRODOTTI FRESCHI ITALIA SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [
+            "LNPF ITALIA"
+        ],
+        "note_specifiche": "",
+        "partita_iva": "05395030967",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
     "LATTE MONTAGNA ALTO ADIGE SOC. AGR. COOP.": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01661820215",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "fornitore",
@@ -545,6 +1627,9 @@
     "LATTERIA NÖM SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -561,6 +1646,9 @@
     "LEVONI SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -579,6 +1667,9 @@
     "LINDT & SPRUNGLI SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -587,9 +1678,54 @@
         "partita_iva_confermata": true,
         "regole_campo": []
     },
+    "LNPF ITALIA (*)": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
+    "LOGICA SRL ROMA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "04432470153",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
+    "LOGISTICA GRILLO 1939 SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": true,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
     "LORIS SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -601,6 +1737,9 @@
     "LUBEX SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -618,15 +1757,20 @@
             }
         ]
     },
-    "MADAMA OLIVA": {
+    "MADAMA OLIVA SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
-        "nomi_alternativi": [],
+        "nomi_alternativi": [
+            "MADAMA OLIVA"
+        ],
         "note_specifiche": "",
         "partita_iva": "10702821009",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -637,6 +1781,9 @@
     "MAINA PANETTONI SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -659,12 +1806,15 @@
     "MANZI GIOVANNI SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02423440599",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -675,6 +1825,9 @@
     "MARCHESI FRESCOBALDI SOCIETA AGRICOLA SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -686,12 +1839,15 @@
     "MARI LIBRI SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02528610427",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -702,12 +1858,15 @@
     "MARIANANTONI SILVIO SRLS": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01192700571",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -718,12 +1877,15 @@
     "ME.PI.MA.SÜDTIROL SRL/G.M.B.H.": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02562960217",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -734,12 +1896,15 @@
     "MEC IMPORT GROUP SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "16010101000",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -750,23 +1915,29 @@
     "MENNUTIGROUP DISTRIBUZIONE SRL A SOCIO UNICO": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "06586000488",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "MOLINO SANTA SUSANNA DI ALDO BOSI & C. SNC": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00838090579",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -777,6 +1948,9 @@
     "MOLKEREI ALOIS MÜLLER GMBH & CO. KG": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -788,12 +1962,15 @@
     "NATRULY ITALIA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "16222991008",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -804,6 +1981,9 @@
     "NEW POINT SPA - SOCIETÀ UNIPERSONALE": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -815,6 +1995,9 @@
     "NT FOOD SRL UNIPERSONALE": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -835,6 +2018,9 @@
     "NUOVO SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -851,6 +2037,9 @@
     "NUTRITION & SANTÈ ITALIA SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -867,17 +2056,23 @@
     "O SOLE 'E NAPULE DI CALABRIA ALFONSO SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02691611210",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "O&N SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -894,6 +2089,9 @@
     "OFFICINE TESSILI SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -905,6 +2103,9 @@
     "OLGA ITALIA SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -916,6 +2117,9 @@
     "OROPAN SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -927,61 +2131,121 @@
     "OSCAR'78 SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01183571007",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PABULO SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "13421601009",
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "PAC 2000 A SOC. A R.L.": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
+    "PAC 2000A SOCIETA' COOPERATIVA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
         "partita_iva_confermata": false,
         "regole_campo": []
     },
     "PAI SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "12190280151",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PANIFICIO DI BELMONTE SNC DI IMPERATORI T.E M.": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00776230575",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "PANIFICIO ITALIA SRL": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "11486281006",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PARDGROUP SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "03369761204",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PARTENOPE DISTRIBUZIONE SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -998,17 +2262,23 @@
     "PASTA RICCA DI FESTUCCIA MONIA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01256290576",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PASTIFICIO RANA SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -1027,17 +2297,23 @@
     "PERFETTI VAN MELLE SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "04219660158",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "PERLETTI SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1049,6 +2325,9 @@
     "PICA ITALIA SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1060,6 +2339,9 @@
     "PONTE REALE SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1073,9 +2355,26 @@
             }
         ]
     },
+    "PONTE REALE SPA UNIPERSONALE SEDE LEGALE: S.S. VENAFRANA, KM 18+500 - 86079 VENAFRO (IS) - SEDE OPERATIVA: S.P. PONTEREALE KM 7+600 - 81010 CIORLANO (CE) - ITALY WWW.PONTEREALE.IT": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
     "PROBIOS SRL - SOCIETÀ BENEFIT": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1092,6 +2391,9 @@
     "PROZIS.COM, S.A.": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1103,17 +2405,23 @@
     "RHÜTTEN SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01136310438",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "RITTER SPORT ITALIA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1127,9 +2435,31 @@
             }
         ]
     },
+    "ROBERTO AZZOCCHI SRL": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "07913191008",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce Indirizzo di consegna"
+            }
+        ]
+    },
     "ROSSI ALIMENTARI SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1141,6 +2471,9 @@
     "S&G SNC": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1154,9 +2487,26 @@
             }
         ]
     },
+    "S.A.B.A. FISH": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
     "SA.BA DI SABATINI EUGENIO FISH": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -1170,6 +2520,9 @@
     "SAGEM SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1186,6 +2539,9 @@
     "SAIS SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1197,6 +2553,9 @@
     "SAL. PI UNO SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [
             "VIA GIACOMO ANDREASSI 30, 00123 ROMA (RM)"
         ],
@@ -1216,18 +2575,29 @@
     },
     "SALUMIFICIO CIRIACI SRL": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "01402430449",
-        "partita_iva_confermata": false,
-        "regole_campo": []
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "accanto la voce DESTINAZ."
+            }
+        ]
     },
     "SALUMIFICIO UMBRO SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1244,6 +2614,9 @@
     "SAMA SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1255,6 +2628,9 @@
     "SAN CARLO GRUPPO ALIMENTARE SPA": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1271,12 +2647,15 @@
     "SAPORÀ SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "14792991003",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -1287,17 +2666,23 @@
     "SIRMAN SPA A SOCIO UNICO": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "00270140288",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "SO.DI.FER.SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1314,6 +2699,9 @@
     "SODICO SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1325,12 +2713,15 @@
     "SPERANDIO SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "03524801002",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -1338,9 +2729,40 @@
             }
         ]
     },
+    "SPTDITTA PAC 2000 A SOCIETA' COOPERATIVA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "01560440552",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
+    "STEF ITALIA SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
+        "regole_campo": []
+    },
     "TENDER SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1352,6 +2774,9 @@
     "TURCONI DISTRIBUZIONE SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -1370,6 +2795,9 @@
     "UBENA ALIMENTARI SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
@@ -1388,6 +2816,9 @@
     "URBANI TARTUFI SRL CON SOCIO UNICO": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1404,6 +2835,9 @@
     "VERCHA EXPRESS SRL": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": true,
         "nomi_alternativi": [],
@@ -1415,12 +2849,15 @@
     "VILLA GUELFA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02537910040",
-        "partita_iva_confermata": false,
+        "partita_iva_confermata": true,
         "regole_campo": [
             {
                 "campo": "indirizzo_consegna",
@@ -1430,18 +2867,29 @@
     },
     "VITAKRAFT ITALIA SPA": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "02267570543",
         "partita_iva_confermata": true,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "numero_ddt",
+                "etichetta": "accanto la voce Bolla Nr."
+            }
+        ]
     },
     "WIREPHARMA SRL": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1458,6 +2906,9 @@
     "WITOR'S SPA": {
         "autorizzato": true,
         "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
@@ -1478,12 +2929,29 @@
     "YAKULT": {
         "autorizzato": true,
         "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
         "partita_iva": "05513080969",
         "partita_iva_confermata": true,
+        "regole_campo": []
+    },
+    "YAKULT ITALIA SPA": {
+        "autorizzato": true,
+        "confermato": "no",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "",
+        "partita_iva_confermata": false,
         "regole_campo": []
     }
 }

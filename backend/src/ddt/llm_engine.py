@@ -14,6 +14,8 @@ from src.comune.memory_manager import (
     carica_memoria,
     partita_iva_per,
     normalizza_piva,
+    voce_fornitore_estero,
+    annota_fornitore_critico,
 )
 from src.comune.configurazione import valore
 from src.comune.normalizzatore import normalizza_dati, normalizza_partita_iva, partita_iva_valida
@@ -37,6 +39,109 @@ def _client():
 
 def _opzioni():
     return {'num_ctx': valore("MODELLO_NUM_CTX"), 'temperature': 0.0}
+
+
+# Quanto si aspetta il motore quando gli si chiede solo se c'e'. Corto di
+# proposito, per la stessa ragione del connect_timeout del database: questo
+# controllo sta sulla STRADA di una scansione, e un host spento deve dirlo
+# subito invece di tenerla ferma. L'estrazione vera non ha timeout e non deve
+# averne uno: sulla GPU condivisa una pagina puo' legittimamente aspettare il
+# suo turno dietro a qualcun altro.
+TIMEOUT_VERIFICA = 5
+
+
+def _nomi_modelli(elenco):
+    """I nomi dei modelli installati, da qualunque forma li dia la libreria.
+
+    ollama >= 0.4 risponde con un oggetto pydantic (.models, campo .model), le
+    versioni precedenti con un dizionario e la chiave 'name'. requirements.txt
+    ammette entrambe (ollama>=0.2.0), quindi qui si reggono entrambe: questo
+    controllo esiste per dire cosa non va, e sarebbe una beffa se fosse lui a
+    rompersi su un aggiornamento della libreria.
+    """
+    modelli = getattr(elenco, "models", None)
+    if modelli is None and isinstance(elenco, dict):
+        modelli = elenco.get("models", [])
+
+    nomi = []
+    for modello in modelli or []:
+        if isinstance(modello, dict):
+            nome = modello.get("model") or modello.get("name")
+        else:
+            nome = getattr(modello, "model", None) or getattr(modello, "name", None)
+        if nome:
+            nomi.append(str(nome))
+    return nomi
+
+
+def _stesso_modello(configurato, installato):
+    """Confronta due nomi di modello tenendo conto del tag implicito.
+
+    "qwen2.5vl" e "qwen2.5vl:latest" sono lo stesso modello: Ollama completa il
+    tag da solo quando manca, e un confronto letterale direbbe "non installato"
+    di un modello che c'e'.
+    """
+    conf = configurato.strip()
+    inst = installato.strip()
+    if ":" not in conf:
+        conf += ":latest"
+    if ":" not in inst:
+        inst += ":latest"
+    return conf.casefold() == inst.casefold()
+
+
+def verifica_motore():
+    """Se il motore AI e' pronto ad analizzare, e se no perche'.
+
+    Chiede l'elenco dei modelli installati: costa millisecondi, non occupa la
+    GPU e risponde in un colpo solo alle due domande che fanno fallire
+    un'estrazione prima ancora che cominci — l'host risponde? e ha il modello
+    che stiamo per chiedergli?
+
+    Il modello mancante e' il piu' insidioso dei due casi: Ollama risponde,
+    quindi da fuori sembra tutto a posto, e l'errore arriva alla prima pagina.
+
+    **Non solleva mai e non restituisce mai None**: e' un controllo, e un
+    controllo che esplode non si distingue da un motore rotto. Chi deve
+    fermarsi legge "pronto"; il "motivo" e' gia' scritto per essere mostrato a
+    una persona, perche' e' l'unica cosa che quella persona potra' leggere.
+    """
+    host = str(valore("OLLAMA_HOST") or "").strip()
+    modello = str(valore("MODELLO_VISION") or "").strip()
+    esito = {
+        "pronto": False,
+        "host": host,
+        "modello": modello,
+        "motivo": "",
+        "modelli_disponibili": [],
+    }
+
+    if not host:
+        esito["motivo"] = ("OLLAMA_HOST non e' configurato: non c'e' nessun motore AI "
+                           "a cui mandare le pagine.")
+        return esito
+
+    try:
+        installati = _nomi_modelli(ollama.Client(host=host, timeout=TIMEOUT_VERIFICA).list())
+    except Exception as e:
+        esito["motivo"] = (f"Ollama non risponde su {host} ({type(e).__name__}). "
+                           f"Controlla che la macchina sia accesa e che il servizio sia avviato.")
+        return esito
+
+    esito["modelli_disponibili"] = installati
+
+    if not modello:
+        esito["motivo"] = "MODELLO_VISION non e' configurato: non si sa quale modello usare."
+        return esito
+
+    if not any(_stesso_modello(modello, nome) for nome in installati):
+        esito["motivo"] = (f"Ollama risponde su {host} ma il modello '{modello}' non e' installato "
+                           f"(scaricalo con 'ollama pull {modello}'). "
+                           f"Presenti: {', '.join(installati) if installati else 'nessuno'}.")
+        return esito
+
+    esito["pronto"] = True
+    return esito
 
 # Campi che si leggono INSIEME perche' stanno nello stesso riquadro del
 # documento: chiedere separatamente il nome del punto vendita e il suo indirizzo
@@ -230,7 +335,9 @@ def completa_partita_iva(dati, image_path):
         frequente, ed e' cio' che rende questa lettura un costo che si paga una
         volta per fornitore invece che a ogni pagina;
       - fornitore nuovo (o voce ancora senza chiave) -> una domanda mirata, il
-        cui esito resta una PROPOSTA da confermare in dashboard.
+        cui esito resta una PROPOSTA da confermare in dashboard;
+      - fornitore marcato ESTERO -> non si chiede niente a nessuno: una P.IVA
+        italiana non c'e' e non ci sara' mai.
     Una lettura che contraddice una P.IVA gia' confermata non sovrascrive
     niente: resta come traccia in partita_iva_scartata, come per gli indirizzi.
     """
@@ -239,6 +346,22 @@ def completa_partita_iva(dati, image_path):
         return dati
 
     memoria = carica_memoria()
+
+    # Un fornitore estero non riempie mai la sua "partita_iva", quindi senza
+    # questa uscita la domanda mirata (~1 s) ripartirebbe su ogni pagina di
+    # ogni sua bolla, per sempre. L'identificativo fiscale estero, se l'utente
+    # l'ha scritto, si porta sul documento: e' l'unica chiave che quel
+    # fornitore ha, ed e' la stessa che arriva dall'XML di una sua fattura.
+    estero, identificativo = voce_fornitore_estero(fornitore, memoria)
+    if estero:
+        letta = normalizza_piva(dati.get("partita_iva"))
+        identificativo = normalizza_piva(identificativo)
+        if letta and letta != identificativo:
+            dati["partita_iva_scartata"] = letta
+        dati["partita_iva"] = identificativo
+        print(f"🌍 [{fornitore}] fornitore estero: nessuna P.IVA italiana da cercare.")
+        return dati
+
     piva_nota, _confermata = partita_iva_per(fornitore, memoria)
 
     if piva_nota:
@@ -385,14 +508,18 @@ def estrai_dati_da_immagine(image_path):
         #     nell'abbinamento con le fatture, che gli alias non li legge;
         #  5. completa_partita_iva, dopo le regole (una regola mirata puo'
         #     riguardare proprio la P.IVA);
-        #  6. filtra_indirizzo_vietato per ultimo, come rete di sicurezza: se
-        #     anche la domanda mirata e' finita sull'indirizzo vietato, il campo
-        #     va comunque svuotato e il documento mandato in CHECK.
+        #  6. filtra_indirizzo_vietato, come rete di sicurezza: se anche la
+        #     domanda mirata e' finita sull'indirizzo vietato, il campo va
+        #     comunque svuotato e il documento mandato in CHECK;
+        #  7. annota_fornitore_critico per ultimo, perche' cerca la voce in
+        #     anagrafica e va fatto sul nome CANONICO (passo 4), che e' quello
+        #     con cui il confronto ha piu' probabilita' di riuscire — e su un
+        #     nome svuotato dal passo 3 non ci sarebbe niente da cercare.
         dati = applica_regole_campo(normalizza_dati(dati), image_path)
         dati = filtra_fornitore_vietato(dati)
         dati = applica_nome_canonico(dati)
         dati = completa_partita_iva(dati, image_path)
-        return filtra_indirizzo_vietato(dati)
+        return annota_fornitore_critico(filtra_indirizzo_vietato(dati))
     except Exception as e:
         print(f"❌ Errore sull'immagine {image_path}: {e}")
         return None

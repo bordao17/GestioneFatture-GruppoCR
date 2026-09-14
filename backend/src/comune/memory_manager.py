@@ -124,6 +124,34 @@ CHIAVE_ALIAS = "nomi_alternativi"
 # dedurre da un documento.
 CHIAVE_MAI_FORNITORE = "mai_fornitore"
 
+# Fornitore ESTERO: non ha una partita IVA italiana, e non l'avra' mai. Senza
+# questo flag il sistema si comporta come se gliela stesse ancora cercando —
+# completa_partita_iva() fa la domanda mirata al modello su ogni pagina di ogni
+# bolla (la voce non si riempie mai, quindi la domanda non smette mai), le sue
+# fatture escono con la segnalazione "piva_assente", e la voce resta ferma
+# nella coda delle conferme senza che nessuno possa chiuderla.
+#
+# L'identificativo fiscale estero (VAT number, USt-IdNr., ...) sta in un campo
+# SUO ed e' FACOLTATIVO. Non si infila dentro partita_iva perche' quella e' la
+# chiave italiana: ci stanno sopra il carattere di controllo di
+# partita_iva_valida(), la coda delle conferme, motivo_scarto_piva() e
+# trova_fornitore_per_piva(). In cambio non si perde niente sull'abbinamento
+# delle fatture: lettore_xml._partita_iva() restituisce IdCodice senza prefisso
+# paese e normalizza_piva() tiene solo le cifre, quindi "DE811128135" e
+# "811128135" restano lo stesso valore.
+CHIAVE_FORNITORE_ESTERO = "fornitore_estero"
+CHIAVE_IDENTIFICATIVO_ESTERO = "identificativo_estero"
+
+# Fornitore CRITICO: quello che sappiamo gia' che sbaglia le bolle. Una sua
+# scansione con tutti e quattro i campi pieni finisce in OK e nessuno la
+# riapre, ed e' esattamente il caso che determina_stato() non puo' vedere — sa
+# contare i campi letti, non giudicare il documento. Marcandolo, le sue bolle
+# vanno sempre in CHECK "a prescindere da quello che legge".
+#
+# Come mai_fornitore, lo mette solo l'utente: che un fornitore stampi male i
+# propri documenti e' un fatto che il codice non puo' dedurre da una pagina.
+CHIAVE_FORNITORE_CRITICO = "fornitore_critico"
+
 
 def normalizza_piva(valore):
     """Solo cifre: "IT 16834201002", "IT16834201002" e "16834201002" sono la
@@ -154,6 +182,30 @@ def mai_fornitore_da_valore(valore):
     Al contrario di autorizzato/confermata qui il default e' il permissivo: ci
     sono decine di voci nate prima di questo flag e sono fornitori veri. Il
     divieto e' l'eccezione, e va scritto.
+    """
+    if valore is None:
+        return False
+    if isinstance(valore, bool):
+        return valore
+    return str(valore).strip().lower() in ("yes", "si", "sì", "true", "1")
+
+
+def fornitore_estero_da_valore(valore):
+    """Legge il flag "fornitore_estero". La chiave ASSENTE vale NO, come per
+    mai_fornitore: le voci nate prima di questo flag sono fornitori italiani."""
+    if valore is None:
+        return False
+    if isinstance(valore, bool):
+        return valore
+    return str(valore).strip().lower() in ("yes", "si", "sì", "true", "1")
+
+
+def fornitore_critico_da_valore(valore):
+    """Legge il flag "fornitore_critico". La chiave ASSENTE vale NO.
+
+    Il default e' il permissivo per la stessa ragione di mai_fornitore: se
+    l'assenza valesse "critico", al primo avvio l'intero archivio finirebbe in
+    CHECK. La criticita' e' l'eccezione, e va scritta.
     """
     if valore is None:
         return False
@@ -361,6 +413,9 @@ def unifica_memoria(memoria):
                 CHIAVE_PIVA_CONFERMATA: piva_confermata_da_valore(dati.get(CHIAVE_PIVA_CONFERMATA)),
                 CHIAVE_AUTORIZZATO: autorizzato_da_valore(dati.get(CHIAVE_AUTORIZZATO)),
                 CHIAVE_MAI_FORNITORE: mai_fornitore_da_valore(dati.get(CHIAVE_MAI_FORNITORE)),
+                CHIAVE_FORNITORE_ESTERO: fornitore_estero_da_valore(dati.get(CHIAVE_FORNITORE_ESTERO)),
+                CHIAVE_IDENTIFICATIVO_ESTERO: str(dati.get(CHIAVE_IDENTIFICATIVO_ESTERO, "") or "").strip(),
+                CHIAVE_FORNITORE_CRITICO: fornitore_critico_da_valore(dati.get(CHIAVE_FORNITORE_CRITICO)),
             }
             continue
 
@@ -389,6 +444,22 @@ def unifica_memoria(memoria):
         # che non lo e' mai, altrimenti riaprirebbe l'errore che aveva chiuso.
         if mai_fornitore_da_valore(dati.get(CHIAVE_MAI_FORNITORE)):
             voce[CHIAVE_MAI_FORNITORE] = True
+
+        # Estero e critico si comportano allo stesso modo: il flag acceso
+        # vince. Fondere due voci non deve far ripartire la caccia alla P.IVA
+        # italiana di un fornitore che non ne ha una, ne' rimettere in OK le
+        # bolle di un fornitore che l'utente ha marcato come critico.
+        if fornitore_estero_da_valore(dati.get(CHIAVE_FORNITORE_ESTERO)):
+            voce[CHIAVE_FORNITORE_ESTERO] = True
+        if fornitore_critico_da_valore(dati.get(CHIAVE_FORNITORE_CRITICO)):
+            voce[CHIAVE_FORNITORE_CRITICO] = True
+
+        # L'identificativo estero e' un dato scritto a mano: vince il primo
+        # non vuoto, non c'e' modo di sapere quale delle due voci sia piu'
+        # aggiornata e sovrascriverlo perderebbe l'unico che c'era.
+        identificativo_nuovo = str(dati.get(CHIAVE_IDENTIFICATIVO_ESTERO, "") or "").strip()
+        if identificativo_nuovo and not voce[CHIAVE_IDENTIFICATIVO_ESTERO]:
+            voce[CHIAVE_IDENTIFICATIVO_ESTERO] = identificativo_nuovo
 
         # Gli indirizzi vietati si sommano (senza ridoppiarli): sono divieti,
         # tenerne uno solo riaprirebbe la porta all'errore che l'altro chiudeva.
@@ -535,6 +606,15 @@ def aggiorna_fornitore(fornitore, note_proposte, partita_iva=""):
         print(f"[MEMORIA] '{fornitore}' e' '{gia_noto}', marcato come mai fornitore: non lo censisco.")
         return
 
+    # Un fornitore estero non ha una P.IVA italiana: qualunque numero letto
+    # accanto al suo nome sulla bolla e' di qualcun altro (spesso il nostro,
+    # stampato come cessionario). Scartarlo qui e' la stessa guardia di
+    # mai_fornitore, applicata alla chiave invece che al nome.
+    if gia_noto and fornitore_estero_da_valore(memoria[gia_noto].get(CHIAVE_FORNITORE_ESTERO)
+                                               if isinstance(memoria[gia_noto], dict) else None):
+        print(f"[MEMORIA] '{gia_noto}' e' un fornitore estero: nessuna P.IVA italiana da proporre.")
+        return
+
     piva_letta = normalizza_piva(partita_iva) if partita_iva_valida(partita_iva) else ""
 
     # Una P.IVA che risulta gia' di qualcun altro non e' di questo fornitore:
@@ -601,6 +681,53 @@ def partita_iva_per(fornitore, memoria=None):
 
     piva = normalizza_piva(voce.get(CHIAVE_PARTITA_IVA))
     return piva, (piva != "" and piva_confermata_da_valore(voce.get(CHIAVE_PIVA_CONFERMATA)))
+
+
+def voce_fornitore_estero(fornitore, memoria=None):
+    """(estero, identificativo) del fornitore in anagrafica, (False, "") se ignoto.
+
+    Gemella di partita_iva_per: si parte da un nome letto su una scansione,
+    quindi il confronto e' per somiglianza. Serve a chi deve decidere se ha
+    ancora senso cercare una partita IVA italiana su quel documento.
+    """
+    memoria = carica_memoria() if memoria is None else memoria
+    chiave = trova_fornitore_simile(normalizza_azienda(fornitore), memoria)
+    voce = memoria.get(chiave) if chiave else None
+    if not isinstance(voce, dict):
+        return False, ""
+
+    return (fornitore_estero_da_valore(voce.get(CHIAVE_FORNITORE_ESTERO)),
+            str(voce.get(CHIAVE_IDENTIFICATIVO_ESTERO, "") or "").strip())
+
+
+def annota_fornitore_critico(dati, memoria=None):
+    """Scrive dati["fornitore_critico"] se il fornitore e' marcato critico.
+
+    E' un flag nei DATI e non una lettura dentro determina_stato(), che ha
+    cinque chiamanti ed e' una funzione pura: mettercelo dentro costerebbe una
+    query a Postgres per ogni pagina e per ogni accorpamento. La strada e'
+    quella gia' battuta da leggibilita_bassa — la pipeline lo scrive una volta,
+    il classificatore lo legge senza sapere da dove viene, e l'accorpamento se
+    lo porta dietro da solo.
+
+    La decisione (chi somiglia a chi) resta qui, come tutte le altre:
+    l'archivio e' il magazziniere.
+    """
+    if not isinstance(dati, dict):
+        return dati
+
+    fornitore = dati.get("fornitore", "")
+    if not fornitore:
+        return dati
+
+    memoria = carica_memoria() if memoria is None else memoria
+    chiave = trova_fornitore_simile(normalizza_azienda(fornitore), memoria)
+    voce = memoria.get(chiave) if chiave else None
+    if isinstance(voce, dict) and fornitore_critico_da_valore(voce.get(CHIAVE_FORNITORE_CRITICO)):
+        dati["fornitore_critico"] = True
+        print(f"[MEMORIA] '{chiave}' e' un fornitore critico: il documento andra' in CHECK.")
+
+    return dati
 
 
 def conferma_partita_iva(fornitore, partita_iva, confermata=True):
@@ -892,6 +1019,19 @@ def trova_fornitore_per_piva(partita_iva, memoria):
     for chiave, dati in memoria.items():
         if isinstance(dati, dict) and normalizza_piva(dati.get(CHIAVE_PARTITA_IVA)) == piva:
             return chiave
+
+    # Ripiego sull'identificativo fiscale estero, con lo stesso confronto
+    # esatto. Non e' un allentamento: lettore_xml._partita_iva() restituisce
+    # IdCodice senza il prefisso paese e normalizza_piva() tiene solo le cifre,
+    # quindi "DE811128135" scritto a mano in anagrafica e l'"811128135" che
+    # arriva dall'XML sono lo stesso numero. E' l'unico modo in cui il cedente
+    # di una fattura estera si riconosce per chiave invece che per nome.
+    for chiave, dati in memoria.items():
+        if not isinstance(dati, dict):
+            continue
+        estero = normalizza_piva(dati.get(CHIAVE_IDENTIFICATIVO_ESTERO))
+        if estero and estero == piva:
+            return chiave
     return None
 
 
@@ -967,14 +1107,22 @@ def verifica_fornitore_fattura(nome, partita_iva, memoria=None):
     piva = normalizza_piva(partita_iva)
     segnalazioni = []
 
-    if not piva:
+    per_piva = trova_fornitore_per_piva(piva, memoria) if piva else None
+    per_nome = trova_fornitore_simile(normalizza_azienda(nome), memoria)
+
+    # Su un fornitore marcato ESTERO la P.IVA italiana assente e' il caso
+    # normale, non un'anomalia: segnalarla vorrebbe dire ripetere a ogni
+    # fattura una cosa che l'utente ha gia' detto in anagrafica, e una riga
+    # gialla che c'e' sempre smette di essere letta.
+    voce_nota = memoria.get(per_piva or per_nome) if (per_piva or per_nome) else None
+    estero_noto = (isinstance(voce_nota, dict)
+                   and fornitore_estero_da_valore(voce_nota.get(CHIAVE_FORNITORE_ESTERO)))
+
+    if not piva and not estero_noto:
         segnalazioni.append({
             "codice": SEGNALAZIONE_PIVA_ASSENTE,
             "messaggio": "La fattura non riporta la partita IVA del cedente.",
         })
-
-    per_piva = trova_fornitore_per_piva(piva, memoria) if piva else None
-    per_nome = trova_fornitore_simile(normalizza_azienda(nome), memoria)
 
     # Stesso nome ma P.IVA diversa da una gia' CONFERMATA: o e' un'altra
     # societa' dello stesso gruppo, o e' la voce sbagliata. In entrambi i casi

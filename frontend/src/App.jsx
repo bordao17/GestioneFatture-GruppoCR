@@ -40,7 +40,8 @@ function App() {
   // P.IVA di li', l'anagrafica cambia sotto la bozza che SuppliersManager ha
   // letto al mount — e la sua PUT sovrascrive l'INTERA anagrafica, quindi
   // salvarla dopo riporterebbe la P.IVA a "da confermare". Questo contatore
-  // e' il modo in cui la sezione viene a saperlo.
+  // e' il modo in cui la sezione viene a saperlo. Lo alza anche "Sincronizza",
+  // che e' il gesto con cui si chiede esplicitamente di rileggere tutto.
   const [versioneAnagrafica, setVersioneAnagrafica] = useState(0);
   const [showManualEntry, setShowManualEntry] = useState(false);
 
@@ -111,8 +112,13 @@ function App() {
     try {
       const response = await axios.get(`${API_URL}/api/fornitori`);
       const voci = Object.values(response.data || {});
+      // Stessa condizione di pivaDaConfermare() in SuppliersManager: il badge
+      // conta solo cio' che aspetta un intervento, e su un fornitore estero
+      // non c'e' nessuna P.IVA italiana da confermare — resterebbe un numero
+      // che non cala mai, e un numero cosi' smette di essere letto.
       setDaAutorizzare(voci.filter(
         (v) => v.partita_iva && v.partita_iva_confermata === false
+              && v.fornitore_estero !== true
       ).length);
     } catch (err) {
       setDaAutorizzare(0);
@@ -123,6 +129,13 @@ function App() {
     fetchDocuments();
     fetchFatture();
     fetchDaAutorizzare();
+    // "Sincronizza" promette di ricaricare anche l'anagrafica, ma fetchDaAutorizzare
+    // ne ricava solo il numero sul badge: la tabella dei fornitori si rileggeva
+    // soltanto al mount della sezione. Chi RESTA in Fornitori non aveva modo di
+    // aggiornarla senza un F5 — e restarci e' normale, perche' il modale di un
+    // D.D.T. sopravvive al cambio di sezione e perche' una scansione (anche
+    // pianificata, anche da un altro browser) censisce fornitori nuovi.
+    setVersioneAnagrafica((v) => v + 1);
   }, [fetchDocuments, fetchFatture, fetchDaAutorizzare]);
 
   useEffect(() => { ricaricaTutto(); }, [ricaricaTutto]);

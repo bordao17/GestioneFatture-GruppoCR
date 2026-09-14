@@ -237,7 +237,7 @@ export default function FattureSection({
               onChange={(e) => setRicerca(e.target.value)}
             />
             {ricerca && (
-              <button className="btn btn-outline-secondary text-white" onClick={() => setRicerca('')} title="Azzera">
+              <button className="btn btn-outline-secondary" onClick={() => setRicerca('')} title="Azzera">
                 <X size={18} />
               </button>
             )}
@@ -260,7 +260,7 @@ export default function FattureSection({
               disabled={isAbbinaTutte || isRicontrollo}
               title="Cerca i D.D.T. di tutte le fatture in coda, comprese quelle appena caricate. Non chiude niente: la conferma resta per fattura."
             >
-              <Link2 size={16} className={isAbbinaTutte ? 'fa-spin' : ''} />
+              <Link2 size={16} className={isAbbinaTutte ? 'gira' : ''} />
               {isAbbinaTutte ? 'Abbinamento…' : 'Abbina tutte'}
             </button>
 
@@ -270,7 +270,7 @@ export default function FattureSection({
               disabled={isRicontrollo || isAbbinaTutte || conteggi.attesa === 0}
               title="Riprova l'abbinamento di tutta la coda. Normalmente scatta da solo dopo ogni D.D.T.: serve dopo aver toccato l'anagrafica fornitori."
             >
-              <RotateCw size={16} className={isRicontrollo ? 'fa-spin' : ''} />
+              <RotateCw size={16} className={isRicontrollo ? 'gira' : ''} />
               {isRicontrollo ? 'Ricontrollo…' : 'Ricontrolla coda'}
             </button>
           </div>
@@ -346,9 +346,9 @@ export default function FattureSection({
                     <tbody>
                       {ddtSoli.map((ddt) => (
                         <tr key={ddt.id}>
-                          <td className="px-4 text-white">{ddt.fornitore || <span className="text-warning fst-italic">Mancante</span>}</td>
-                          <td className="font-monospace text-white fw-bold">{ddt.numero_ddt || '—'}</td>
-                          <td className="font-monospace text-white">{ddt.data_ddt || '—'}</td>
+                          <td className="px-4 text-body">{ddt.fornitore || <span className="text-warning fst-italic">Mancante</span>}</td>
+                          <td className="font-monospace text-body fw-bold">{ddt.numero_ddt || '—'}</td>
+                          <td className="font-monospace text-body">{ddt.data_ddt || '—'}</td>
                           <td>
                             <span className={`badge rounded-pill ${ddt.stato === 'OK' ? 'bg-success' : 'bg-warning text-dark'}`}>
                               {ddt.stato}

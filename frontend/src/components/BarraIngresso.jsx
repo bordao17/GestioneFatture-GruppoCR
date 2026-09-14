@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { Upload, PlayCircle, Loader2, Inbox } from 'lucide-react';
+import { Upload, PlayCircle, Loader2, Inbox, CloudOff, RefreshCw } from 'lucide-react';
 
 /**
  * I due pulsanti della cartella in ingresso: deposita i file, poi analizzali.
@@ -14,6 +14,12 @@ import { Upload, PlayCircle, Loader2, Inbox } from 'lucide-react';
  * Caricare e analizzare restano DUE gesti: si mettono in coda dieci bolle in
  * pochi secondi e si fa partire l'analisi (minuti, sulla GPU condivisa) una
  * volta sola, guardando la barra di avanzamento.
+ *
+ * Sui soli D.D.T. la barra controlla anche che il motore AI risponda, e finche'
+ * non risponde non lascia nemmeno premere Analizza. NON vale per le fatture, e
+ * non e' una dimenticanza: il flusso fatture e' tutto Python e non chiama mai
+ * il modello, quindi li' un Ollama spento non cambia niente — un avviso
+ * sarebbe solo rumore che insegna a ignorare gli avvisi.
  */
 export default function BarraIngresso({
   apiUrl,
@@ -24,12 +30,39 @@ export default function BarraIngresso({
   descrizione,
   onFatto,            // (esito) => void, per ricaricare gli elenchi
   onErrore,
+  controllaMotore = false,   // solo i D.D.T.: le fatture non passano dal modello
 }) {
   const input = useRef(null);
   const [inCaricamento, setInCaricamento] = useState(false);
   const [inAnalisi, setInAnalisi] = useState(false);
   const [inAttesa, setInAttesa] = useState(null);   // quanti file aspettano
   const [ultimo, setUltimo] = useState(null);
+  // null = non lo sappiamo (endpoint irraggiungibile, backend vecchio): in quel
+  // caso non si avvisa e non si blocca niente. Si blocca solo quando sappiamo
+  // POSITIVAMENTE che il motore e' giu' — un controllo rotto non deve poter
+  // impedire un lavoro che funzionerebbe.
+  const [motore, setMotore] = useState(null);
+  const [inVerifica, setInVerifica] = useState(false);
+
+  const verificaMotore = useCallback(async () => {
+    if (!controllaMotore) return null;
+    setInVerifica(true);
+    try {
+      const res = await axios.get(`${apiUrl}/api/motore`);
+      setMotore(res.data);
+      return res.data;
+    } catch {
+      setMotore(null);
+      return null;
+    } finally {
+      setInVerifica(false);
+    }
+  }, [apiUrl, controllaMotore]);
+
+  // Al montaggio, cosi' l'avviso c'e' gia' quando si arriva sulla sezione:
+  // scoprire che la GPU e' spenta DOPO aver caricato dieci bolle e premuto
+  // Analizza e' esattamente il giro che questo controllo serve a evitare.
+  useEffect(() => { verificaMotore(); }, [verificaMotore]);
 
   const carica = async (files) => {
     if (!files || files.length === 0) return;
@@ -57,6 +90,16 @@ export default function BarraIngresso({
   };
 
   const analizza = async () => {
+    // Il controllo al montaggio puo' avere minuti: la GPU e' condivisa e nel
+    // frattempo qualcuno puo' averla spenta. Si richiede adesso, che costa
+    // millisecondi contro i minuti che sta per impegnare. Il backend lo rifa'
+    // comunque (503) — questo serve a non far partire il giro per niente.
+    const stato = await verificaMotore();
+    if (stato && !stato.pronto) {
+      setUltimo({ tipo: 'danger', testo: stato.motivo });
+      return;
+    }
+
     setInAnalisi(true);
     setUltimo(null);
     try {
@@ -101,6 +144,7 @@ export default function BarraIngresso({
   };
 
   const occupato = inCaricamento || inAnalisi;
+  const motoreGiu = motore !== null && !motore.pronto;
 
   return (
     <div className="card shadow-sm mb-3">
@@ -126,7 +170,7 @@ export default function BarraIngresso({
           disabled={occupato}
           title={`Copia i file nella cartella in ingresso, senza analizzarli`}
         >
-          {inCaricamento ? <Loader2 size={18} className="fa-spin" /> : <Upload size={18} />}
+          {inCaricamento ? <Loader2 size={18} className="gira" /> : <Upload size={18} />}
           {etichettaCarica}
         </button>
 
@@ -134,14 +178,37 @@ export default function BarraIngresso({
           type="button"
           className="btn btn-primary d-flex align-items-center gap-2"
           onClick={analizza}
-          disabled={occupato}
-          title="Elabora tutti i file fermi nella cartella in ingresso"
+          disabled={occupato || motoreGiu}
+          title={motoreGiu
+            ? motore.motivo
+            : 'Elabora tutti i file fermi nella cartella in ingresso'}
         >
-          {inAnalisi ? <Loader2 size={18} className="fa-spin" /> : <PlayCircle size={18} />}
+          {inAnalisi ? <Loader2 size={18} className="gira" /> : <PlayCircle size={18} />}
           {inAnalisi ? 'Analisi in corso...' : etichettaAnalizza}
           {inAttesa > 0 && <span className="badge rounded-pill bg-white text-primary">{inAttesa}</span>}
         </button>
       </div>
+
+      {motoreGiu && (
+        <div className="card-footer bg-transparent py-2 d-flex flex-wrap align-items-center gap-2">
+          <CloudOff size={16} className="text-danger flex-shrink-0" />
+          <small className="text-danger flex-grow-1">
+            <strong>Motore AI non raggiungibile.</strong> {motore.motivo}
+            {' '}I file caricati restano in coda: nessuno viene perso, l'analisi riparte da qui
+            quando il motore torna su.
+          </small>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+            onClick={verificaMotore}
+            disabled={inVerifica}
+            title="Ricontrolla adesso se il motore risponde"
+          >
+            <RefreshCw size={14} className={inVerifica ? 'gira' : undefined} />
+            Ricontrolla
+          </button>
+        </div>
+      )}
 
       {ultimo && (
         <div className={`card-footer bg-transparent py-2 text-${ultimo.tipo}`}>

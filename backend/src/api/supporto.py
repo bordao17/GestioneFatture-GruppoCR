@@ -1,9 +1,10 @@
 """Gli aiutanti condivisi dalle route, senza nessuna route dentro.
 
-Non e' un "utils": sono le quattro funzioni che piu' di un router chiama e che
-non appartengono a nessuno dei due flussi in particolare — trovare un D.D.T.
-nei tre registri, spostarlo portandosi dietro il PDF, annotare in lettura lo
-stato della sua P.IVA e far ripartire il ricontrollo della coda fatture.
+Non e' un "utils": sono le cinque funzioni che piu' di un router chiama e che
+non appartengono a nessuno dei due flussi in particolare — verificare che il
+motore AI risponda prima di avviare un'analisi, trovare un D.D.T. nei tre
+registri, spostarlo portandosi dietro il PDF, annotare in lettura lo stato
+della sua P.IVA e far ripartire il ricontrollo della coda fatture.
 
 Stanno qui e non in src/comune/ per la regola gia' scritta in CLAUDE.md: in
 comune/ ci va cio' che serve alle PIPELINE, qui cio' che serve alle ROUTE.
@@ -14,13 +15,42 @@ tutte verso supporto.py e lavorazione.py, mai all'indietro.
 import os
 import shutil
 
-from src.comune.memory_manager import carica_memoria, partita_iva_per
+from fastapi import HTTPException
+
+from src.comune.memory_manager import (
+    carica_memoria, partita_iva_per, voce_fornitore_estero,
+)
 from src.comune.percorsi import CARTELLA_DDT
 from src.comune.registro import (
     aggiorna_registro, leggi_registro, rimuovi_dal_registro,
     aggiorna_documento_registro, percorso_pdf_documento,
 )
+from src.ddt.llm_engine import verifica_motore
 from src.fatture.coda import ricontrolla_attese
+
+
+def esigi_motore_pronto():
+    """Ferma un'analisi PRIMA che cominci se il motore AI non risponde.
+
+    Senza, un Ollama spento si scopre a meta' lavoro: le pagine gia' lette sono
+    archiviate, quelle dopo no, e il file torna un errore generico — un
+    documento elaborato a meta' che nessuno sa di dover riprendere, che e'
+    peggio di uno non elaborato affatto. Qui invece, quando dice di no, non e'
+    stato ancora toccato niente: nessun PDF scritto, nessuna voce nei registri,
+    nessun file rimosso dalla cartella in ingresso.
+
+    Costa un giro di rete di pochi millisecondi contro i minuti di una
+    scansione, quindi si paga volentieri anche per file.
+
+    **503 e non 500**: non e' un guasto di questo servizio ma una dipendenza
+    esterna che non c'e' (la GPU sta su un'altra macchina in LAN), e chi lo
+    riceve deve capire che riprovare piu' tardi ha senso.
+    """
+    esito = verifica_motore()
+    if not esito["pronto"]:
+        print(f"⛔ Analisi non avviata: {esito['motivo']}")
+        raise HTTPException(status_code=503, detail=esito["motivo"])
+    return esito
 
 
 def ricontrolla_fatture_in_attesa(motivo):
@@ -94,6 +124,11 @@ def annota_stato_piva(documenti):
     confermare (campo editabile + pulsante) o e' gia' una chiave (campo in
     sola lettura: da li' in poi si corregge dall'anagrafica).
 
+    Su un fornitore ESTERO non c'e' niente da confermare: si riporta il flag
+    (cosi' il modale puo' dirlo invece di mostrare un campo vuoto in attesa) e
+    si dichiara la P.IVA confermata, altrimenti resterebbe per sempre un
+    invito a completare una chiave che non esiste.
+
     La cache tiene la ricerca per somiglianza a una volta per nome distinto,
     non a una per documento.
     """
@@ -102,8 +137,13 @@ def annota_stato_piva(documenti):
     for doc in documenti:
         nome = ((doc.get('dati') or {}).get('fornitore') or "").strip()
         if nome not in cache:
-            cache[nome] = partita_iva_per(nome, memoria) if nome else ("", False)
-        piva, confermata = cache[nome]
+            cache[nome] = (
+                partita_iva_per(nome, memoria) + voce_fornitore_estero(nome, memoria)
+                if nome else ("", False, False, "")
+            )
+        piva, confermata, estero, identificativo = cache[nome]
         doc['partita_iva_anagrafica'] = piva
-        doc['partita_iva_confermata'] = bool(piva) and confermata
+        doc['partita_iva_confermata'] = estero or (bool(piva) and confermata)
+        doc['fornitore_estero'] = estero
+        doc['identificativo_estero'] = identificativo
     return documenti
