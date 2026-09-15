@@ -41,6 +41,15 @@ def _motivo_check(dati):
     if mancanti:
         return "Non letto: " + esc(", ".join(mancanti))
 
+    # Prima della leggibilita' e della criticita': quelle due dicono di
+    # riguardare un documento, questa dice che potrebbe essere attribuito al
+    # negozio sbagliato, cioe' che c'e' da rifare una scelta fatta prima di
+    # premere Analizza — e se e' successo, e' successo su tutto il batch.
+    discorde = dati.get("consegna_discorde")
+    if discorde:
+        return ("Consegna dichiarata a " + esc(dati.get("punto_vendita_nome", ""))
+                + ", ma " + esc(discorde.get("motivo", "il foglio parla di un altro negozio")))
+
     if dati.get("leggibilita_bassa"):
         return "Campi completi, ma scansione di bassa qualita"
 

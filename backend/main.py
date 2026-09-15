@@ -17,9 +17,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from src.api import documenti, fatture, fornitori, impostazioni, ingresso
-from src.comune import archivio_fornitori, database, pianificatore
+from src.api import (
+    documenti, fatture, fornitori, impostazioni, ingresso, punti_vendita,
+)
+from src.comune import (
+    archivio_fornitori, archivio_punti_vendita, database, pianificatore,
+)
 from src.comune.memory_manager import migra_da_file_a_database
+from src.comune.punti_vendita import importa_da_csv
 
 
 # La dashboard interroga /api/elaborazione ogni 2 secondi per tenere viva la
@@ -56,6 +61,21 @@ def _prepara_anagrafiche():
     except Exception as e:
         print(f"⚠️ Anagrafiche su database non disponibili ({e}): "
               f"si continua con la copia su file.")
+
+    # I punti vendita hanno il loro try: sono la seconda anagrafica e una non
+    # deve poter costare l'altra. Qui pero' non c'e' nessuna copia su file su
+    # cui ripiegare — senza database il menu a tendina resta vuoto e le
+    # scansioni tornano a essere quelle di prima, senza consegna dichiarata.
+    try:
+        archivio_punti_vendita.prepara()
+        importati = importa_da_csv()
+        if importati:
+            print(f"📥 Anagrafica punti vendita importata dal CSV: {importati} voci.")
+        else:
+            print("✅ Anagrafica punti vendita sul database.")
+    except Exception as e:
+        print(f"⚠️ Anagrafica punti vendita non disponibile ({e}): "
+              f"le scansioni resteranno senza punto vendita dichiarato.")
 
 
 @asynccontextmanager
@@ -103,6 +123,7 @@ app.add_middleware(
 # fatture porta /api/fatture/{id_fattura} — invertendo i due include, "carica"
 # e "scansiona" diventerebbero l'id di una fattura che non esiste.
 app.include_router(fornitori.router)
+app.include_router(punti_vendita.router)
 app.include_router(documenti.router)
 app.include_router(ingresso.router)
 app.include_router(fatture.router)

@@ -14,11 +14,12 @@ import os
 import shutil
 from typing import List
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, Body, UploadFile, File, HTTPException
 
 from src.api.lavorazione import elabora_ddt, elabora_fattura
 from src.api.supporto import esigi_motore_pronto
 from src.comune.configurazione import valore
+from src.comune import punti_vendita
 from src.comune.percorsi import CARTELLA_DDT_INGRESSO, CARTELLA_FATTURE_INGRESSO
 from src.comune.tempo import adesso
 from src.ddt.notificatore import calcola_riepilogo
@@ -114,7 +115,7 @@ async def stato_ingresso():
     }
 
 
-def _scansione_ddt(origine="manuale"):
+def _scansione_ddt(origine="manuale", codice_punto_vendita=None):
     """Analizza tutte le scansioni ferme in DDT/da_leggere.
 
     Il file elaborato viene RIMOSSO dalla cartella: la scansione resta
@@ -134,10 +135,19 @@ def _scansione_ddt(origine="manuale"):
     origine dice chi l'ha chiesta ("manuale" dalla dashboard, "pianificata" dal
     pianificatore notturno) e serve solo a decidere se mandare la mail di
     riepilogo: chi ha appena premuto Analizza sta già guardando l'esito.
+
+    codice_punto_vendita è il negozio per cui è questa pila di fogli, scelto
+    prima di premere Analizza: vale per TUTTO il batch, perché una scansione è
+    la posta di un punto vendita solo. Vuoto è una strada prevista e non un
+    errore — è quella del pianificatore notturno, che non ha nessuno a cui
+    chiederlo, e quella di una pila mista analizzata di proposito senza.
     """
     inizio = adesso()
     nomi = _file_in_ingresso(CARTELLA_DDT_INGRESSO, ESTENSIONI_DDT)
-    print(f"📥 Scansione {origine} di DDT/da_leggere: {len(nomi)} file da elaborare.")
+    punto = punti_vendita.trova(codice_punto_vendita)
+    dove = punti_vendita.descrizione(punto) if punto else "nessun punto vendita dichiarato"
+    print(f"📥 Scansione {origine} di DDT/da_leggere: {len(nomi)} file da elaborare "
+          f"({dove}).")
 
     # Il motore si controlla una volta per batch, e solo se c'e' davvero
     # qualcosa da analizzare: su una cartella vuota non c'e' niente da fermare.
@@ -151,12 +161,12 @@ def _scansione_ddt(origine="manuale"):
     if nomi:
         esigi_motore_pronto()
 
-    elaborati, falliti, sbloccate, duplicati = [], [], [], []
+    elaborati, falliti, sbloccate, duplicati, discordanze = [], [], [], [], []
 
     for nome in nomi:
         percorso = os.path.join(CARTELLA_DDT_INGRESSO, nome)
         try:
-            esito = elabora_ddt(percorso, nome)
+            esito = elabora_ddt(percorso, nome, punto)
         except HTTPException as e:
             print(f"❌ '{nome}' non elaborato: {e.detail}")
             falliti.append({"file": nome, "motivo": str(e.detail)})
@@ -173,6 +183,7 @@ def _scansione_ddt(origine="manuale"):
         })
         sbloccate.extend(esito.get("fatture_sbloccate", []))
         duplicati.extend(esito.get("duplicati", []))
+        discordanze.extend(esito.get("discordanze", []))
         try:
             os.remove(percorso)
         except OSError as e:
@@ -183,8 +194,18 @@ def _scansione_ddt(origine="manuale"):
         "elaborati": elaborati,
         "falliti": falliti,
         "duplicati": duplicati,
+        # Le bolle il cui foglio parla di un ALTRO negozio: sono in CHECK, ma
+        # il conteggio qui e' cio' che fa capire subito che a sbagliare non e'
+        # stato il modello ma la scelta nel menu a tendina.
+        "discordanze": discordanze,
         "pagine_totali": sum(e["pagine"] for e in elaborati),
         "fatture_sbloccate": sbloccate,
+        # Si rimanda indietro quello che si è davvero applicato, non quello che
+        # è stato chiesto: un codice che in anagrafica non c'è più deve poter
+        # risultare vuoto qui invece di far credere che la consegna sia stata
+        # scritta su tutte le bolle del batch.
+        "punto_vendita": ({"codice": punto["codice"], "dipendenza": punto["dipendenza"]}
+                          if punto else None),
     }
 
     if _riepilogo_da_mandare(origine) and (elaborati or falliti):
@@ -196,9 +217,15 @@ def _scansione_ddt(origine="manuale"):
 
 
 @router.post("/api/ddt/scansiona")
-def scansiona_ddt():
-    """Il pulsante Analizza dei D.D.T.: sincrona, perché elabora_ddt() è bloccante."""
-    return _scansione_ddt("manuale")
+def scansiona_ddt(payload: dict = Body(default={})):
+    """Il pulsante Analizza dei D.D.T.: sincrona, perché elabora_ddt() è bloccante.
+
+    Nel corpo può arrivare {"punto_vendita": "<COD_AZI>"}, il negozio per cui è
+    questa pila di fogli. È facoltativo e senza corpo la route si comporta come
+    ha sempre fatto: un campo nuovo non deve poter impedire un lavoro che prima
+    funzionava.
+    """
+    return _scansione_ddt("manuale", (payload or {}).get("punto_vendita"))
 
 
 def _scansione_fatture(origine="manuale"):

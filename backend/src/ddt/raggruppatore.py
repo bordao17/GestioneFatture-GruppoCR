@@ -18,8 +18,13 @@ SOGLIA_SIMILARITA_FORNITORE = 0.5
 # Campi che vengono "uniti" tra le pagine di uno stesso documento: se una pagina
 # ha il campo vuoto ma un'altra pagina dello stesso gruppo lo ha valorizzato,
 # il valore viene riportato nel dato finale del gruppo.
+# Il punto vendita dichiarato ci sta dentro come gli altri: le pagine di uno
+# stesso batch lo hanno tutte uguale, ma un'unione manuale puo' mettere insieme
+# una pagina dichiarata e una no, e la griglia per punto vendita deve trovare
+# il documento sotto il suo negozio invece che fra i "non dichiarati".
 CAMPI_DA_UNIRE = ["fornitore", "numero_ddt", "data_ddt", "indirizzo_consegna",
-                  "ragione_sociale_consegna", "partita_iva"]
+                  "ragione_sociale_consegna", "partita_iva",
+                  "punto_vendita", "punto_vendita_nome"]
 
 
 def normalizza_numero_ddt(numero):
@@ -78,6 +83,13 @@ def unisci_dati_pagina(dati_gruppo, dati_nuova_pagina, campi_da_unire=CAMPI_DA_U
     # proprio il documento che deve finire in CHECK.
     if dati_nuova_pagina.get("fornitore_critico"):
         dati_gruppo["fornitore_critico"] = True
+
+    # Idem per il sospetto sul punto vendita: e' il luogo di consegna, quindi
+    # spesso e' stampato su una pagina sola del documento, e senza questa riga
+    # l'accorpamento riporterebbe in OK una bolla attribuita al negozio
+    # sbagliato. Si tiene il primo trovato: e' un sospetto, non un conteggio.
+    if dati_nuova_pagina.get("consegna_discorde") and not dati_gruppo.get("consegna_discorde"):
+        dati_gruppo["consegna_discorde"] = dati_nuova_pagina["consegna_discorde"]
 
     return dati_gruppo
 

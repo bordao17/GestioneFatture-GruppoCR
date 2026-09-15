@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { Upload, PlayCircle, Loader2, Inbox, CloudOff, RefreshCw } from 'lucide-react';
+import { Upload, PlayCircle, Loader2, Inbox, CloudOff, RefreshCw, Store } from 'lucide-react';
 
 /**
  * I due pulsanti della cartella in ingresso: deposita i file, poi analizzali.
@@ -14,6 +14,14 @@ import { Upload, PlayCircle, Loader2, Inbox, CloudOff, RefreshCw } from 'lucide-
  * Caricare e analizzare restano DUE gesti: si mettono in coda dieci bolle in
  * pochi secondi e si fa partire l'analisi (minuti, sulla GPU condivisa) una
  * volta sola, guardando la barra di avanzamento.
+ *
+ * Sui soli D.D.T. la barra chiede anche PER QUALE PUNTO VENDITA e' la pila di
+ * fogli: una scansione e' la posta di un negozio solo, e chi la mette nello
+ * scanner lo sa gia'. Dichiarandolo, ragione_sociale_consegna e
+ * indirizzo_consegna smettono di essere una lettura del modello e diventano un
+ * dato certo. La scelta non si ricorda da un'analisi all'altra, ed e' voluto:
+ * un punto vendita rimasto selezionato dalla volta prima scriverebbe in
+ * silenzio la consegna sbagliata su tutte le bolle del batch nuovo.
  *
  * Sui soli D.D.T. la barra controlla anche che il motore AI risponda, e finche'
  * non risponde non lascia nemmeno premere Analizza. NON vale per le fatture, e
@@ -31,6 +39,7 @@ export default function BarraIngresso({
   onFatto,            // (esito) => void, per ricaricare gli elenchi
   onErrore,
   controllaMotore = false,   // solo i D.D.T.: le fatture non passano dal modello
+  puntiVendita = null,       // solo i D.D.T.: null = non si chiede niente
 }) {
   const input = useRef(null);
   const [inCaricamento, setInCaricamento] = useState(false);
@@ -43,6 +52,12 @@ export default function BarraIngresso({
   // impedire un lavoro che funzionerebbe.
   const [motore, setMotore] = useState(null);
   const [inVerifica, setInVerifica] = useState(false);
+  // '' = non ancora scelto (Analizza resta bloccato), 'NESSUNO' = scelto di
+  // proposito di non dichiararlo. Sono due cose diverse: la prima e' una
+  // domanda senza risposta, la seconda una risposta.
+  const [puntoVendita, setPuntoVendita] = useState('');
+
+  const chiedePuntoVendita = Array.isArray(puntiVendita) && puntiVendita.length > 0;
 
   const verificaMotore = useCallback(async () => {
     if (!controllaMotore) return null;
@@ -103,7 +118,10 @@ export default function BarraIngresso({
     setInAnalisi(true);
     setUltimo(null);
     try {
-      const res = await axios.post(`${apiUrl}/api/${tipo}/scansiona`);
+      const res = await axios.post(`${apiUrl}/api/${tipo}/scansiona`,
+        chiedePuntoVendita && puntoVendita && puntoVendita !== 'NESSUNO'
+          ? { punto_vendita: puntoVendita }
+          : {});
       const falliti = res.data.falliti || [];
       // Le anomalie sul cedente non sono errori: la fattura e' stata archiviata
       // lo stesso (dal 2026-09-08 non si scarta piu' niente per il fornitore).
@@ -113,16 +131,27 @@ export default function BarraIngresso({
       // nessuno: si dicono perche' senza, i conteggi non tornerebbero con la
       // pila di fogli appena messa nello scanner.
       const duplicate = res.data.duplicati || [];
+      // La discordanza sul punto vendita si dice QUI prima ancora che nella
+      // tabella: e' l'unico momento in cui chi ha scelto il negozio nel menu
+      // qui accanto e' ancora davanti allo schermo, e la sua ha senso contarla
+      // sul batch — una pagina su venti e' un foglio di un'altra pila, venti su
+      // venti sono venti bolle attribuite al negozio sbagliato.
+      const discordanze = res.data.discordanze || [];
       const fatti = tipo === 'ddt'
         ? `${res.data.elaborati.length} documenti (${res.data.pagine_totali} pagine)`
         : `${res.data.totale} fatture`;
+      // Si riscrive il punto vendita che il backend dice di aver applicato, non
+      // quello scelto qui: e' l'unico modo di accorgersi che un codice non e'
+      // stato trovato in anagrafica e la consegna non e' stata scritta.
+      const pv = res.data.punto_vendita;
 
       setInAttesa(0);
       setUltimo({
-        tipo: (falliti.length > 0 || segnalate.length > 0)
+        tipo: (falliti.length > 0 || segnalate.length > 0 || discordanze.length > 0)
           ? 'warning'
           : (duplicate.length > 0 ? 'info' : 'success'),
         testo: `Analizzati ${fatti}`
+          + (pv ? ` per ${pv.dipendenza}` : '')
           + (falliti.length > 0
             ? ` — ${falliti.length} non elaborati, restano in cartella: ${falliti.map((f) => f.file).join(', ')}`
             : '.')
@@ -133,6 +162,11 @@ export default function BarraIngresso({
           + (segnalate.length > 0
             ? ` ${segnalate.length} con anomalie sul fornitore (archiviate lo stesso): `
               + segnalate.map((s) => `${s.numero_fattura} — ${s.messaggi.join(' ')}`).join(' · ')
+            : '')
+          + (discordanze.length > 0
+            ? ` ${discordanze.length} ${discordanze.length === 1 ? 'pagina parla' : 'pagine parlano'}`
+              + ` di un altro punto vendita (${[...new Set(discordanze.map((d) => d.nome))].join(', ')}):`
+              + ' sono in DA VERIFICARE, controlla di non aver scelto il negozio sbagliato.'
             : ''),
       });
       onFatto?.(res.data);
@@ -145,6 +179,7 @@ export default function BarraIngresso({
 
   const occupato = inCaricamento || inAnalisi;
   const motoreGiu = motore !== null && !motore.pronto;
+  const senzaPuntoVendita = chiedePuntoVendita && !puntoVendita;
 
   return (
     <div className="card shadow-sm mb-3">
@@ -163,6 +198,32 @@ export default function BarraIngresso({
           onChange={(e) => carica(e.target.files)}
         />
 
+        {chiedePuntoVendita && (
+          <div className="d-flex align-items-center gap-2">
+            <Store size={18} className="text-body-secondary flex-shrink-0" />
+            <select
+              className="form-select form-select-sm"
+              style={{ minWidth: '15rem' }}
+              value={puntoVendita}
+              onChange={(e) => setPuntoVendita(e.target.value)}
+              disabled={occupato}
+              title="Il negozio a cui appartiene questa pila di fogli: ne riempie
+                     la ragione sociale e l'indirizzo di consegna"
+            >
+              <option value="">Per quale punto vendita?</option>
+              {puntiVendita.map((pv) => (
+                <option key={pv.codice} value={pv.codice}>
+                  {pv.dipendenza} — {pv.citta}
+                </option>
+              ))}
+              {/* Una pila mista si analizza lo stesso, ma dicendolo: senza
+                  questa voce l'unica via d'uscita sarebbe lasciare il menu
+                  vuoto, che e' la stessa cosa che fa chi si e' distratto. */}
+              <option value="NESSUNO">— Non dichiararlo (pila mista) —</option>
+            </select>
+          </div>
+        )}
+
         <button
           type="button"
           className="btn btn-outline-secondary d-flex align-items-center gap-2"
@@ -178,10 +239,12 @@ export default function BarraIngresso({
           type="button"
           className="btn btn-primary d-flex align-items-center gap-2"
           onClick={analizza}
-          disabled={occupato || motoreGiu}
+          disabled={occupato || motoreGiu || senzaPuntoVendita}
           title={motoreGiu
             ? motore.motivo
-            : 'Elabora tutti i file fermi nella cartella in ingresso'}
+            : senzaPuntoVendita
+              ? 'Scegli prima il punto vendita di questa scansione'
+              : 'Elabora tutti i file fermi nella cartella in ingresso'}
         >
           {inAnalisi ? <Loader2 size={18} className="gira" /> : <PlayCircle size={18} />}
           {inAnalisi ? 'Analisi in corso...' : etichettaAnalizza}

@@ -472,8 +472,8 @@
         "mai_fornitore": false,
         "nomi_alternativi": [],
         "note_specifiche": "",
-        "partita_iva": "01591680283",
-        "partita_iva_confermata": false,
+        "partita_iva": "11054911000",
+        "partita_iva_confermata": true,
         "regole_campo": []
     },
     "CEREALDOLCI SRL": {
@@ -1098,7 +1098,7 @@
         "autorizzato": true,
         "confermato": "no",
         "fornitore_critico": false,
-        "fornitore_estero": false,
+        "fornitore_estero": true,
         "identificativo_estero": "",
         "indirizzi_vietati": [],
         "mai_fornitore": false,
@@ -1174,7 +1174,7 @@
     "GAMMA PRODUCTIONS SRL": {
         "autorizzato": true,
         "confermato": "yes",
-        "fornitore_critico": false,
+        "fornitore_critico": true,
         "fornitore_estero": false,
         "identificativo_estero": "",
         "indirizzi_vietati": [],
@@ -1284,7 +1284,7 @@
     },
     "GM GRANDI MARCHE - SOCIETÀ A SOCIO UNICO": {
         "autorizzato": true,
-        "confermato": "no",
+        "confermato": "yes",
         "fornitore_critico": false,
         "fornitore_estero": false,
         "identificativo_estero": "",
@@ -1294,7 +1294,12 @@
         "note_specifiche": "",
         "partita_iva": "00366810281",
         "partita_iva_confermata": true,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO"
+            }
+        ]
     },
     "GRANAROLO SPA": {
         "autorizzato": true,
@@ -1598,12 +1603,18 @@
         "indirizzi_vietati": [],
         "mai_fornitore": false,
         "nomi_alternativi": [
-            "LNPF ITALIA"
+            "LNPF ITALIA",
+            "LNPF ITALIA (*)"
         ],
         "note_specifiche": "",
         "partita_iva": "05395030967",
         "partita_iva_confermata": true,
-        "regole_campo": []
+        "regole_campo": [
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "accanto a destra della voce DESTINATARIO"
+            }
+        ]
     },
     "LATTE MONTAGNA ALTO ADIGE SOC. AGR. COOP.": {
         "autorizzato": true,
@@ -1676,20 +1687,6 @@
         "note_specifiche": "Il nome del fornitore è riconoscibile in alto a destra dal logo Lindt, non ti confondere con la ditta di trasporto VERCHA EXPRESS SRL",
         "partita_iva": "00197480122",
         "partita_iva_confermata": true,
-        "regole_campo": []
-    },
-    "LNPF ITALIA (*)": {
-        "autorizzato": true,
-        "confermato": "no",
-        "fornitore_critico": false,
-        "fornitore_estero": false,
-        "identificativo_estero": "",
-        "indirizzi_vietati": [],
-        "mai_fornitore": false,
-        "nomi_alternativi": [],
-        "note_specifiche": "",
-        "partita_iva": "",
-        "partita_iva_confermata": false,
         "regole_campo": []
     },
     "LOGICA SRL ROMA": {
@@ -1819,6 +1816,29 @@
             {
                 "campo": "indirizzo_consegna",
                 "etichetta": "la voce DESTINAZIONE"
+            }
+        ]
+    },
+    "MARCHESI ANTINORI": {
+        "autorizzato": true,
+        "confermato": "yes",
+        "fornitore_critico": false,
+        "fornitore_estero": false,
+        "identificativo_estero": "",
+        "indirizzi_vietati": [],
+        "mai_fornitore": false,
+        "nomi_alternativi": [],
+        "note_specifiche": "",
+        "partita_iva": "05087460480",
+        "partita_iva_confermata": true,
+        "regole_campo": [
+            {
+                "campo": "fornitore",
+                "etichetta": "in alto a sinistra cè il logo MARCHESI ANTINORI"
+            },
+            {
+                "campo": "indirizzo_consegna",
+                "etichetta": "la voce DESTINATARIO"
             }
         ]
     },

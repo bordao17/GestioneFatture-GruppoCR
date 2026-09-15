@@ -45,9 +45,17 @@ export default function Sidebar({ vista, onVista, badge = {}, tema, onCambiaTema
 
       {/* 1. Marchio e pulsante per richiudere */}
       <div className="d-flex align-items-center gap-2 px-3 py-3 border-bottom">
-        <div className="marchio bg-primary text-white rounded d-flex align-items-center justify-content-center flex-shrink-0">
-          <FileText size={20} />
+        
+        {/* Nota: ho tolto "bg-primary text-white" se il tuo logo ha già i suoi colori o è trasparente. 
+            Se invece il tuo logo è bianco e vuoi il quadratino blu dietro, rimettili! */}
+        <div className="marchio d-flex align-items-center justify-content-center flex-shrink-0">
+          <img 
+            src="/logo.png" 
+            alt="Logo Gestionale" 
+            style={{ width: '45px', height: '45px', objectFit: 'contain' }} 
+          />
         </div>
+
         <div className="solo-estesa flex-grow-1 lh-sm">
           <div className="fw-semibold small">Gestione D.D.T.</div>
           <div className="text-body-secondary" style={{ fontSize: '0.72rem' }}>&amp; Fatture elettroniche</div>

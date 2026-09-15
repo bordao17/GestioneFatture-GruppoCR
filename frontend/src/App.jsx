@@ -60,6 +60,14 @@ function App() {
   const [idInAccoppiamento, setIdInAccoppiamento] = useState(null);
   const [isConfermandoAccoppiamento, setIsConfermandoAccoppiamento] = useState(false);
 
+  // --- Punti vendita --------------------------------------------------------
+  // L'anagrafica dei negozi: la legge il menu a tendina della barra di ingresso
+  // (per quale punto vendita e' questa pila di fogli) e la griglia in fondo
+  // alla sezione. Sta qui e non nei due componenti per la regola di sempre:
+  // App e' la fonte unica degli elenchi, e due fetch della stessa lista
+  // divergono al primo ricaricamento.
+  const [puntiVendita, setPuntiVendita] = useState([]);
+
   // --- Fornitori ------------------------------------------------------------
   // La sezione ha stato suo (è un editor con salvataggio esplicito): qui serve
   // solo il conteggio di chi aspetta un occhio, per il badge in alto.
@@ -125,10 +133,23 @@ function App() {
     }
   }, []);
 
+  // Cambia di rado (la riscrive il gestionale, non la dashboard) e non fallisce
+  // mai in modo rumoroso: senza database l'elenco resta vuoto, il menu a
+  // tendina si disattiva e le scansioni tornano a essere quelle di prima.
+  const fetchPuntiVendita = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/punti-vendita`);
+      setPuntiVendita(response.data?.punti_vendita || []);
+    } catch (err) {
+      setPuntiVendita([]);
+    }
+  }, []);
+
   const ricaricaTutto = useCallback(() => {
     fetchDocuments();
     fetchFatture();
     fetchDaAutorizzare();
+    fetchPuntiVendita();
     // "Sincronizza" promette di ricaricare anche l'anagrafica, ma fetchDaAutorizzare
     // ne ricava solo il numero sul badge: la tabella dei fornitori si rileggeva
     // soltanto al mount della sezione. Chi RESTA in Fornitori non aveva modo di
@@ -136,7 +157,7 @@ function App() {
     // D.D.T. sopravvive al cambio di sezione e perche' una scansione (anche
     // pianificata, anche da un altro browser) censisce fornitori nuovi.
     setVersioneAnagrafica((v) => v + 1);
-  }, [fetchDocuments, fetchFatture, fetchDaAutorizzare]);
+  }, [fetchDocuments, fetchFatture, fetchDaAutorizzare, fetchPuntiVendita]);
 
   useEffect(() => { ricaricaTutto(); }, [ricaricaTutto]);
 
@@ -549,6 +570,7 @@ L'operazione può richiedere qualche minuto se la GPU è occupata.`
           onDelete={handleDelete}
           onApriFattura={apriFattura}
           apiUrl={API_URL}
+          puntiVendita={puntiVendita}
           onScansione={(esito) => {
             fetchDocuments();
             fetchFatture();

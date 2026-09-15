@@ -25,7 +25,7 @@ from src.api.supporto import (
     annota_stato_piva, esigi_motore_pronto, ricontrolla_fatture_in_attesa,
     sposta_documento, trova_documento,
 )
-from src.comune import stato_elaborazione
+from src.comune import punti_vendita, stato_elaborazione
 from src.comune.memory_manager import (
     aggiorna_fornitore, annota_fornitore_critico, conferma_partita_iva,
 )
@@ -522,10 +522,14 @@ async def riepilogo_endpoint(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/estrai-ddt")
-def analizza_documento(file: UploadFile = File(...)):
+def analizza_documento(file: UploadFile = File(...), punto_vendita: str = Form("")):
     """Upload di una scansione e sua elaborazione immediata (è quel che fa n8n).
 
     Sincrona di proposito: vedi elabora_ddt(). Non riconvertirla in async def.
+
+    punto_vendita è il COD_AZI del negozio a cui la scansione appartiene, ed è
+    facoltativo come sulla scansione della cartella: una chiamata che non lo
+    manda si comporta esattamente come prima.
     """
     temp_dir = tempfile.mkdtemp()
     nome_file = file.filename or "documento.pdf"
@@ -537,7 +541,8 @@ def analizza_documento(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, buffer)
         print(f"⏱️ Salvataggio file caricato: {time.time() - t0:.2f} secondi")
 
-        return elabora_ddt(file_path, nome_file)
+        return elabora_ddt(file_path, nome_file,
+                           punti_vendita.trova(punto_vendita))
 
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)

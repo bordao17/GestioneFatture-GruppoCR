@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit2, Trash2, Receipt, AlertTriangle } from 'lucide-react';
+import { Edit2, Trash2, Receipt, AlertTriangle, Store } from 'lucide-react';
 import { infoStato } from './etichetteDdt';
 
 export default function DocumentTable({ documents, onEdit, onDelete, selectedIds = [], onToggleSelect, onApriFattura }) {
@@ -78,6 +78,18 @@ export default function DocumentTable({ documents, onEdit, onDelete, selectedIds
                           title="Fornitore critico: le sue bolle vanno sempre in CHECK, anche con tutti i campi letti."
                         >
                           <AlertTriangle size={12} /> critico
+                        </span>
+                      )}
+                      {/* Stessa ragione del badge qui sopra, e anzi di piu':
+                          questo CHECK ha tutti e quattro i campi pieni proprio
+                          perche' li ha scritti il sistema, col negozio che
+                          potrebbe essere quello sbagliato. */}
+                      {doc.dati?.consegna_discorde && (
+                        <span
+                          className="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 d-inline-flex align-items-center gap-1 ms-2"
+                          title={`Consegna dichiarata a ${doc.dati.punto_vendita_nome || doc.dati.punto_vendita}, ma ${doc.dati.consegna_discorde.motivo}: controlla che alla scansione non sia stato scelto il negozio sbagliato.`}
+                        >
+                          <Store size={12} /> altro negozio?
                         </span>
                       )}
                     </td>

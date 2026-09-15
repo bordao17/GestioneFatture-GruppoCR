@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "924ea496-db4d-450d-9f06-0b31ae7ab7f2",
+    "file_origine": "20260914092840328.pdf",
+    "timestamp": "2026-09-14T15:59:51.860771+02:00",
+    "firme_pagine": [
+      "cb856853c085b7fa28d860b3c6dc352f55f790119d80322f895d60c2327b704c"
+    ],
+    "dati": {
+      "fornitore": "PAC 2000 A SOC. A R.L.",
+      "numero_ddt": "GT880PF",
+      "data_ddt": "01-09-2026",
+      "ragione_sociale_consegna": "CREF SRL",
+      "indirizzo_consegna": "VIA DELLE SCIENZE, 10/20, 02015 CITTADUCALE (RI)",
+      "leggibilita_bassa": false,
+      "partita_iva": "00957520599",
+      "consegna_letta": {
+        "indirizzo_consegna": "VIA DEL RAME PONTE FELCINO ZONA I P.IVA 00163040546"
+      },
+      "punto_vendita": "41",
+      "punto_vendita_nome": "CITTADUCALE"
+    },
+    "stato_manuale": "2026-09-15T10:14:42.339807+02:00"
+  }
+]

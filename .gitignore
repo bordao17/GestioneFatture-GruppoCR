@@ -59,3 +59,11 @@ backend/env/
 # leggibile e versionato in backend/data/fornitori_memoria.json, che
 # salva_memoria() riscrive a ogni salvataggio come copia di scorta.
 postgre/dati/
+
+# =========================
+# Uptime Kuma (il guardiano)
+# =========================
+# Stessa ragione di postgre/dati: qui dentro c'e' un sqlite che cresce a ogni
+# battito di ogni monitor, piu' gli screenshot e la cache. La configurazione
+# utile (quali monitor esistono e perche') e' scritta in CLAUDE.md.
+uptime-kuma/dati/

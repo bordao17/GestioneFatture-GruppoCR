@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Download, Sparkles, Receipt, KeyRound, Check, Lock, BookUser, AlertTriangle, Globe } from 'lucide-react';
+import { Download, Sparkles, Receipt, KeyRound, Check, Lock, BookUser, AlertTriangle, Globe, Store } from 'lucide-react';
 import { STATI_DDT, ORDINE_STATI, infoStato } from './etichetteDdt';
 import SelettoreFornitore from './SelettoreFornitore';
 
@@ -352,6 +352,55 @@ export default function ComparisonModal({ selectedDoc, editData, setEditData, on
                       onChange={(e) => setEditData({...editData, indirizzo_consegna: e.target.value})}
                     />
                   </div>
+
+                  {/* Quando la scansione ha dichiarato un punto vendita, i due
+                      campi qui sopra non sono una lettura ma un dato: va detto,
+                      altrimenti chi rivede li confronterebbe con il PDF e
+                      penserebbe a un errore del modello. E soprattutto va detto
+                      cosa c'era scritto davvero sul foglio: e' l'unico modo di
+                      accorgersi che alla scansione era stato scelto il negozio
+                      sbagliato. */}
+                  {editData.punto_vendita && (
+                    <div className="alert alert-info bg-info bg-opacity-10 border-info small d-flex align-items-start gap-2 mb-3">
+                      <Store size={15} className="flex-shrink-0 mt-1" />
+                      <div>
+                        Consegna <strong>dichiarata</strong> alla scansione:{' '}
+                        <strong>{editData.punto_vendita_nome || editData.punto_vendita}</strong>
+                        <span className="text-body-secondary"> ({editData.punto_vendita})</span>.
+                        I due campi qui sopra vengono dall&apos;anagrafica dei punti vendita.
+                        {editData.consegna_letta && (
+                          <div className="mt-1 text-warning">
+                            Sul documento il modello aveva letto
+                            {editData.consegna_letta.ragione_sociale_consegna && (
+                              <> <code>{editData.consegna_letta.ragione_sociale_consegna}</code></>
+                            )}
+                            {editData.consegna_letta.indirizzo_consegna && (
+                              <> <code>{editData.consegna_letta.indirizzo_consegna}</code></>
+                            )}
+                            : se non e&apos; lo stesso posto, alla scansione era stato scelto il
+                            punto vendita sbagliato.
+                          </div>
+                        )}
+                        {/* La riga qui sopra invita a confrontare, questa dice
+                            che il confronto e' gia' stato fatto e non torna: il
+                            CAP stampato sul foglio e' di un altro negozio
+                            dell'anagrafica. E' l'unica ragione per cui questo
+                            documento e' in CHECK con tutti i campi pieni. */}
+                        {editData.consegna_discorde && (
+                          <div className="mt-2 p-2 rounded border border-danger border-opacity-50 bg-danger bg-opacity-10 text-danger">
+                            <strong>Potrebbe essere il negozio sbagliato:</strong>{' '}
+                            {editData.consegna_discorde.motivo}
+                            <span className="text-body-secondary">
+                              {' '}Se la bolla e&apos; davvero di{' '}
+                              {editData.consegna_discorde.nome}, correggi i due campi qui
+                              sopra; se il negozio dichiarato era giusto, lascia tutto
+                              com&apos;e&apos; e sposta il documento in COMPLETATO.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-3 border-top bg-body-tertiary d-flex flex-column gap-3">

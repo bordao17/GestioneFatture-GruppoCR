@@ -22,7 +22,7 @@ import uuid
 from fastapi import HTTPException
 
 from src.api.supporto import esigi_motore_pronto, ricontrolla_fatture_in_attesa
-from src.comune import stato_elaborazione
+from src.comune import punti_vendita, stato_elaborazione
 from src.comune.memory_manager import (
     aggiorna_fornitore, registra_fornitore_fattura, verifica_fornitore_fattura,
 )
@@ -40,7 +40,7 @@ from src.fatture.coda import registra_senza_abbinare, trova_fattura_registrata
 from src.fatture.lettore_xml import leggi_fattura
 
 
-def elabora_ddt(file_path, nome_file):
+def elabora_ddt(file_path, nome_file, punto_vendita=None):
     """Estrae, classifica e archivia un PDF/immagine di D.D.T. già su disco.
 
     È il corpo di /estrai-ddt, tirato fuori dalla route perché lo usa anche la
@@ -53,6 +53,13 @@ def elabora_ddt(file_path, nome_file):
     scrittura su disco) e dentro una route async terrebbe fermo l'event loop,
     rendendo irraggiungibile qualsiasi altra chiamata — compresa
     /api/elaborazione, cioè proprio la barra di avanzamento.
+
+    punto_vendita è la voce di anagrafica del negozio a cui questa scansione
+    appartiene, già risolta dal chiamante (None se non è stata dichiarata).
+    Scrive ragione_sociale_consegna e indirizzo_consegna al posto di quelle
+    lette dal modello: sono due dei quattro campi obbligatori, e chi ha messo i
+    fogli nello scanner sa dove la merce è stata consegnata meglio di quanto
+    possa saperlo una fotografia.
     """
     # PRIMA di tutto il resto: se il motore AI non risponde non si comincia
     # nemmeno. Solleva 503 e a quel punto non e' stato toccato niente — nessuna
@@ -82,6 +89,14 @@ def elabora_ddt(file_path, nome_file):
 
         risultati_pagine = []
         duplicati = []
+        discordanze = []
+
+        # L'anagrafica dei punti vendita, letta UNA VOLTA per batch come
+        # archivio_firme e per lo stesso motivo: serve a riconoscere il negozio
+        # di cui il foglio parla davvero, e cercarlo pagina per pagina sarebbe
+        # una query a Postgres per ognuna. Senza punto vendita dichiarato non
+        # c'e' niente da confrontare e non si legge nemmeno.
+        anagrafica_punti = punti_vendita.elenco() if punto_vendita else []
 
         # Le pagine gia' archiviate, lette una volta sola per batch. Il
         # dizionario cresce strada facendo, cosi' il confronto copre anche le
@@ -122,6 +137,26 @@ def elabora_ddt(file_path, nome_file):
 
             if not dati_estratti:
                 dati_estratti = {}
+
+            # PRIMA del censimento del fornitore e PRIMA di determina_stato:
+            # applicarla dopo lascerebbe in CHECK proprio i documenti a cui
+            # abbiamo appena dato i due campi che mancavano. Senza punto
+            # vendita dichiarato non tocca niente.
+            dati_estratti = punti_vendita.applica_consegna(dati_estratti, punto_vendita,
+                                                           anagrafica_punti)
+
+            # Il sospetto che alla scansione sia stato scelto il negozio
+            # sbagliato: lo stato lo dice gia' (CHECK), ma su venti bolle
+            # dichiarate tutte insieme conta il NUMERO — e' la differenza fra
+            # una lettura storta e una distrazione dell'operatore.
+            discorde = dati_estratti.get(punti_vendita.CAMPO_DISCORDE)
+            if discorde:
+                discordanze.append({
+                    "id": id_generico,
+                    "file_origine": nome_file,
+                    "pagina": i + 1,
+                    **discorde,
+                })
 
             # =======================================================
             # SALVATAGGIO AUTOMATICO NUOVO FORNITORE IN MEMORIA
@@ -202,6 +237,10 @@ def elabora_ddt(file_path, nome_file):
             # perche' gia' letto e una risposta con zero pagine si assomigliano
             # troppo, e la seconda sembra un errore.
             "duplicati": duplicati,
+            # Idem: va detto adesso, che e' il momento in cui qualcuno guarda.
+            # Scoprirlo aprendo una bolla la settimana dopo vorrebbe dire
+            # rifare a mano tutto il batch.
+            "discordanze": discordanze,
             "accorpamento": report_accorpamento,
             "fatture_sbloccate": report_fatture["sbloccate"],
         }

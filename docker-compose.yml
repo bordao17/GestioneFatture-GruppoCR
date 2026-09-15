@@ -171,15 +171,56 @@ services:
     depends_on:
       - api-gestione-fatture
 
-# n8n E' STATO TOLTO DA QUI il 2026-09-09, e i suoi file sono rimasti sul disco.
-# Faceva tre cose — guardare l'ora, chiamare un'API di questo backend, spedire
-# una mail — mentre tutto cio' che decideva stava gia' in Python: era un secondo
-# posto in cui sbagliare, con l'HTML delle mail chiuso dentro il suo database
-# sqlite (non leggibile, non diffabile, non versionabile).
-# Adesso: src/comune/pianificatore.py e' l'orologio, src/notifiche/ e' il postino.
-# n8n_config/ (327 MB di stato runtime: workflow, credenziali, esecuzioni) e'
-# stato cancellato il 2026-09-11, quando il ritorno indietro ha smesso di essere
-# un'ipotesi viva. Era tracciato in git, quindi si recupera da un commit
-# precedente: git checkout <commit> -- n8n_config
-# Resta n8n_snippets/ (i nodi Code versionati a mano): e' la fonte storica delle
-# tre mail, oggi in src/notifiche/, e costa 96 KB.
+  # Il guardiano (dal 2026-09-15). Non elabora niente e nessun altro servizio lo
+  # conosce: sta qui per GUARDARE gli altri tre da fuori e per dirlo a qualcuno
+  # quando uno non risponde. E' l'unica cosa che il sistema non puo' fare da se'
+  # — un backend giu' non manda nessuna mail per avvisare che e' giu', e la GPU
+  # sta su un'altra macchina ancora (vedi OLLAMA_HOST qui sopra).
+  #
+  # I monitor NON si scrivono qui: vivono nel suo database, si creano dalla sua
+  # interfaccia e restano li'. Quelli che servono a questo sistema sono elencati
+  # in CLAUDE.md ("Il guardiano"), che e' il posto in cui si rileggono.
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    container_name: uptime_kuma_gruppocr
+    restart: always
+    ports:
+      # L'interfaccia si apre dai PC dell'ufficio, quindi NON e' limitata a
+      # 127.0.0.1 come quella di Postgres. Attenzione: al primo accesso chiunque
+      # arrivi per primo crea l'account di amministratore — va aperta e
+      # configurata subito dopo il primo avvio, non "quando capita".
+      - "3001:3001"
+    volumes:
+      # Stessa regola di ./postgre/dati: i dati stanno in una cartella del
+      # progetto e sono ignorati da git. Qui dentro c'e' un sqlite che cresce a
+      # ogni battito di ogni monitor — e' esattamente il caso di n8n_config/,
+      # 327 MB finiti nella storia del repo.
+      - ./uptime-kuma/dati:/app/data
+    environment:
+      # UTC nell'esempio ufficiale, ma qui vale la regola degli altri due
+      # servizi: gli orari che legge una persona devono essere quelli
+      # dell'ufficio, altrimenti un'interruzione delle 23:40 va tradotta a mano
+      # proprio mentre la si sta cercando nei log del backend.
+      - TZ=Europe/Rome
+      - UMASK=0022
+    # NESSUN depends_on, ed e' deliberato: il guardiano deve essere gia' in piedi
+    # quando cio' che sorveglia non parte. Un monitor che si avvia solo dopo il
+    # backend tace proprio nel caso che deve raccontare.
+    #
+    # NESSUNA rete dedicata, e questa e' la differenza piu' importante rispetto
+    # all'esempio ufficiale: mettendolo su un "kuma_network" suo, Kuma non
+    # risolverebbe piu' api-gestione-fatture ne' postgres-gestione-fatture e i
+    # monitor andrebbero puntati a mano su indirizzi IP. Stando sulla rete di
+    # default del compose li raggiunge per NOME, che e' l'unica forma che resta
+    # valida quando la macchina cambia indirizzo.
+    #
+    # Nessun healthcheck: l'immagine ne porta gia' uno suo (extra/healthcheck).
+    # Riscriverlo con curl qui sopra non aggiungerebbe niente, e con curl assente
+    # dall'immagine lo darebbe per malato mentre e' sano.
+    logging:
+      # Un monitor scrive una riga per battito: senza tetto, il log di questo
+      # container diventa il file piu' grande del server nel giro di mesi.
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
